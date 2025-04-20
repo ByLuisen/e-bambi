@@ -1,0 +1,31 @@
+replicas: 1
+
+image:
+  registry: ""
+  repository: custom-keycloak
+  tag: latest
+
+global:
+  security: 
+    allowInsecureImages: true
+  postgresql:
+    auth:
+      password: "{{ requiredEnv 'POSTGRES_PASSWORD' }}"
+
+auth:
+  adminUser: admin
+  adminPassword: admin
+
+postgresql:
+  enabled: true
+
+externalDatabase:
+  host: "keycloak-db"  
+  port: 5432            
+  database: "keycloak-db"  
+  user: "user"  
+  password: "password"
+
+ingress:
+  enabled: true 
+  ingressClassName: "nginx"

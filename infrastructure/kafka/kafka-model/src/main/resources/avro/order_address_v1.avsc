@@ -1,0 +1,24 @@
+{
+  "type": "record",
+  "name": "OrderAddress",
+  "namespace": "com.e.bambi.kafka.avro.model",
+  "version": "1",
+  "doc": "Address info where the order will be shipped",
+  "fields": [
+    {
+      "name": "userName",
+      "type": "string",
+      "doc": "Name of the user that purchased the order"
+    },
+    {
+      "name": "city",
+      "type": "string",
+      "doc": "City where the order will be sent"
+    },
+    {
+      "name": "province",
+      "type": "string",
+      "doc": "Province where the order will be sent"
+    }
+  ]
+}

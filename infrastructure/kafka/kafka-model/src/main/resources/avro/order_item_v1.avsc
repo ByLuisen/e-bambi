@@ -1,0 +1,66 @@
+{
+  "type": "record",
+  "name": "OrderItem",
+  "namespace": "com.e.bambi.kafka.avro.model",
+  "version": "1",
+  "doc": "Items purchased in our order",
+  "fields": [
+    {
+      "name": "productId",
+      "type": {
+        "type": "string",
+        "logicalType": "UUID"
+      },
+      "doc": "Id of the product"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "doc": "Name of the product"
+    },
+    {
+      "name": "soldBy",
+      "type": "string",
+      "doc": "Name of the supplier product"
+    },
+    {
+      "name": "quantity",
+      "type": "int",
+      "doc": "Quantity purchased for the product"
+    },
+    {
+      "name": "price",
+      "type": {
+        "type": "bytes",
+        "logicalType": "decimal",
+        "precision": 5,
+        "scale": 2
+      },
+      "doc": "Unit price of the product"
+    },
+    {
+      "name": "totalPrice",
+      "type": {
+        "type": "bytes",
+        "logicalType": "decimal",
+        "precision": 5,
+        "scale": 2
+      },
+      "doc": "Total price adding the unit price and the product quantity"
+    },
+    {
+      "name": "discount",
+      "type": [
+        "null",
+        {
+          "type": "bytes",
+          "logicalType": "decimal",
+          "precision": 4,
+          "scale": 2
+        }
+      ],
+      "default": null,
+      "doc": "Discount applied for this product"
+    }
+  ]
+}

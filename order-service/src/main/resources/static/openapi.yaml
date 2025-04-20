@@ -1,0 +1,699 @@
+openapi: 3.1.0
+info:
+  title: Swagger Order Service
+  description: |-
+    Bienvenido a la documentación oficial del microservicio 'Order Service'. Aquí podrás explorar e interactuar con los diversos recursos disponibles, facilitando la integración y gestión de órdenes a través de sus APIs. Esta documentación proporciona los detalles técnicos necesarios para utilizar las funcionalidades ofrecidas por el servicio de manera eficiente.
+
+    Algunos enlaces útiles:
+      - [El repositorio de Order Service](https://github.com/ByLuisen/my-k8s-project/tree/main/apps/order-service)
+      - [La definición de la API para Order Service](https://github.com/ByLuisen/my-k8s-project/blob/main/apps/order-service/src/main/resources/static/openapi.yaml)
+  version:  1.0.11
+servers:
+  - url: http://localhost:8181
+tags:
+  - name: Payment methods
+    description: Métodos de pago disponibles
+  - name: Order status
+    description: Nuestros diferentes estados de pedidos
+  - name: Orders
+    description: Solicita información de tus pedidos
+  - name: Order status history
+    description: Obtén el hisorial de estados acerca de un pedido
+paths:
+  /v1/payment-methods:
+    get:
+      tags:
+        - Payment methods
+      summary: Obtenén una lista de los diferentes métodos de pago
+      description: Obtenén una lista de los diferentes métodos de pago
+      operationId: findAllPaymentMethods
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentMethod'
+        '404':
+          description: Sin métodos de pago
+    post:
+      tags:
+        - Payment methods
+      summary: Crea un nuevo método de pago
+      description: Crea un nuevo método de pago
+      operationId: savePaymentMethod
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentMethodInputDTO'
+        required: true
+      responses:
+        '204':
+          description: Operación exitosa
+        '400':
+          description: Solicitud incorrecta
+        '401':
+          description: Falta de autenticación o credenciales inválidas
+        '403':
+          description: Autenticado, pero sin permisos suficientes para acceder al recurso
+      security:
+        - bambi_auth: []
+      x-roles-required:
+        - ADMIN
+  /v1/payment-methods/{paymentMethodId}:
+    put:
+      tags:
+        - Payment methods
+      summary: Actualiza un método de pago existente
+      description: Actualiza un método de pago existente
+      operationId: updatePaymentMethodById
+      parameters:
+        - name: paymentMethodId
+          in: path
+          description: ID del método de pago a actualizar
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Actualiza un método de pago existente
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentMethodInputDTO'
+        required: true
+      responses:
+        '204':
+          description: Operación exitosa
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Método de pago no encontrado
+        '401':
+          description: Falta de autenticación o credenciales inválidas
+        '403':
+          description: Autenticado, pero sin permisos suficientes para acceder al recurso
+      security:
+        - bambi_auth: []
+      x-roles-required:
+        - ADMIN
+    delete:
+      tags:
+        - Payment methods
+      summary: Elimina un método de pago por ID
+      description: Elimina un método de pago por ID
+      operationId: deletePaymentMethodById
+      parameters:
+        - name: paymentMethodId
+          in: path
+          description: ID del método de pago a eliminar
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: Operación exitosa
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Método de pago no encontrado
+        '401':
+          description: Falta de autenticación o credenciales inválidas
+        '403':
+          description: Autenticado, pero sin permisos suficientes para acceder al recurso
+      security:
+        - bambi_auth: []
+      x-roles-required:
+        - ADMIN
+  /v1/order-statuses:
+    get:
+      tags:
+        - Order status
+      summary: Obtén una lista de los diferentes estados que tiene un pedido
+      description: Obtén una lista de los diferentes estados que tiene un pedido
+      operationId: findAllOrderStatuses
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderStatus'
+        '404':
+          description: Ningún estado de pedido registrado
+        '401':
+          description: Falta de autenticación o credenciales inválidas
+        '403':
+          description: Autenticado, pero sin permisos suficientes para acceder al recurso
+      security:
+        - bambi_auth: []
+      x-roles-required:
+        - ADMIN
+    post:
+      tags:
+        - Order status
+      summary: Crea un nuevo estado de pedido
+      description: Crea un nuevo estado de pedido
+      operationId: saveOrderStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderStatusInputDTO'
+        required: true
+      responses:
+        '204':
+          description: Operación exitosa
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Estado de pedido no encontrado
+        '401':
+          description: Falta de autenticación o credenciales inválidas
+        '403':
+          description: Autenticado, pero sin permisos suficientes para acceder al recurso
+      security:
+        - bambi_auth: []
+      x-roles-required:
+        - ADMIN
+  /v1/order-statuses/{orderStatusId}:
+    put:
+      tags:
+        - Order status
+      summary: Actualiza un estado de pedido existente
+      description: Actualiza un estado de pedido existente
+      operationId: updateOrderStatusById
+      parameters:
+        - name: orderStatusId
+          in: path
+          description: ID del estado de pedido a actualizar
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderStatusInputDTO'
+        required: true
+      responses:
+        '204':
+          description: Operación exitosa
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Estado de pedido no encontrado
+        '401':
+          description: Falta de autenticación o credenciales inválidas
+        '403':
+          description: Autenticado, pero sin permisos suficientes para acceder al recurso
+      security:
+        - bambi_auth: []
+      x-roles-required:
+        - ADMIN
+    delete:
+      tags:
+        - Order status
+      summary: Elimina un estado de pedido por ID
+      description: Elimina un estado de pedido por ID
+      operationId: deleteOrderStatusById
+      parameters:
+        - name: orderStatusId
+          in: path
+          description: ID del estado de pedido a eliminar
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: Operación exitosa
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Estado de pedido de pago no encontrado
+        '401':
+          description: Falta de autenticación o credenciales inválidas
+        '403':
+          description: Autenticado, pero sin permisos suficientes para acceder al recurso
+      security:
+        - bambi_auth: []
+      x-roles-required:
+        - ADMIN
+  /v1/users/{userId}/orders:
+    get:
+      tags:
+        - Orders
+      summary: Obtén los pedidos que tienes
+      description: Obtén los pedidos que tienes
+      operationId: findOrdersByUserId
+      parameters:
+        - name: userId
+          in: path
+          description: Tú ID de usuario
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderWithItemOutputDTO'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: El usuario no tiene ningún pedido
+        '401':
+          description: Falta de autenticación o credenciales inválidas
+        '403':
+          description: Autenticado, pero el usuario intenta acceder a recursos de otro usuario
+      security:
+        - bambi_auth: []
+  /v1/users/{userId}/orders/{orderId}:
+    get:
+      tags:
+        - Orders
+      summary: Obtén los detalles de uno de tus pedidos
+      description: Obtén los detalles de uno de tus pedidos
+      operationId: findOrderByUserIdAndOrderId
+      parameters:
+        - name: userId
+          in: path
+          description: Tú ID de usuario
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - name: orderId
+          in: path
+          description: El ID del pedido que quieres obtener
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/OrderWithItemOutputDTO'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: El pedido no existe
+        '401':
+          description: Falta de autenticación o credenciales inválidas
+        '403':
+          description: Autenticado, pero el usuario intenta acceder a recursos de otro usuario
+      security:
+        - bambi_auth: []
+  /v1/orders:
+    get:
+      tags:
+        - Orders
+      summary: Obtén todos los pedidos
+      description: Obtén todos los pedidos paginados y con filtros
+      operationId: findOrdersWithPaginationAndFilters
+      parameters:
+        - name: orderFilterInputDTO
+          in: query
+          description: Filtros disponibles para la búsqueda de pedidos
+          required: false
+          schema:
+            $ref: '#/components/schemas/OrderFilterInputDTO'
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/PaginatedResultOutputDTO'
+        '404':
+          description: Pedidos no encontrados
+        '401':
+          description: Falta de autenticación o credenciales inválidas
+        '403':
+          description: Autenticado, pero sin permisos suficientes para acceder al recurso
+      security:
+        - bambi_auth: []
+      x-roles-required:
+        - ADMIN
+    post:
+      tags:
+        - Orders
+      summary: Crea un nuevo pedido
+      description: Crear un nuevo pedido
+      operationId: saveOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderDTO'
+        required: true
+      responses:
+        '204':
+          description: Operación exitosa
+        '400':
+          description: Solicitud incorrecta
+        '401':
+          description: Falta de autenticación o credenciales inválidas
+      security:
+        - bambi_auth: []
+  /v1/orders/{orderId}:
+    get:
+      tags:
+        - Orders
+      summary: Obtén los detalles de un pedido
+      description: Obtén los detalles de un pedido
+      operationId: findOrderByOrderId
+      parameters:
+        - name: orderId
+          in: path
+          description: ID del pedido que quieres obtener
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/OrderWithItemOutputDTO'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Pedido no encontrados
+        '401':
+          description: Falta de autenticación o credenciales inválidas
+        '403':
+          description: Autenticado, pero sin permisos suficientes para acceder al recurso
+      security:
+        - bambi_auth: []
+      x-roles-required:
+        - ADMIN
+  /v1/orders/{orderId}/status-history:
+    get:
+      tags:
+        - Order status history
+      summary: Obtén el historial de estados de un pedido
+      description: Obtén el historial de estados de un pedido
+      operationId: findOrderStatusHistoryByOrderId
+      parameters:
+        - name: orderId
+          in: path
+          description: ID del pedido
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: Historial obtenido
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/OrderWithStatusHistoryOutputDTO'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Historial de estados de pedido no encontrado
+        '401':
+          description: Falta de autenticación o credenciales inválidas
+      security:
+        - bambi_auth: []
+components:
+  schemas:
+    PaymentMethodInputDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          pattern: ^[a-zA-Z ]+$
+          examples: ['PayPal']
+        description:
+          type: string
+          pattern: ^[a-zA-Z ]+$
+          examples: ['Payment via PayPal account']
+      required:
+        - name
+        - description
+    OrderStatusInputDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          pattern: ^[a-zA-Z ]+$
+          examples: ['Cancelled']
+      required:
+        - name
+    CreateOrderDTO:
+      type: object
+      properties:
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+        customerId:
+          type: string
+        totalPrice:
+          type: number
+          minimum: 0
+        shippingCountry:
+          type: string
+          pattern: ^(Canada|Spain)$
+        shippingAddress:
+          type: string
+          maxLength: 255
+          minLength: 0
+        shippingCity:
+          type: string
+        shippingProvince:
+          type: string
+        shippingPostalCode:
+          type: string
+          pattern: ^[0-9]{5}(?:-[0-9]{4})?$
+        shippingPhoneNumber:
+          type: string
+          pattern: ^\+?[0-9]{1,4}[\s-]?[0-9]+
+      required:
+        - customerId
+        - paymentMethod
+        - shippingAddress
+        - shippingCity
+        - shippingCountry
+        - shippingPhoneNumber
+        - shippingPostalCode
+        - shippingProvince
+        - totalPrice
+    PaymentMethod:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          examples: ['d358b324-db9a-4415-a0a6-bcf38597fc52']
+        name:
+          type: string
+          examles: ['Bitcoin']
+        description:
+          type: string
+          examples: ['Payment via cryptocurrency (Bitcoin)']
+      required:
+        - description
+        - name
+    AddressOutputDTO:
+      type: object
+      properties:
+        shippingAddress:
+          type: string
+          examples: ['22 Rue de Paris']
+        shippingCountry:
+          type: string
+          examples: ['France']
+        shippingCity:
+          type: string
+          examples: ['Paris']
+        shippingProvince:
+          type: string
+          examples: ['Île-de-France']
+        shippingPostalCode:
+          type: string
+          examples: ['75000']
+        shippingPhoneNumber:
+          type: string
+          examples: ['234-567-8901']
+    ItemOutputDTO:
+      type: object
+      properties:
+        orderId:
+          type: string
+          format: uuid
+          examples: ['b6f6dacc-80e6-464c-b878-9f08b592af36']
+        productId:
+          type: string
+          format: uuid
+          examples: ['b2e0d0c3-1fa4-4cde-b373-1a560dfb7ab2']
+        productSku:
+          type: string
+          examples: ['SKU138']
+        productName:
+          type: string
+          examples: ['Product P']
+        productQuantity:
+          type: integer
+          format: int32
+          examples: [7]
+        productPrice:
+          type: number
+          examples: [15.00]
+        totalPrice:
+          type: number
+          examples: [105.00]
+        discount:
+          type: number
+          examples: [0.00]
+        createdAt:
+          type: string
+          format: date-time
+          examples: [2025-03-01 14:22:56.256]
+    OrderWithItemOutputDTO:
+      type: object
+      properties:
+        orderId:
+          type: string
+          format: uuid
+          examples: ['0c06d331-a282-4eb2-9c2e-ed1875ee98fa']
+        userId:
+          type: string
+          format: uuid
+          examples: ['ed2a8e1a-8a74-4d5b-bd7f-e0f5909842f5']
+        statusId:
+          type: string
+          format: uuid
+          examples: ['ef88b0b6-0e6a-48b6-a94d-f10fd0493dca']
+        status:
+          type: string
+          examples: ['Cancelled']
+        address:
+          $ref: '#/components/schemas/AddressOutputDTO'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemOutputDTO'
+        paymentMethod:
+          type: string
+          examples: ['PayPal']
+        totalPrice:
+          type: number
+          examples: [120.50]
+        createdAt:
+          type: string
+          format: date-time
+          examples: [2025-03-03 21:33:33.314]
+        updatedAt:
+          type: string
+          format: date-time
+          examples: [2025-03-03 21:33:33.314]
+    OrderFilterInputDTO:
+      type: object
+      properties:
+        statusId:
+          type: string
+          pattern: >-
+            ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})(\|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})*$
+          examples: ['ef88b0b6-0e6a-48b6-a94d-f10fd0493dca|50e99d57-dd70-49b5-8a77-28a06d697f10']
+        paymentMethodId:
+          type: string
+          pattern: >-
+            ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})(\|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})*$
+          examples: ['d23e2755-2261-4ff3-a999-576039356d22']
+        userId:
+          type: string
+          pattern: >-
+            ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})(\|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})*$
+          examples: ['ed2a8e1a-8a74-4d5b-bd7f-e0f5909842f5']
+        createdAt:
+          type: string
+          pattern: ^(\d{4}-\d{2}-\d{2})\|(\d{4}-\d{2}-\d{2})$
+          examples: ['2025-03-01|2025-03-05']
+        totalPrice:
+          type: string
+          pattern: ^\d+-\d+$
+          examples: ['120-500']
+        orderBy:
+          type: string
+          pattern: ^[a-z_]+-(desc|asc)$
+          examples: ['created_at-desc']
+        page:
+          type: integer
+          format: int32
+          examples: [1]
+        size:
+          type: integer
+          format: int32
+          examples: [20]
+    PaginatedResultOutputDTO:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        count:
+          type: integer
+          format: int64
+          examples: [40]
+    OrderWithStatusHistoryOutputDTO:
+      type: object
+      properties:
+        orderId:
+          type: string
+          format: uuid
+          examples: ['c641d607-35bd-45ea-a1f2-b80b49e00e59']
+        statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatusHistoryOutputDTO'
+    StatusHistoryOutputDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          examples: ['Pending']
+        reason:
+          type: string
+          examples: ['Order placed, awaiting payment.']
+        changedAt:
+          type: string
+          format: date-time
+          examples: ['2025-03-03 21:33:33.314']
+    OrderStatus:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+      required:
+        - name
+  securitySchemes:
+    bambi_auth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/auth
+          tokenUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/token

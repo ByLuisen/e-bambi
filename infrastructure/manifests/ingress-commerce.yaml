@@ -1,0 +1,55 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-commerce
+  namespace: commerce
+  annotations:
+    # nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/app-root: /app1
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/affinity: cookie
+    nginx.ingress.kubernetes.io/limit-connections: "100"
+    nginx.ingress.kubernetes.io/limit-rps: "20"
+    nginx.ingress.kubernetes.io/custom-http-errors: "404,500,502,503"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cache-control: "public, max-age=3600"
+    # nginx.ingress.kubernetes.io/configuration-snippet: |
+    #   add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    #   add_header X-Content-Type-Options nosniff;
+    #   add_header X-Frame-Options DENY;
+    #   add_header X-XSS-Protection "1; mode=block";
+    # cert-manager.io/cluster-issuer: "letsencrypt-staging"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: api.commerce.com
+    http:
+      paths:
+        - path: /inventory(/|$)(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: inventory-service
+              port:
+                number: 8081
+        # - path: /order
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: order-service
+        #       port:
+        #         number: 8080
+        # - path: /notification
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: notification-service
+        #       port:
+        #         number: 8080
+
+  # tls:
+  # - hosts:
+  #   - api.commerce.com
+  #   secretName: commerce-tls

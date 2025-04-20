@@ -1,0 +1,65 @@
+apiVersion: skaffold/v4beta11
+kind: Config
+
+# ---------------------------
+# Configuración General de Construcción
+# ---------------------------
+build:
+  artifacts:
+    # Definimos artefactos de construcción para cada servicio
+    - image: inventory-service
+      context: ./apps/inventory-service
+      docker:
+        dockerfile: Dockerfile
+
+    # - image: payment-service
+    #   context: ./apps/payment-service
+    #   docker:
+    #     dockerfile: Dockerfile
+
+    # - image: notification-service
+    #   context: ./apps/notification-service
+    #   docker:
+    #     dockerfile: Dockerfile
+
+  tagPolicy:
+    sha256: {}
+  local:
+    push: false # No se sube a repositorio remoto, solo local
+    concurrency: 6  # Paralelismo para aumentar la velocidad de construcción
+
+# ---------------------------
+# Despliegue con Helm
+# ---------------------------
+deploy:
+  kubeContext: minikube  # Contexto de Kubernetes para el entorno de desarrollo
+
+  helm:
+    releases:
+      # Definimos un release para cada servicio utilizando Helm Charts
+      - name: inventory-service
+        chartPath: ./infra/helm-charts/app
+        createNamespace: true
+        namespace: commerce
+        valuesFiles:
+          - ./infra/helmfile.d/values/inventory-service/dev.yaml
+
+      # - name: payment-service
+      #   chartPath: ./infra/helm-charts/app-chart
+      #   namespace: commerce
+      #   valuesFiles:
+      #     - ./infra/helmfile.d/values/frontend/dev.yaml
+
+      # - name: notification-service
+      #   chartPath: ./infra/helm-charts/app-chart
+      #   namespace: commerce
+      #   valuesFiles:
+      #     - ./infra/helmfile.d/values/frontend/dev.yaml
+          
+portForward:
+  # Habilitar el port forwarding para servicios locales durante el desarrollo
+  # - resourceType: Service
+  #   resourceName: inventory-service
+  #   namespace: commerce
+  #   port: 8081
+  #   localPort: 8081
