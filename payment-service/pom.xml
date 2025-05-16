@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.e.bambi</groupId>
+        <artifactId>e-bambi</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>payment-service</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>payment-infrastructure-persistence</module>
+        <module>payment-infrastructure-rest</module>
+        <module>payment-application</module>
+        <module>payment-bootstrap</module>
+        <module>payment-domain</module>
+        <module>payment-infrastructure-security</module>
+        <module>payment-infrastructure-messaging</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.e.bambi</groupId>
+                <artifactId>payment-application</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.e.bambi</groupId>
+                <artifactId>payment-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.e.bambi</groupId>
+                <artifactId>payment-infrastructure-persistence</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.e.bambi</groupId>
+                <artifactId>payment-infrastructure-rest</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.e.bambi</groupId>
+                <artifactId>payment-infrastructure-security</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.e.bambi</groupId>
+                <artifactId>payment-infrastructure-messaging</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

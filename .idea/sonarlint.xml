@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SonarLintProjectSettings">
+    <option name="moduleMapping">
+      <map>
+        <entry key="infrastructure-common-shared" value="infrastructure-common" />
+        <entry key="inventory-bootstrap" value="inventory" />
+        <entry key="order-adapter-res" value="order-rest" />
+        <entry key="order-bootstrap" value="order-container" />
+        <entry key="order-domain" value="order-domain-core" />
+        <entry key="order-infrastructure-messaging" value="order-adapter-inbound-messaging" />
+        <entry key="order-infrastructure-persistence" value="order-adapter-outbound-persistence" />
+        <entry key="order-infrastructure-rest" value="order-adapter-inbound-rest" />
+        <entry key="order-messaging-adapter" value="order-messaging" />
+        <entry key="order-persistence-adapter" value="order-persistence" />
+        <entry key="payment-bootstrap" value="payment-container" />
+        <entry key="payment-domain" value="payment-domain-core" />
+        <entry key="payment-infrastructure-persistence" value="payment-persistence" />
+        <entry key="payment-infrastructure-rest" value="payment-rest" />
+        <entry key="shared-infrastructure" value="infrastructure" />
+        <entry key="shared-infrastructure-cache-redis" value="infrastructure-cache-redis" />
+        <entry key="shared-infrastructure-messaging" value="infrastructure-messaging-shared" />
+        <entry key="shared-infrastructure-messaging-kafka" value="infrastructure-messaging-kafka" />
+        <entry key="shared-infrastructure-persistence-flyway" value="infrastructure-flyway" />
+        <entry key="shared-infrastructure-persistence-jooq" value="shared-infrastructure (1) (shared-infrastructure-persistence-jooq)" />
+        <entry key="shared-infrastructure-rest" value="infrastructure-rest" />
+        <entry key="shared-infrastructure-security" value="infrastructure-security" />
+        <entry key="shared-infrastructure-springdocs" value="infrastructure-springdocs" />
+        <entry key="shared-kernel-saga" value="shared-kernel-saga" />
+        <entry key="shared-kernel-security" value="shared-kernel-application" />
+      </map>
+    </option>
+  </component>
+</project>

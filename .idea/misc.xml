@@ -7,6 +7,28 @@
         <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/infrastructure/database/jooq/pom.xml" />
+        <option value="$PROJECT_DIR$/infrastructure/persistence/pom.xml" />
+        <option value="$PROJECT_DIR$/infrastructure/saga/pom.xml" />
+        <option value="$PROJECT_DIR$/infrastructure/security/pom.xml" />
+        <option value="$PROJECT_DIR$/order-service/order-adapter-inbound-bus/pom.xml" />
+        <option value="$PROJECT_DIR$/order-service/order-adapter-inbound-rest/pom.xml" />
+        <option value="$PROJECT_DIR$/shared-adapter/infrastructure-common-shared/pom.xml" />
+        <option value="$PROJECT_DIR$/shared-infrastructure/shared-infrastructure-messaging/pom.xml" />
+        <option value="$PROJECT_DIR$/shared-infrastructure/shared-infrastructure-springdocs/pom.xml" />
+        <option value="$PROJECT_DIR$/shared-kernel/shared-kernel-adapter-rest/pom.xml" />
+        <option value="$PROJECT_DIR$/shared-kernel/shared-kernel-flyway/pom.xml" />
+        <option value="$PROJECT_DIR$/shared-kernel/shared-kernel-jooq/pom.xml" />
+        <option value="$PROJECT_DIR$/shared-kernel/shared-kernel-springdocs/pom.xml" />
+        <option value="$PROJECT_DIR$/starter/pom.xml" />
+        <option value="$PROJECT_DIR$/starter/spring-boot-starter-flyway/pom.xml" />
+        <option value="$PROJECT_DIR$/starter/spring-boot-starter-jooq/pom.xml" />
+        <option value="$PROJECT_DIR$/starter/spring-boot-starter-security/pom.xml" />
+        <option value="$PROJECT_DIR$/starter/spring-boot-starter-springdocs/pom.xml" />
+      </set>
+    </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="temurin-21 (2)" project-jdk-type="JavaSDK" />
 </project>

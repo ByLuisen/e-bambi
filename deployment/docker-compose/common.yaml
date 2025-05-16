@@ -1,0 +1,4 @@
+networks:
+  e-bambi-network:
+    name: e-bambi-network
+    driver: bridge

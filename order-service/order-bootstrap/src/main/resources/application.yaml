@@ -1,0 +1,57 @@
+server:
+  port: 8181
+
+debug:
+  enabled: true
+
+logging:
+  level:
+    com.e.bambi: DEBUG
+    reactor.kafka: DEBUG
+    io:
+#      r2dbc: DEBUG
+#      r2dbc.pool: DEBUG
+#      r2dbc.postgresql: DEBUG
+    org:
+      apache.kafka: DEBUG
+      springframework: DEBUG
+#      springframework.r2dbc: DEBUG
+      springframework.data.r2dbc: TRACE
+
+spring:
+  webflux:
+    base-path: /api
+  profiles:
+    active: native
+  application:
+    name: order-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_PROVIDER_URI:http://localhost:8081/realms/bambi}
+  redis:
+    host: ${REDIS_URL_HOTS:localhost}
+    port: ${REDIS_URL_PORT:6379}
+  r2dbc:
+    url: r2dbc:postgresql://${DATASOURCE_URL_HOST:localhost}:${DATASOURCE_URL_PORT:5434}/order-service
+    username: user
+    password: password
+  flyway:
+    url: jdbc:postgresql://${DATASOURCE_URL_HOST:localhost}:${DATASOURCE_URL_PORT:5434}/order-service
+    locations: classpath:db/migration
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
