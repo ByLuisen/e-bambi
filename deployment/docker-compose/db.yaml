@@ -15,6 +15,7 @@ services:
     image: dbeaver/cloudbeaver:25.0.0
     environment:
       - CLOUDBEAVER_EXPIRE_SESSION_AFTER_PERIOD=2147460000
+      - CLOUDBEAVER_CORE_THEMING_THEME=dark
     volumes:
       - e-bambi-cloudbeaver:/opt/cloudbeaver/workspace
     ports:
@@ -23,6 +24,7 @@ services:
       - e-bambi-network
 
   inventory-service-db:
+    restart: unless-stopped
     image: postgres:14
     container_name: e-bambi-inventory-service-db
     volumes:
@@ -45,6 +47,7 @@ services:
       retries: 5
 
   order-service-db:
+    restart: unless-stopped
     image: postgres:14
     container_name: e-bambi-order-service-db
     volumes:
@@ -67,6 +70,7 @@ services:
       retries: 5
 
   payment-service-db:
+    restart: unless-stopped
     image: postgres:14
     container_name: e-bambi-payment-service-db
     volumes:
@@ -89,6 +93,7 @@ services:
       retries: 5
 
   # elasticsearch:
+  #  restart: unless-stopped
   #   image: elasticsearch:7.17.26
   #   container_name: e-bambi-elasticsearch
   #   ports:
@@ -100,6 +105,7 @@ services:
   # If you don't have redis-cli installed locally, you can run it from the Docker container:
   # $ docker exec -it e-bambi-redis-stack redis-cli <command> ## MONITOR
   redis-stack:
+    restart: unless-stopped
     image: redis/redis-stack:latest
     container_name: e-bambi-redis-stack
     ports:

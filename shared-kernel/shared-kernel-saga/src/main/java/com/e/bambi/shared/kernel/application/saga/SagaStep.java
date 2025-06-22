@@ -1,8 +1,8 @@
 package com.e.bambi.shared.kernel.application.saga;
 
-import com.e.bambi.shared.kernel.domain.event.DomainEvent;
+import reactor.core.publisher.Mono;
 
-public interface SagaStep<T, S extends DomainEvent, U extends DomainEvent> {
-    U process(T data);
-    U rollback(T data);
+public interface SagaStep<S, E> {
+    Mono<Void> process(S data);
+    Mono<Void> rollback(E data);
 }

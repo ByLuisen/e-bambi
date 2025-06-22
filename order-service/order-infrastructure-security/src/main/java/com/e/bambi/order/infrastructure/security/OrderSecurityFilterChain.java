@@ -3,7 +3,9 @@ package com.e.bambi.order.infrastructure.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -23,11 +25,21 @@ public class OrderSecurityFilterChain {
                 oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter))
         );
 
+        http.cors(Customizer.withDefaults());
+
         http.csrf(ServerHttpSecurity.CsrfSpec::disable);
 
         http.authorizeExchange(exchanges ->
                 exchanges
-                        .pathMatchers("/v3/api-docs/**", "/openapi.yaml", "/swagger-ui/**", "/debug").permitAll()
+                        .pathMatchers(HttpMethod.GET,
+                                "/v3/api-docs/**",
+                                "/openapi.yaml",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/debug",
+                                "/actuator/health/**"
+                        )
+                        .permitAll()
                         .anyExchange().authenticated()
         );
 

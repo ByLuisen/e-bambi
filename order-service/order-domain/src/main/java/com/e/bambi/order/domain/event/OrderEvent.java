@@ -1,24 +1,19 @@
 package com.e.bambi.order.domain.event;
 
+import com.e.bambi.order.domain.order.entity.Order;
 import com.e.bambi.shared.kernel.domain.event.DomainEvent;
-import com.e.bambi.order.domain.entity.Order;
+import com.e.bambi.shared.kernel.domain.event.payload.order.OrderEventPayload;
+import lombok.Getter;
 
-import java.time.ZonedDateTime;
-
+@Getter
 public abstract class OrderEvent implements DomainEvent<Order> {
-    private final Order order;
-    private final ZonedDateTime createdAt;
+    protected final String aggregatetype;
+    protected final Order order;
 
-    public OrderEvent(Order order, ZonedDateTime createdAt) {
+    protected OrderEvent(String aggregatetype, Order order) {
+        this.aggregatetype = aggregatetype;
         this.order = order;
-        this.createdAt = createdAt;
     }
 
-    public Order getOrder() {
-        return order;
-    }
-
-    public ZonedDateTime getCreatedAt() {
-        return createdAt;
-    }
+    protected abstract OrderEventPayload toPayload();
 }

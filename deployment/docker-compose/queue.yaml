@@ -17,6 +17,7 @@ services:
   # It depends on PostgreSQL. Here, we depend on Redpanda only for our get-started.
   # https://docs.conduktor.io/platform/get-started/configuration/introduction/
   conduktor-console:
+    restart: unless-stopped
     image: conduktor/conduktor-console:1.31.0
     container_name: e-bambi-conduktor-console
     ports:
@@ -31,7 +32,7 @@ services:
       CDK_CLUSTERS_0_ID: "redpanda-cluster"
       CDK_CLUSTERS_0_NAME: "redpanda-cluster"
       CDK_CLUSTERS_0_BOOTSTRAPSERVERS: "redpanda-0:9092,redpanda-1:9092,redpanda-2:9092"
-      CDK_CLUSTERS_0_SCHEMAREGISTRY_URL: "http://redpanda-0:18081"
+      CDK_CLUSTERS_0_SCHEMAREGISTRY_URL: "http://redpanda-0:8081"
       CDK_CLUSTERS_0_COLOR: "#ff0000"
       CDK_CLUSTERS_0_ICON: "kafka"
       CDK_CLUSTERS_0_KAFKACONNECTS_0_ID: "kafka-connect"
@@ -41,7 +42,7 @@ services:
       CDK_CLUSTERS_1_ID: "cdk-gateway"
       CDK_CLUSTERS_1_NAME: "cdk-gateway"
       CDK_CLUSTERS_1_BOOTSTRAPSERVERS: "conduktor-gateway:6969"
-      CDK_CLUSTERS_1_SCHEMAREGISTRY_URL: "http://redpanda-0:18081"
+      CDK_CLUSTERS_1_SCHEMAREGISTRY_URL: "http://redpanda-0:8081"
       CDK_CLUSTERS_1_KAFKAFLAVOR_URL: "http://conduktor-gateway:8888"
       CDK_CLUSTERS_1_KAFKAFLAVOR_USER: "admin"
       CDK_CLUSTERS_1_KAFKAFLAVOR_PASSWORD: "conduktor"
@@ -65,6 +66,7 @@ services:
   # Consider using an external managed database for production usage.
   # https://docs.conduktor.io/platform/get-started/configuration/database/
   postgresql:
+    restart: unless-stopped
     image: postgres:14
     container_name: e-bambi-postgresql
     hostname: postgresql
@@ -89,6 +91,7 @@ services:
   # Separate db ensures continued operation of the core Console experience if the SQL db becomes unavailable
   # https://docs.conduktor.io/platform/guides/configure-sql/
   postgresql-2:
+    restart: unless-stopped
     image: postgres:14
     container_name: e-bambi-postgresql-2
     hostname: postgresql-sql
@@ -112,6 +115,7 @@ services:
   # It is optional. 
   # https://docs.conduktor.io/platform/get-started/configuration/cortex/
   conduktor-monitoring:
+    restart: unless-stopped
     image: conduktor/conduktor-console-cortex:1.31.0
     container_name: e-bambi-conduktor-monitoring
     environment:
@@ -122,6 +126,7 @@ services:
   # We use Redpanda to get started with Kafka as it's small and efficient.
   # This is an example here. For production, connect Conduktor to your own Kafka clusters.
   redpanda-0:
+    restart: unless-stopped
     container_name: e-bambi-redpanda-0
     command:
       - redpanda
@@ -158,6 +163,7 @@ services:
       - 19644:9644
 
   redpanda-1:
+    restart: unless-stopped
     container_name: e-bambi-redpanda-1
     command:
       - redpanda
@@ -188,6 +194,7 @@ services:
       - redpanda-0
 
   redpanda-2:
+    restart: unless-stopped
     container_name: e-bambi-redpanda-2
     command:
       - redpanda
@@ -218,6 +225,7 @@ services:
       - redpanda-0
 
   kafka-connect:
+    restart: unless-stopped
     container_name: e-bambi-kafka-connect
     image: confluentinc/cp-kafka-connect:7.9.0
     environment:
@@ -260,6 +268,7 @@ services:
   # In this get started, Gateway uses Redpanda as its backend Kafka cluster.
   # https://docs.conduktor.io/gateway/
   conduktor-gateway:
+    restart: unless-stopped
     container_name: e-bambi-conduktor-gateway
     image: conduktor/conduktor-gateway:3.5.0
     hostname: conduktor-gateway

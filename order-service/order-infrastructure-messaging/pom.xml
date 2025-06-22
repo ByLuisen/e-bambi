@@ -21,12 +21,8 @@
             <artifactId>kafka-consumer</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.e.bambi</groupId>
-            <artifactId>kafka-producer</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.e.bambi</groupId>
-            <artifactId>kafka-model</artifactId>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
         </dependency>
     </dependencies>
 

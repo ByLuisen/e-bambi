@@ -36,6 +36,10 @@
             <groupId>com.e.bambi</groupId>
             <artifactId>shared-kernel-saga</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

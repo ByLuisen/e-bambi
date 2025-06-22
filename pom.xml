@@ -73,16 +73,6 @@
             </dependency>
             <dependency>
                 <groupId>com.e.bambi</groupId>
-                <artifactId>shared-infrastructure-messaging</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.e.bambi</groupId>
-                <artifactId>shared-infrastructure-messaging-kafka</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.e.bambi</groupId>
                 <artifactId>shared-infrastructure-persistence-flyway</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -118,8 +108,8 @@
             </dependency>
             <dependency>
                 <groupId>com.e.bambi</groupId>
-                <artifactId>shared-kernel-security</artifactId>
-                <version>${project.version}</version>
+                <artifactId>shared-kernel-event</artifactId>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

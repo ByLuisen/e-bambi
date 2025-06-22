@@ -1,4 +1,4 @@
 package com.e.bambi.shared.kernel.application.bus;
 
-public interface Query<R> {
+public class Query<R> {
 }

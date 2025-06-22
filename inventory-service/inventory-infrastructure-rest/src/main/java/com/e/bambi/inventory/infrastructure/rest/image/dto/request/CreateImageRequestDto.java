@@ -1,0 +1,22 @@
+package com.e.bambi.inventory.infrastructure.rest.image.dto.request;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.validator.constraints.UUID;
+
+@Getter
+@Setter
+public class CreateImageRequestDto {
+    @UUID
+    @NotNull
+    private String productId;
+
+    @NotNull
+    @NotBlank(message = "Image is required")
+    @Pattern(regexp = "^(https?://.*\\.(?:png|jpg|jpeg|gif|bmp|webp))$",
+            message = "The URL must be valid and point to an image.")
+    private String imageUrl;
+}

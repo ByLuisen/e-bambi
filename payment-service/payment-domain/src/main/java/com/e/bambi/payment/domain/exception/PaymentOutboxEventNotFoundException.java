@@ -1,8 +1,6 @@
 package com.e.bambi.payment.domain.exception;
 
-import com.e.bambi.shared.kernel.domain.exception.DomainException;
-
-public class PaymentOutboxEventNotFoundException extends DomainException {
+public class PaymentOutboxEventNotFoundException extends PaymentDomainException {
     public PaymentOutboxEventNotFoundException(String message) {
         super(message);
     }

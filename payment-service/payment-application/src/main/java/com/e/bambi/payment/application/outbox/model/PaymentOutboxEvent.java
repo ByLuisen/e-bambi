@@ -8,9 +8,9 @@ import java.util.UUID;
 @Getter
 @Builder
 public class PaymentOutboxEvent {
-    private UUID id;
-    private String aggregatetype;
-    private String aggregateid;
-    private String eventType;
-    private String payload;
+    private final UUID id;
+    private final String aggregatetype;
+    private final String aggregateid;
+    private final String eventType;
+    private final String payload;
 }

@@ -3,6 +3,7 @@ package com.e.bambi.shared.kernel.application;
 import com.e.bambi.shared.kernel.application.bus.Command;
 import com.e.bambi.shared.kernel.application.bus.CommandHandler;
 import com.e.bambi.shared.kernel.application.port.inbound.bus.CommandBus;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -13,8 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Primary
 @Component
+@Primary
 public class CommandBusImpl implements CommandBus {
 
     private final Map<Class<?>, CommandHandler> handlers;
@@ -27,6 +28,7 @@ public class CommandBusImpl implements CommandBus {
         });
     }
 
+    @Override
     public <R> R dispatch(Command<R> command) {
         if (!handlers.containsKey(command.getClass())) {
             Mono.error(new Exception(String.format("No handler for %s", command.getClass().getName())));
@@ -35,7 +37,8 @@ public class CommandBusImpl implements CommandBus {
     }
 
     private Class<?> getCommandClass(CommandHandler handler) {
-        Type commandInterface = ((ParameterizedType) handler.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0];
+        Type commandInterface =
+                ((ParameterizedType) AopUtils.getTargetClass(handler).getGenericInterfaces()[0]).getActualTypeArguments()[1];
         return getClass(commandInterface.getTypeName());
     }
 

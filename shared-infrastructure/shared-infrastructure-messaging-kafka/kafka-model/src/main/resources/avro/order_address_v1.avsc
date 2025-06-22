@@ -1,0 +1,8 @@
+[
+  "null",
+  {
+    "type": "string",
+    "connect.version": 1,
+    "connect.name": "io.debezium.data.Json"
+  }
+]

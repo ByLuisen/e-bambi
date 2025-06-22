@@ -11,4 +11,11 @@
 
     <artifactId>inventory-domain</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.e.bambi</groupId>
+            <artifactId>shared-kernel-domain</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>

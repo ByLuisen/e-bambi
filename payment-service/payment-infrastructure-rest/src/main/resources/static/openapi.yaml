@@ -1,0 +1,225 @@
+openapi: 3.1.1
+info:
+  title: Swagger Payment Service
+  description: |-
+    Bienvenido a la documentación oficial del microservicio 'Payment Service'. Aquí podrás explorar e interactuar con los 
+    diversos recursos disponibles través de sus API. 
+    Esta documentación proporciona los detalles técnicos necesarios para utilizar las funcionalidades ofrecidas por el 
+    servicio de manera eficiente.
+
+    Algunos enlaces útiles:
+      - [El repositorio de Payment Service](https://github.com/ByLuisen/my-k8s-project/tree/main/apps/order-service)
+      - [La definición de la API para Payment Service](https://github.com/ByLuisen/my-k8s-project/blob/main/apps/order-service/src/main/resources/static/openapi.yaml)
+  version: 1.0.12
+servers:
+  - url: /api
+tags:
+  - name: Payment methods
+    description: Nuestros diferentes métodos de pago
+paths:
+  /v1/payment-methods/{paymentMethodId}:
+    get:
+      tags:
+        - Payment methods
+      summary: Obtén los datos de un método de pago
+      description: Obtén los datos de un método de pago
+      operationId: getPaymentMethodById
+      parameters:
+        - name: paymentMethodId
+          in: path
+          description: ID del método de pago
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/PaymentMethodReadResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Método de pago no encontrado
+        default:
+          description: Error inesperado
+    put:
+      tags:
+        - Payment methods
+      summary: Actualiza un método de pago
+      description: Actualiza un método de pago
+      operationId: updatePaymentMethod
+      parameters:
+        - name: paymentMethodId
+          in: path
+          description: ID del método de pago
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        description: Información necesaria para actualizar el método de pago
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePaymentMethodRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/PaymentMethodResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Método de pago no encontrado
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+    delete:
+      tags:
+        - Payment methods
+      summary: Elimina un método de pago
+      description: Elimina un método de pago
+      operationId: deletePaymentMethodById
+      parameters:
+        - name: paymentMethodId
+          in: path
+          description: ID del método de pago
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: Operación exitosa
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Método de pago no encontrado
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+  /v1/payment-methods:
+    get:
+      tags:
+        - Payment methods
+      summary: Lista nuestros diferentes métodos de pago
+      description: Lista nuestros diferentes métodos de pago
+      operationId: getAllPaymentMethods
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentMethodResponse'
+        '404':
+          description: Métodos de pago no encontrado
+        default:
+          description: Error inesperado
+    post:
+      tags:
+        - Payment methods
+      summary: Crea un nuevo método de pago
+      description: Crea un nuevo método de pago
+      operationId: createPaymentMethod
+      requestBody:
+        desciption: Información necesaria para crear un método de pago
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentMethodRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/PaymentMethodResponse'
+        '400':
+          description: Solicitud incorrecta
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+components:
+  schemas:
+    UpdatePaymentMethodRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          minLength: 0
+        description:
+          type: string
+          maxLength: 255
+          minLength: 0
+      required:
+        - description
+        - name
+    PaymentMethodResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+    CreatePaymentMethodRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          minLength: 0
+        description:
+          type: string
+          maxLength: 255
+          minLength: 0
+      required:
+        - description
+        - name
+    PaymentMethodReadResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          examples: ['PayPal']
+        description:
+          type: string
+  securitySchemes:
+    BambiOAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/auth
+          tokenUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/token
+          scopes:
+            - admin: Acceso administrativo

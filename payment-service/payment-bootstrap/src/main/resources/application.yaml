@@ -13,13 +13,13 @@ logging:
     #      r2dbc.pool: DEBUG
     #      r2dbc.postgresql: DEBUG
     org:
-#      apache.kafka: DEBUG
+      #      apache.kafka: DEBUG
       springframework: DEBUG
-      #      springframework.r2dbc: DEBUG
+      springframework.r2dbc: DEBUG
       springframework.data.r2dbc: TRACE
 
 payment-service:
-  saga.order_orchestrator.process_payment: saga.order_orchestrator.process_payment
+  order.payment.validate-topic-name: order.payment.validate
 
 spring:
   webflux:
@@ -27,23 +27,23 @@ spring:
   profiles:
     active: native
   application:
-    name: order-service
+    name: payment-service
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: ${JWT_PROVIDER_URI:http://localhost:8081/realms/bambi}
   r2dbc:
-    url: r2dbc:postgresql://${DATASOURCE_URL_HOST:localhost}:${DATASOURCE_URL_PORT:5435}/payment-service
-    username: user
-    password: password
+    url: r2dbc:postgresql://${DATASOURCE_URL:localhost:5435}/payment-service
+    username: ${DATASOURCE_USERNAME:user}
+    password: ${DATASOURCE_PASSWORD:password}
   flyway:
-    url: jdbc:postgresql://${DATASOURCE_URL_HOST:localhost}:${DATASOURCE_URL_PORT:5435}/payment-service
+    url: jdbc:postgresql://${DATASOURCE_URL:localhost:5435}/payment-service
     locations: classpath:db/migration
 
 kafka-config:
-  bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
-  schema-registry-url: http://localhost:18081
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:19092, localhost:29092, localhost:39092}
+  schema-registry-url: ${KAFKA_SCHEMA_REGISTRY_URL:http://localhost:18081}
 
 kafka-consumer-config:
   payment-service-consumer-group-id: payment-service-consumer
@@ -52,6 +52,12 @@ kafka-consumer-config:
   value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
   enable-auto-commit: false
   auto-offset-reset: earliest
+
+springdoc:
+  api-docs.enabled: false
+  swagger-ui:
+    showExtensions: true
+    url: /openapi.yaml
 
 management:
   endpoints:

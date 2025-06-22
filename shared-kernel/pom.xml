@@ -16,7 +16,7 @@
         <module>shared-kernel-domain</module>
         <module>shared-kernel-saga</module>
         <module>shared-kernel-bus</module>
-        <module>shared-kernel-security</module>
+        <module>shared-kernel-event</module>
     </modules>
 
     <dependencies>

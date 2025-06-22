@@ -6,12 +6,10 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,23 +20,19 @@ public class OrderItemEntity {
     private UUID id;
     @Column("order_id")
     private UUID orderId;
+    @Column("image_url")
+    private String imageUrl;
+    @Column("supplier_id")
+    private UUID supplierId;
+    private String supplier;
     @Column("product_id")
     private UUID productId;
-    @Column("sku")
     private String sku;
-    @Column("name")
     private String name;
-    @Column("sold_by")
-    private String soldBy;
-    @Column("quantity")
-    private Integer quantity;
-    @Column("price")
     private BigDecimal price;
+    private Integer quantity;
     @Column("total_price")
     private BigDecimal totalPrice;
-    private BigDecimal discount;
-    @Column("created_at")
-    private ZonedDateTime createdAt;
 
     @Override
     public boolean equals(Object o) {

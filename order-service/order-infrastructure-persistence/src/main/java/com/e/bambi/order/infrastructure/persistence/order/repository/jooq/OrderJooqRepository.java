@@ -1,24 +1,30 @@
 package com.e.bambi.order.infrastructure.persistence.order.repository.jooq;
 
-import com.e.bambi.order.application.dto.query.OrderQuery;
-import com.e.bambi.shared.kernel.domain.valueobject.OrderId;
-import com.e.bambi.shared.kernel.domain.valueobject.UserId;
+import com.e.bambi.order.application.order.dto.query.OrderQuery;
+import com.e.bambi.order.application.order.dto.response.ordersummary.OrderSummaryReadResponse;
+import com.e.bambi.order.application.order.dto.response.orderwithdetails.OrderWithDetailReadResponse;
+import com.e.bambi.order.application.order.dto.response.PaginatedResultResponse;
+import com.e.bambi.order.domain.exception.OrderNotFoundException;
+import com.e.bambi.order.infrastructure.persistence.order.mapper.OrderPersistenceMapper;
 import lombok.RequiredArgsConstructor;
 import org.jooq.*;
-import org.jooq.Record;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
-import static com.e.bambi.order.service.dataaccess.order.jooq.Tables.*;
+import static com.e.bambi.order.infrastructure.persistence.jooq.Tables.ORDERS;
+import static com.e.bambi.order.infrastructure.persistence.jooq.Tables.ORDER_ITEMS;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.multiset;
 
 @Repository
@@ -26,110 +32,140 @@ import static org.jooq.impl.DSL.multiset;
 public class OrderJooqRepository {
 
     private final DSLContext dslContext;
+    private final OrderPersistenceMapper orderPersistenceMapper;
 
-    public Flux<Record> findByUserId(UserId userId) {
+    public Mono<PaginatedResultResponse<OrderSummaryReadResponse>> findByUserId(UUID userId, int page, Integer date) {
+        var o = ORDERS;
 
-        return Flux.from(getQuery(ORDERS.USER_ID.eq(userId.getValue())));
+        Condition where = o.USER_ID.eq(userId)
+                .and(buildDate(date));
+        SortField<?> sort = o.field(o.CREATED_AT.getName(), Object.class).desc();
+        int limit = 10;
+        int offset = limit * page;
+
+        var countSql = dslContext.select(field("count(*)", SQLDataType.BIGINT))
+                .from(o)
+                .where(where);
+
+        return Mono.zip(
+                Flux.from(getOrderSummaryQuery(where)
+                                .orderBy(sort)
+                                .offset(offset)
+                                .limit(limit))
+                        .map(orderPersistenceMapper::toOrderSummaryReadResponse)
+                        .collectList(),
+                Mono.from(countSql)
+                        .map(Record1::value1)
+        ).flatMap(tuple -> {
+            if (tuple.getT1().isEmpty()) {
+                return Mono.error(new OrderNotFoundException("No orders could be found"));
+            }
+            return Mono.just(new PaginatedResultResponse<>(tuple.getT1(), tuple.getT2()));
+        });
+
     }
 
-    public Mono<Record> findByUserIdAndOrderId(UserId userId, OrderId orderId) {
-        return Mono.from(getQuery(ORDERS.USER_ID.eq(userId.getValue())
-                        .and(ORDERS.ID.eq(orderId.getValue()))));
+    public Mono<OrderWithDetailReadResponse> findByUserIdAndOrderId(UUID userId, UUID orderId) {
+        Condition where = ORDERS.USER_ID.eq(userId)
+                .and(ORDERS.ID.eq(orderId));
+
+        return Mono.from(getOrderWithDetailsQuery(where))
+                .map(orderPersistenceMapper::toOrderWithDetailsReadResponse);
     }
 
-    public Flux<Record> findAllByFilter(OrderQuery filters) {
+    public Mono<PaginatedResultResponse<OrderSummaryReadResponse>> findAll(OrderQuery filters) {
+        var o = ORDERS;
 
         Condition where = buildWhere(filters);
         SortField<?> sort = buildSort(filters.getOrderBy());
+        int limit = 10;
+        int offset = limit * filters.getPage();
 
-        int offset = filters.getPage() * filters.getSize();
-        int limit = filters.getSize();
-
-        return Flux.from(getQuery(where)
-                .orderBy(sort)
-                .limit(limit)
-                .offset(offset));
-
-    }
-
-    public Mono<Record> findByOrderId(OrderId orderId) {
-
-        return Mono.from(getQuery(ORDERS.ID.eq(orderId.getValue())));
-    }
-
-    private SelectConditionStep<?> getQuery(Condition where) {
-
-        var o = ORDERS;
-        var os = ORDER_STATUSES;
-        var pm = PAYMENT_METHODS;
-        var oi = ORDER_ITEMS;
-
-        var orderItemSubquery = dslContext
-                .select(
-                        oi.ORDER_ID.as("order_id"),
-                        oi.PRODUCT_ID.as("product_id"),
-                        oi.SKU.as("product_sku"),
-                        oi.NAME.as("product_name"),
-                        oi.SOLD_BY.as("sold_by"),
-                        oi.QUANTITY.as("product_quantity"),
-                        oi.PRICE.as("product_price"),
-                        oi.TOTAL_PRICE.as("total_price"),
-                        oi.DISCOUNT.as("discount"),
-                        oi.CREATED_AT.as("item_created_at")
-                )
-                .from(oi)
-                .where(oi.ORDER_ID.eq(o.ID));
-
-        return dslContext
-                .select(
-                        o.ID.as("order_id"),
-                        o.USER_ID.as("user_id"),
-                        o.TOTAL_PRICE.as("order_total_price"),
-                        o.ADDRESS.as("shipping_address"),
-                        o.COUNTRY.as("shipping_country"),
-                        o.CITY.as("shipping_city"),
-                        o.PROVINCE.as("shipping_province"),
-                        o.POSTAL_CODE.as("shipping_postal_code"),
-                        o.PHONE_NUMBER.as("shipping_phone_number"),
-                        o.CREATED_AT.as("order_created_at"),
-                        o.UPDATED_AT.as("order_updated_at"),
-                        os.ID.as("status_id"),
-                        os.NAME.as("status_name"),
-                        pm.NAME.as("payment_method_name"),
-                        multiset(orderItemSubquery).as("order_items")
-                )
+        var countSql = dslContext.select(field("count(*)", SQLDataType.BIGINT))
                 .from(o)
-                .join(os).on(os.ID.eq(o.STATUS_ID))
-                .join(pm).on(pm.ID.eq(o.PAYMENT_METHOD_ID))
-                .where(where != null ? where : DSL.trueCondition());
+                .where(where);
+
+        return Mono.zip(
+                Flux.from(getOrderSummaryQuery(where)
+                                .orderBy(sort)
+                                .offset(offset)
+                                .limit(limit))
+                        .map(orderPersistenceMapper::toOrderSummaryReadResponse)
+                        .collectList(),
+                Mono.from(countSql)
+                        .map(Record1::value1)
+        ).flatMap(tuple -> {
+            if (tuple.getT1().isEmpty()) {
+                return Mono.error(new OrderNotFoundException("No orders could be found"));
+            }
+            return Mono.just(new PaginatedResultResponse<>(tuple.getT1(), tuple.getT2()));
+        });
+    }
+
+    public Mono<OrderWithDetailReadResponse> findByOrderId(UUID orderId) {
+        Condition where = ORDERS.ID.eq(orderId);
+
+        return Mono.from(getOrderWithDetailsQuery(where))
+                .map(orderPersistenceMapper::toOrderWithDetailsReadResponse);
+    }
+
+    private Condition buildDate(Integer date) {
+        OffsetDateTime minDate;
+        OffsetDateTime maxDate;
+        switch (date) {
+            case 30 -> {
+                minDate = OffsetDateTime.now().minusDays(30);
+                maxDate = OffsetDateTime.now();
+            }
+            case 3 -> {
+                minDate = OffsetDateTime.now().minusMonths(3);
+                maxDate = OffsetDateTime.now();
+            }
+            default -> {
+                ZoneOffset offset = ZoneOffset.of("UTC");
+
+                // Primera fecha del año: 1 de enero a las 00:00:00
+                minDate = OffsetDateTime.of(
+                        date, 1, 1,
+                        0, 0, 0, 0,
+                        offset
+                );
+
+                // Última fecha del año: 31 de diciembre a las 23:59:59.999999999
+                maxDate = OffsetDateTime.of(
+                        date, 12, 31,
+                        23, 59, 59, 999_999_999,
+                        offset
+                );
+            }
+        }
+
+        return ORDERS.CREATED_AT.between(minDate, maxDate);
     }
 
     private Condition buildWhere(OrderQuery q) {
-        Condition c = DSL.trueCondition();
-        if (q.getStatusId() != null) {
-            List<UUID> ids = parseUuids(q.getStatusId());
-            c = c.and(ORDERS.STATUS_ID.in(ids));
-        }
+        List<Condition> conditions = new ArrayList<>();
         if (q.getPaymentMethodId() != null) {
-            List<UUID> ids = parseUuids(q.getPaymentMethodId());
-            c = c.and(ORDERS.PAYMENT_METHOD_ID.in(ids));
+            conditions.add(ORDERS.PAYMENT_METHOD_ID.in(q.getPaymentMethodId()));
         }
         if (q.getUserId() != null) {
-            List<UUID> ids = parseUuids(q.getUserId());
-            c = c.and(ORDERS.USER_ID.in(ids));
+            conditions.add(ORDERS.USER_ID.in(q.getUserId()));
         }
         if (q.getCreatedAt() != null) {
-            LocalDate[] dates = parseDateRange(q.getCreatedAt());
-            c = c.and(ORDERS.CREATED_AT.between(
-                    dates[0].atStartOfDay(),
-                    dates[1].atTime(LocalTime.MAX)
+            conditions.add(ORDERS.CREATED_AT.between(
+                    q.getCreatedAt().getFirst(),
+                    q.getCreatedAt().getLast()
             ));
         }
         if (q.getTotalPrice() != null) {
-            BigDecimal[] prices = parseNumberRange(q.getTotalPrice());
-            c = c.and(ORDERS.TOTAL_PRICE.between(prices[0], prices[1]));
+            conditions.add(ORDERS.TOTAL_PRICE.between(
+                    q.getTotalPrice().getFirst(),
+                    q.getTotalPrice().getLast()
+            ));
         }
-        return c;
+        return conditions.isEmpty()
+                ? DSL.noCondition()
+                : DSL.and(conditions);
     }
 
     private SortField<?> buildSort(String orderBy) {
@@ -140,19 +176,69 @@ public class OrderJooqRepository {
                 : field.desc();
     }
 
-    private List<UUID> parseUuids(String pipeSeparated) {
-        return Stream.of(pipeSeparated.split("\\|"))
-                .map(UUID::fromString)
-                .toList();
+    private SelectConditionStep<?> getOrderSummaryQuery(Condition where) {
+        var o = ORDERS;
+        var oi = ORDER_ITEMS;
+
+        var orderItemsSubquery = dslContext
+                .select(
+                        oi.IMAGE_URL.as("image_url"),
+                        oi.PRODUCT_ID.as("product_id"),
+                        oi.NAME.as("product_name")
+                )
+                .from(oi)
+                .where(oi.ORDER_ID.eq(o.ID));
+
+        return dslContext
+                .select(
+                        o.ID.as("id"),
+                        o.ORDER_STATUS.as("order_status"),
+                        o.COUNTRY.as("shipping_country"),
+                        o.ADDRESS.as("shipping_address"),
+                        o.CITY.as("shipping_city"),
+                        o.PROVINCE.as("shipping_province"),
+                        o.POSTAL_CODE.as("shipping_postal_code"),
+                        o.PHONE_NUMBER.as("shipping_phone_number"),
+                        o.TOTAL_PRICE.as("total_price"),
+                        o.CREATED_AT.as("created_at"),
+                        multiset(orderItemsSubquery).as("order_items")
+                )
+                .from(o)
+                .where(where != null ? where : DSL.trueCondition());
     }
 
-    private LocalDate[] parseDateRange(String pipeSeparated) {
-        String[] d = pipeSeparated.split("\\|");
-        return new LocalDate[]{LocalDate.parse(d[0]), LocalDate.parse(d[1])};
-    }
+    private SelectConditionStep<?> getOrderWithDetailsQuery(Condition where) {
+        var o = ORDERS;
+        var oi = ORDER_ITEMS;
 
-    private BigDecimal[] parseNumberRange(String dashSeparated) {
-        String[] p = dashSeparated.split("-");
-        return new BigDecimal[]{new BigDecimal(p[0]), new BigDecimal(p[1])};
+        var orderItemsSubquery = dslContext
+                .select(
+                        oi.IMAGE_URL.as("image_url"),
+                        oi.SUPPLIER_ID.as("supplier_id"),
+                        oi.SUPPLIER.as("supplier"),
+                        oi.PRODUCT_ID.as("product_id"),
+                        oi.NAME.as("product_name"),
+                        oi.PRICE.as("price"),
+                        oi.QUANTITY.as("quantity"),
+                        oi.TOTAL_PRICE.as("item_total_price")
+                ).from(oi)
+                .where(oi.ORDER_ID.eq(o.ID));
+
+        return dslContext
+                .select(
+                        o.ORDER_STATUS.as("order_status"),
+                        o.PAYMENT_METHOD_ID.as("payment_method_id"),
+                        o.PAYMENT_METHOD.as("payment_method"),
+                        o.COUNTRY.as("shipping_country"),
+                        o.ADDRESS.as("shipping_address"),
+                        o.CITY.as("shipping_city"),
+                        o.PROVINCE.as("shipping_province"),
+                        o.POSTAL_CODE.as("shipping_postal_code"),
+                        o.PHONE_NUMBER.as("shipping_phone_number"),
+                        o.TOTAL_PRICE.as("order_total_price"),
+                        o.CREATED_AT.as("created_at"),
+                        multiset(orderItemsSubquery).as("order_items")
+                ).from(o)
+                .where(where != null ? where : DSL.trueCondition());
     }
 }

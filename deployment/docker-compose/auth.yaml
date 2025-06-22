@@ -4,8 +4,9 @@ volumes:
 
 services:
   bitnami-keycloak:
+    restart: unless-stopped
     image: bitnami/keycloak:26.1.0-debian-12-r1
-    container_name: e-bambi-bitnami-keycloak
+    container_name: e-bambi-keycloak
     volumes:
       - ../keycloak-themes/keywind:/opt/bitnami/keycloak/themes/keywind
     environment:
@@ -14,7 +15,7 @@ services:
       KEYCLOAK_DATABASE_HOST: keycloak-db
       KEYCLOAK_DATABASE_PASSWORD: nil
     ports:
-      - "8081:8080" # Mapea el puerto local 8080 al puerto 8080 del contenedor
+      - "8081:8080"
     networks:
       - e-bambi-network
     depends_on:
@@ -22,6 +23,7 @@ services:
         condition: service_healthy
 
   keycloak-db:
+    restart: unless-stopped
     image: postgres:14
     container_name: e-bambi-keycloak-db
     volumes:

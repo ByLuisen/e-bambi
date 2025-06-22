@@ -1,8 +1,6 @@
 package com.e.bambi.payment.domain.exception;
 
-import com.e.bambi.shared.kernel.domain.exception.DomainException;
-
-public class PaymentMethodNotFoundException extends DomainException {
+public class PaymentMethodNotFoundException extends PaymentDomainException {
     public PaymentMethodNotFoundException(String message) {
         super(message);
     }

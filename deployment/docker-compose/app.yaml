@@ -1,0 +1,27 @@
+services:
+  swaggerapi:
+    restart: unless-stopped
+    image: swaggerapi/swagger-ui
+    container_name: e-bambi-swagger-api
+    volumes:
+      - ./swagger-ui/index.html:/usr/share/nginx/html/index.html
+      - ./swagger-ui/dark-mode.css:/usr/share/nginx/html/dark-mode.css
+    environment:
+      URLS: "[
+                { 
+                  url: \"http://localhost:8182/api/openapi.yaml\", 
+                  name: \"inventory\" 
+                },
+                { 
+                  url: \"http://localhost:8183/api/openapi.yaml\", 
+                  name: \"payment\" 
+                },
+                {
+                  url: \"http://localhost:8181/api/openapi.yaml\",
+                  name: \"order\"
+                }
+             ]"
+    ports:
+      - "80:8080"
+    networks:
+      - e-bambi-network

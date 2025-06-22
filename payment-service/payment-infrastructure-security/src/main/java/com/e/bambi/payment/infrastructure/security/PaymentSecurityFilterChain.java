@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -23,16 +24,19 @@ public class PaymentSecurityFilterChain {
         http.oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)));
 
+        http.cors(Customizer.withDefaults());
+
         http.csrf(ServerHttpSecurity.CsrfSpec::disable);
 
         http.authorizeExchange(exchanges ->
-                exchanges
-                        .pathMatchers(HttpMethod.GET,
+                exchanges.pathMatchers(HttpMethod.GET,
                                 "/v3/api-docs/**",
-                                "swagger-ui.html",
+                                "/openapi.yaml",
+                                "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/debug",
-                                "v*/payment-methods"
+                                "/v*/payment-methods/**",
+                                "/actuator/health/**"
                         )
                         .permitAll()
                         .anyExchange().authenticated()

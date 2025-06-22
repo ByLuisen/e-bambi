@@ -1,22 +1,16 @@
 package com.e.bambi.order.domain.event;
 
-import com.e.bambi.shared.kernel.domain.event.publisher.DomainEventPublisher;
-import com.e.bambi.order.domain.entity.Order;
-
-import java.time.ZonedDateTime;
+import com.e.bambi.order.domain.order.entity.Order;
+import com.e.bambi.shared.kernel.domain.event.payload.order.OrderEventPayload;
 
 public class OrderCreatedEvent extends OrderEvent {
 
-    private final DomainEventPublisher<OrderCreatedEvent> orderCreatedEventDomainEventPublisher;
-
-    public OrderCreatedEvent(Order order, ZonedDateTime createdAt,
-                             DomainEventPublisher<OrderCreatedEvent> orderCreatedEventDomainEventPublisher) {
-        super(order, createdAt);
-        this.orderCreatedEventDomainEventPublisher = orderCreatedEventDomainEventPublisher;
+    public OrderCreatedEvent(String aggregatetype, Order order) {
+        super(aggregatetype, order);
     }
 
     @Override
-    public void fire() {
-        orderCreatedEventDomainEventPublisher.publish(this);
+    protected OrderEventPayload toPayload() {
+        return null;
     }
 }

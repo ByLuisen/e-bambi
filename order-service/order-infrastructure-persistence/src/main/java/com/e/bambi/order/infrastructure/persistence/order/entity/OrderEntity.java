@@ -7,12 +7,11 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,22 +20,28 @@ public class OrderEntity {
 
     @Id
     private UUID id;
-    @Column("tracking_id")
-    private UUID trackingId;
-    @Column("status_id")
-    private UUID statusId;
-    @Column("payment_method_id")
-    private UUID paymentMethodId;
     @Column("user_id")
     private UUID userId;
+    @Column("order_status")
+    private String orderStatus;
+    @Column("payment_method_id")
+    private UUID paymentMethodId;
+    @Column("payment_method")
+    private String paymentMethod;
+    private String country;
+    private String address;
+    private String city;
+    private String province;
+    @Column("postal_code")
+    private String postalCode;
+    @Column("phone_number")
+    private String phoneNumber;
     @Column("total_price")
     private BigDecimal totalPrice;
     @Column("failure_messages")
     private String failureMessages;
     @Column("created_at")
-    private ZonedDateTime createdAt;
-    @Column("updated_at")
-    private Instant updatedAt;
+    private OffsetDateTime createdAt;
 
     @Override
     public boolean equals(Object o) {

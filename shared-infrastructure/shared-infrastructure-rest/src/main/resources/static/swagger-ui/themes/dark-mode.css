@@ -1,0 +1,76 @@
+:root {
+    --bg-primary: #232932;
+    --text-primary: #ffffff;
+    --text-accent: #62a03f;
+    --link-color: #4990e2;
+}
+
+.swagger-ui .topbar {
+    background-color: #313845;
+}
+
+.swagger-ui {
+    background: var(--bg-primary);
+    color: var(--text-accent);
+}
+
+.swagger-ui, .swagger-ui table thead tr th, .swagger-ui .parameter__type, .swagger-ui .parameter__name.required, .swagger-ui .info .title, .swagger-ui table thead tr td, .swagger-ui .response-col_status, .swagger-ui .opblock .opblock-section-header h4, .swagger-ui .opblock-description-wrapper p, .swagger-ui .tab li button.tablinks, .swagger-ui .response-col_links, .swagger-ui small, .swagger-ui .response-col_description .renderedMarkdown p, .swagger-ui .opblock .tab-header .tab-item.active h4 span, .swagger-ui .btn, span, .swagger-ui .json-schema-2020-12__title, .swagger-ui .json-schema-2020-12-property .json-schema-2020-12__title, .swagger-ui .json-schema-2020-12-expand-deep-button, .swagger-ui .responses-inner h4, .swagger-ui .responses-inner h5, .swagger-ui .opblock .opblock-summary-description, .swagger-ui .renderedMarkdown p  {
+    color: var(--text-primary);
+}
+
+.swagger-ui span.url {
+    color: var(--link-color);
+}
+
+html, .swagger-ui, .swagger-ui .scheme-container, .swagger-ui .opblock .opblock-section-header, .swagger-ui .json-schema-2020-12-expand-deep-button, .swagger-ui .json-schema-2020-12-accordion {
+    background: var(--bg-primary);
+}
+
+.swagger-ui .json-schema-2020-12-accordion__icon, .swagger-ui .opblock-control-arrow, .swagger-ui .expand-operation, .swagger-ui .models-control {
+    fill: var(--text-primary);
+}
+
+.swagger-ui section.models, .swagger-ui section.models.is-open h4, .swagger-ui .opblock-tag {
+    border-color: #6d7b8f;
+}
+
+.swagger-ui table thead tr td {
+    border-bottom: 1px solid var(--text-primary);
+}
+
+.swagger-ui {
+    fill: #00ff8a
+}
+
+.swagger-ui .dialog-ux .modal-ux {
+    background: var(--bg-primary);
+    border: none;
+
+    p, h2, h3, h4, label {
+        color: var(--text-primary)
+    }
+}
+
+.swagger-ui .auth-container .errors {
+    background-color: #ff000029;
+    border: 1.5px solid #ff0000
+}
+
+.swagger-ui .auth-container .errors b {
+    color: #e5e5e5;
+}
+
+.swagger-ui select {
+    background-color: var(--bg-primary);
+    color: white;
+    border: 1px solid
+}
+
+.swagger-ui .response-control-media-type__accept-message {
+    color: #00ff00;
+}
+
+.swagger-ui textarea {
+    color: white;
+    background: #232932;
+}

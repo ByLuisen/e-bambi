@@ -11,4 +11,15 @@
 
     <artifactId>inventory-infrastructure-messaging</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.e.bambi</groupId>
+            <artifactId>inventory-application</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.e.bambi</groupId>
+            <artifactId>kafka-consumer</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>

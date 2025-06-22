@@ -1,0 +1,1800 @@
+openapi: 3.1.1
+info:
+  title: Swagger Inventory Service
+  description: |-
+    Bienvenido a la documentación oficial del microservicio 'Payment Service'. Aquí podrás explorar e interactuar con los 
+    diversos recursos disponibles través de sus API. 
+    Esta documentación proporciona los detalles técnicos necesarios para utilizar las funcionalidades ofrecidas por el 
+    servicio de manera eficiente.
+
+    Algunos enlaces útiles:
+      - [El repositorio de Inventory Service](https://github.com/ByLuisen/my-k8s-project/tree/main/apps/order-service)
+      - [La definición de la API para Inventory Service](https://github.com/ByLuisen/my-k8s-project/blob/main/apps/order-service/src/main/resources/static/openapi.yaml)
+  version: 1.0.12
+servers:
+  - url: /api
+tags:
+  - name: Suppliers
+    description: Nuestros diferentes proveedores
+  - name: Products
+    description: Explora nuesto catálogo de productos
+  - name: Movement types
+    description: Diferentes tipos de movimientos para la entrada o salida de stock
+  - name: Offers
+    description: Ofertas de nuestros productos
+  - name: Inventory movements
+    description: Movimientos de inventario
+  - name: Departments
+    description: Nuestros diferentes departamentos
+  - name: Brands
+    description: Marcas
+  - name: Images
+    description: Imagenes de nuestros productos
+paths:
+  /v1/suppliers/me:
+    put:
+      tags:
+        - Suppliers
+      summary: Actualiza tus datos de proveedor
+      description: Actualiza tus datos de proveedor
+      operationId: updateSupplier
+      requestBody:
+        description: Datos necesarios para realizar la actualización
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSupplierRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'applications/json':
+              schema:
+                $ref: '#/components/schemas/SupplierResponse'
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [supplier]
+      x-roles-required:
+        - SUPPLIER
+    delete:
+      tags:
+        - Suppliers
+      summary: Elimina tus datos de proveedor
+      description: Elimina tus datos de proveedor
+      operationId: deleteSupplierById
+      responses:
+        '204':
+          description: Operación exitosa
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [supplier]
+      x-roles-required:
+        - SUPPLIER
+  /v1/suppliers:
+    get:
+      tags:
+        - Suppliers
+      summary: Lista nuestros diferentes proveedores
+      description: Lista nuestros diferentes proveedores
+      operationId: getAllSuppliers
+      parameters:
+        - name: supplierRequestDto
+          in: query
+          description: Filtros para obtener nuestros proveedores
+          required: true
+          schema:
+            $ref: '#/components/schemas/SupplierRequestDto'
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/PaginatedResultResponseSupplierResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Proveedores no encontrados
+        default:
+          description: Error inesperado
+  /v1/products/{productId}:
+    get:
+      tags:
+        - Products
+      summary: Obtén información acerca de un producto
+      description: Obtén información acerca de un producto
+      operationId: findProductWithDetails
+      parameters:
+        - name: productId
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ProductWithDetailsReadResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Producto no encontrado
+        default:
+          description: Error inesperado
+    put:
+      tags:
+        - Products
+      summary: Actualiza la información de un producto
+      description: Actualiza la información de un producto
+      operationId: updateProduct
+      parameters:
+        - name: productId
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Datos necesarios para actualizar el producto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductRequestDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Producto no encontrado
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+    delete:
+      tags:
+        - Products
+      summary: Elimina un producto
+      description: Elimina un producto
+      operationId: deleteProduct
+      parameters:
+        - name: productId
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Operación exitosa
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Producto no encontrado
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+  /v1/products:
+    get:
+      tags:
+        - Products
+      summary: Obtén la información de nuestros diferentes productos
+      description: Obtén la información de nuestros diferentes productos
+      operationId: findProducts
+      parameters:
+        - name: filters
+          in: query
+          description: Filtros disponibles
+          required: true
+          schema:
+            $ref: '#/components/schemas/ProductRequestDto'
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: >-
+                  #/components/schemas/PaginatedResultResponseProductSummaryReadResponse
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Productos no encontrados
+        default:
+          description: Error inesperado
+    post:
+      tags:
+        - Products
+      summary: Crea un nuevo producto
+      description: Crea un nuevo producto
+      operationId: saveProduct
+      requestBody:
+        description: Datos necesarios para crear un nuevo producto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '400':
+          description: Solicitud incorrecta
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+  /v1/movement-types:
+    get:
+      tags:
+        - Movement types
+      summary: Lista nuestros diferentes tipos de movimientos
+      description: Lista nuestros diferentes tipos de movimientos
+      operationId: findAllMovementTypes
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovementTypeResponse'
+        '404':
+          description: Tipos de movimientos no encontrados
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+    post:
+      tags:
+        - Movement types
+      summary: Crea un nuevo tipo de movimiento
+      description: Crea un nuevo tipo de movimiento
+      operationId: saveMovementType
+      requestBody:
+        description: Datos necesarios para la creación del nuevo tipo de movimiento
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMovementTypeRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/MovementTypeResponse'
+        '400':
+          description: Solicitud incorrecta
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+  /v1/movement-types/{movementTypeId}:
+    put:
+      tags:
+        - Movement types
+      summary: Actualiza un tipo de movimeinto ya existente
+      description: Actualiza un tipo de movimiento ya existente
+      operationId: updateMovementType
+      parameters:
+        - name: movementTypeId
+          in: path
+          description: ID del tipo de movimiento
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Información necesaria para actualizar un tipo de movimiento
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMovementTypeRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/MovementTypeResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Tipo de movimiento no encontrado
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+    delete:
+      tags:
+        - Movement types
+      summary: Elimina un tipo de movimiento
+      description: Elimina un tipo de movimiento
+      operationId: deleteMovementTypeById
+      parameters:
+        - name: movementTypeId
+          in: path
+          description: ID del tipo de movimiento
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Operación exitosa
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Tipo de movimiento no encontrado
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+  /v1/me/offers/{offerId}:
+    put:
+      tags:
+        - Offers
+      summary: Actualiza los detalles de tu oferta
+      description: Actualiza los detalles de tu oferta
+      operationId: updateOffer
+      parameters:
+        - name: offerId
+          in: path
+          description: ID de la oferta
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Información necesaria para actualizar tu oferta
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOfferRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Operción exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/OfferResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Oferta no encontrada
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [supplier]
+      x-roles-required:
+        - SUPPLIER
+    delete:
+      tags:
+        - Offers
+      summary: Elimina una oferta
+      description: Elimina una oferta
+      operationId: deleteOffer
+      parameters:
+        - name: offerId
+          in: path
+          description: ID de la oferta
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Operación exitosa
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Oferta no encontrada
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [supplier]
+      x-roles-required:
+        - SUPPLIER
+  /v1/me/offers:
+    post:
+      tags:
+        - Offers
+      summary: Crea una nueva oferta
+      description: Crea una nueva oferta
+      operationId: createOffer
+      requestBody:
+        description: Información necesaria para crear una nueva oferta
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOfferRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/OfferResponse'
+        '400':
+          description: Solicitud incorrecta
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [supplier]
+      x-roles-required:
+        - SUPPLIER
+  /v1/suppliers/{supplierId}/offers:
+    get:
+      tags:
+        - Offers
+      summary: Lista las diferentes ofertas que tiene un proveedor
+      description: Lista las diferentes ofertas que tiene un proveedor
+      operationId: getSupplierOffers
+      parameters:
+        - name: supplierId
+          in: path
+          descrption: ID del proveedor
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: offerBySupplierIdRequestDto
+          in: query
+          description: Filtros disponibles
+          required: true
+          schema:
+            $ref: '#/components/schemas/OfferBySupplierIdRequestDto'
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: >-
+                  #/components/schemas/PaginatedResultResponseSupplierOfferReadResponse
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Ofertas del proveedor no encontradas
+        default:
+          description: Error inesperado
+  /v1/products/{productId}/offers:
+    get:
+      tags:
+        - Offers
+      summary: Lista las ofertas que tiene un producto
+      description: Lista las ofertas que tiene un producto
+      operationId: getProductOffers
+      parameters:
+        - name: productId
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductOfferReadResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Ofertas del producto no encontradas
+        default:
+          description: Error inesperado
+  /v1/inventory-movements/{inventoryMovementId}:
+    get:
+      tags:
+        - Inventory movements
+      summary: Obtén los detalles acerca de un movimiento de inventario
+      description: Obtén los detalles acerca de un movimiento de inventario
+      operationId: findInventoryMovement
+      parameters:
+        - name: inventoryMovementId
+          in: path
+          description: ID del movimiento de inventario
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/InventoryMovementSummaryReadResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Movimiento de inventario no encontrado
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene lo roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+    put:
+      tags:
+        - Inventory movements
+      summary: Actualiza un movimiento de inventario
+      description: Actualiza un movimiento de inventario
+      operationId: updateInventoryMovement
+      parameters:
+        - name: inventoryMovementId
+          in: path
+          description: ID del movimiento de inventario
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Información necesario para realizar la actualización
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateInventoryMovementRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/InventoryMovementResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Movimiento de inventario no encontrado
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+    delete:
+      tags:
+        - Inventory movements
+      summary: Elimina un movimiento de inventario
+      description: Elimina un movimiento de inventario
+      operationId: deleteInventoryMovement
+      parameters:
+        - name: inventoryMovementId
+          in: path
+          description: ID del movimiento de inventario
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Operación exitosa
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Movimiento de inventario no encontrado
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+  /v1/inventory-movements:
+    get:
+      tags:
+        - Inventory movements
+      summary: Lista todos los movimientos de inventario
+      description: Lista todos los movimientos de inventario
+      operationId: findInventoryMovements
+      parameters:
+        - name: filters
+          in: query
+          description: Filtros disponibles
+          required: true
+          schema:
+            $ref: '#/components/schemas/InventoryMovementRequestDto'
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: >-
+                  #/components/schemas/PaginatedResultResponseInventoryMovementSummaryReadResponse
+        '400':
+          description: Solicitud incorrecta
+        '401':
+          description: No autenticado
+        '404':
+          description: Movimientos de inventario no encontrados
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+    post:
+      tags:
+        - Inventory movements
+      summary: Crea un nuevo movimiento de inventario
+      description: Crea un nuevo movimiento de inventario
+      operationId: saveInventoryMovement
+      requestBody:
+        description: Información necesaria para crear un movimiento de inventario
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateInventoryMovementRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/InventoryMovementResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: La información proporcionada no existe
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+  /v1/departments/{departmentId}:
+    put:
+      tags:
+        - Departments
+      summary: Actualiza la información de un departamento
+      description: Actualiza la información de un departamento
+      operationId: updateDepartment
+      parameters:
+        - name: departmentId
+          in: path
+          description: ID del departamento
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Información necesaria para actualizar un departamento
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDepartmentRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/DepartmentResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Departamento no encontrado
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+    delete:
+      tags:
+        - Departments
+      summary: Elimina un departamento
+      description: Elimina un departamento
+      operationId: deleteDepartmentById
+      parameters:
+        - name: departmentId
+          in: path
+          description: ID del departamento
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Operación exitosa
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Departamento no encontrado
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+  /v1/departments:
+    get:
+      tags:
+        - Departments
+      summary: Lista nuestros diferentes departamentos
+      description: Lista nuestros diferetes departamentos
+      operationId: findAllDepartments
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DepartmentResponse'
+        '404':
+          description: Departamentos no encontrados
+        default:
+          description: Error inesperado
+    post:
+      tags:
+        - Departments
+      summary: Crea un nuevo departamento
+      description: Crea un nuevo departamento
+      operationId: saveDepartment
+      requestBody:
+        description: Información necesaria para crear un nuevo departamento
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDepartmentRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/DepartmentResponse'
+        '400':
+          description: Solicitud incorrecta
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [amdin]
+      x-roles-required:
+        - ADMIN
+  /v1/brands/{brandId}:
+    put:
+      tags:
+        - Brands
+      summary: Actualiza una marca
+      description: Actualiza una marca
+      operationId: updateBrand
+      parameters:
+        - name: brandId
+          in: path
+          description: ID de la marca
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Información necesaria para actualizar una marca
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBrandRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/BrandResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Marca no encontrada
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+    delete:
+      tags:
+        - Brands
+      summary: Elimina una marca
+      description: Elimina una marca
+      operationId: deleteBrandById
+      parameters:
+        - name: brandId
+          in: path
+          description: ID de la marca
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Operación exitosa
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Marca no encontrada
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+  /v1/brands:
+    get:
+      tags:
+        - Brands
+      summary: Lista las diferentes marcas
+      description: Lista las diferentes marcas
+      operationId: findAllBrands
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BrandResponse'
+        '404':
+          description: Marcas no encontradas
+        default:
+          description: Error inesperado
+    post:
+      tags:
+        - Brands
+      summary: Crear una marca
+      description: Crea una marca
+      operationId: createBrand
+      requestBody:
+        description: Información necesaria para crear una marca
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBrandRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/BrandResponse'
+        '400':
+          description: Solicitud incorrecta
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+  /v1/images:
+    get:
+      tags:
+        - Images
+      summary: Lista las imágenes de un producto
+      description: Lista las imágenes de un producto
+      operationId: getProductImages
+      parameters:
+        - name: productId
+          in: query
+          description: ID del producto
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ImageResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Imágenes del producto no encontradas
+        default:
+          description: Error inesperado
+    post:
+      tags:
+        - Images
+      summary: Guarda una imagen
+      description: Guarda una imagen
+      operationId: saveImage
+      requestBody:
+        description: Información necesaria para guardar una imagen
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateImageRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ImageResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: La información proporcionada no existe
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+  /v1/images/{imageId}:
+    delete:
+      tags:
+        - Images
+      summary: Elimina una imagen
+      description: Elimina una imagen
+      operationId: deleteImageById
+      parameters:
+        - name: imageId
+          in: path
+          description: ID de la imagen
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Operación exitosa
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Imagen no encontrada
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [admin]
+      x-roles-required:
+        - ADMIN
+components:
+  schemas:
+    UpdateSupplierRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          minLength: 3
+          pattern: ^[A-Za-z0-9][A-Za-z0-9 .-]*[A-Za-z0-9]$
+          examples: ['TechGear Partners']
+      required:
+        - name
+    SupplierResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          examples: ['TechGear Partners']
+    UpdateProductRequestDto:
+      type: object
+      properties:
+        brandId:
+          type: string
+          format: uuid
+          examples: ['27f2e42b-a68e-4c89-abe3-69ec78675fbb']
+        departmentId:
+          type: string
+          format: uuid
+          examples: ['fc7e4e78-46ac-47b6-b54f-b12a74a22aa7']
+        productStatusId:
+          type: string
+          format: uuid
+          examples: ['1e8b7e83-bf45-4838-80bd-aa9e2cb9c286']
+        sku:
+          type: string
+          pattern: ^[A-Za-z0-9_-]+$
+          examples: ['SAM-001-EL']
+        name:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[A-Za-z0-9 ]+$
+          examples: ['Samsung Galaxy S23']
+        description:
+          type: string
+          maxLength: 500
+          minLength: 10
+          examples: ['Último modelo de la serie Galaxy con pantalla AMOLED de 120Hz.']
+      required:
+        - brandId
+        - departmentId
+        - description
+        - name
+        - productStatusId
+        - sku
+    ProductResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          examples: ['839546df-e9ab-45c4-b5e0-06f10ca5c3d7']
+        brandId:
+          type: string
+          format: uuid
+          examples: ['27f2e42b-a68e-4c89-abe3-69ec78675fbb']
+        departmentId:
+          type: string
+          format: uuid
+          examples: ['fc7e4e78-46ac-47b6-b54f-b12a74a22aa7']
+        productStatusId:
+          type: string
+          format: uuid
+          examples: ['1e8b7e83-bf45-4838-80bd-aa9e2cb9c286']
+        sku:
+          type: string
+          examples: ['SAM-001-EL']
+        name:
+          type: string
+          examples: ['Samsung Galaxy S23']
+        description:
+          type: string
+          examples: ['Último modelo de la serie Galaxy con pantalla AMOLED de 120Hz.']
+    UpdateMovementTypeRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          minLength: 3
+          pattern: ^[A-Za-z0-9][A-Za-z0-9 .-]*[A-Za-z0-9]$
+          example: ['Sale']
+        description:
+          type: string
+          maxLength: 100
+          minLength: 5
+          pattern: ^[a-zA-Z0-9 ]+$
+          examples: ['Último modelo de la serie Galaxy con pantalla AMOLED de 120Hz.']
+      required:
+        - description
+        - name
+    UpdateOfferRequestDto:
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+        price:
+          type: number
+          minimum: 0.01
+          examples: [79.99]
+        stock:
+          type: integer
+          format: int32
+          examples: [10]
+      required:
+        - price
+        - productId
+        - stock
+    OfferResponse:
+      type: object
+      properties:
+        offerId:
+          type: string
+          format: uuid
+        supplierId:
+          type: string
+          format: uuid
+        productId:
+          type: string
+          format: uuid
+        price:
+          type: number
+          examples: [79.99]
+        stock:
+          type: integer
+          format: int32
+          examples: [10]
+    UpdateInventoryMovementRequestDto:
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+        movementTypeId:
+          type: string
+          format: uuid
+        productSku:
+          type: string
+          pattern: ^[A-Za-z0-9_-]+$
+          examples: ['SAM-001-EL']
+        productName:
+          type: string
+          pattern: ^[A-Za-z0-9\s\-_,.]+$
+          examples: ['Samsung Galaxy S23']
+        quantity:
+          type: integer
+          format: int32
+          examples: [10]
+      required:
+        - movementTypeId
+        - productId
+        - productName
+        - productSku
+        - quantity
+    InventoryMovementResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        supplierId:
+          type: string
+          format: uuid
+        productId:
+          type: string
+          format: uuid
+        movementTypeId:
+          type: string
+          format: uuid
+        productSku:
+          type: string
+          examples: ['SAM-001-EL']
+        productName:
+          type: string
+          examples: ['Samsung Galaxy S23']
+        quantity:
+          type: integer
+          format: int32
+          examples: [10]
+        previousStock:
+          type: integer
+          format: int32
+          examples: [50]
+        newStock:
+          type: integer
+          format: int32
+          examples: [40]
+        createdAt:
+          type: string
+          format: date-time
+          examples: ['2025-06-07T21:00:03.348+02:00']
+    UpdateDepartmentRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          minLength: 3
+          pattern: ^[A-Za-z0-9][A-Za-z0-9 .-]*[A-Za-z0-9]$
+          examples: ['Electronics']
+      required:
+        - name
+    DepartmentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          examples: ['Electronics']
+    UpdateBrandRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          minLength: 3
+          pattern: ^[A-Za-z0-9][A-Za-z0-9 .-]*[A-Za-z0-9]$
+          examples: ['Samsung']
+      required:
+        - name
+    BrandResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          examples: ['Samsung']
+    CreateProductRequestDto:
+      type: object
+      properties:
+        brandId:
+          type: string
+          format: uuid
+        departmentId:
+          type: string
+          format: uuid
+        productStatusId:
+          type: string
+          format: uuid
+        sku:
+          type: string
+          pattern: ^[A-Za-z0-9_-]+$
+          examples: ['SAM-001-EL']
+        name:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[A-Za-z0-9 ]+$
+          examples: ['Samsung Galaxy S23']
+        description:
+          type: string
+          maxLength: 500
+          minLength: 10
+          examples: ['Último modelo de la serie Galaxy con pantalla AMOLED de 120Hz.']
+      required:
+        - brandId
+        - departmentId
+        - description
+        - name
+        - productStatusId
+        - sku
+    CreateMovementTypeRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          minLength: 3
+          pattern: ^[A-Za-z0-9][A-Za-z0-9 .-]*[A-Za-z0-9]$
+          examples: ['Sale']
+        description:
+          type: string
+          maxLength: 100
+          minLength: 5
+          pattern: ^[a-zA-Z0-9 ]+$
+          examples: ['Movimiento en el que un producto es vendido a un cliente.']
+      required:
+        - description
+        - name
+    MovementTypeResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          examples: ['Sale']
+        description:
+          type: string
+          examples: ['Movimiento en el que un producto es vendido a un cliente.']
+    CreateOfferRequestDto:
+      type: object
+      properties:
+        productId:
+          type: string
+        price:
+          type: number
+          minimum: 0.01
+          examples: [79.99]
+        stock:
+          type: integer
+          format: int32
+          examples: [10]
+      required:
+        - price
+        - productId
+        - stock
+    CreateInventoryMovementRequestDto:
+      type: object
+      properties:
+        supplierId:
+          type: string
+          format: uuid
+        productId:
+          type: string
+          format: uuid
+        movementTypeId:
+          type: string
+          format: uuid
+        productSku:
+          type: string
+          pattern: ^[A-Za-z0-9_-]+$
+          examples: ['SAM-001-EL']
+        productName:
+          type: string
+          pattern: ^[A-Za-z0-9\s\-_,.]+$
+          examples: ['Samsung Galaxy S23']
+        quantity:
+          type: integer
+          format: int32
+          examples: [10]
+      required:
+        - movementTypeId
+        - productId
+        - productName
+        - productSku
+        - quantity
+        - supplierId
+    CreateImageRequestDto:
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+        imageUrl:
+          type: string
+          pattern: ^(https?://.*\.(?:png|jpg|jpeg|gif|bmp|webp))$
+          examples: ['https://example.com/images/productos/camiseta-deportiva.jpg']
+      required:
+        - imageUrl
+        - productId
+    CreateDepartmentRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          minLength: 3
+          pattern: ^[A-Za-z0-9][A-Za-z0-9 .-]*[A-Za-z0-9]$
+          examples: ['Electronics']
+      required:
+        - name
+    CreateBrandRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          minLength: 3
+          pattern: ^[A-Za-z0-9][A-Za-z0-9 .-]*[A-Za-z0-9]$
+          examples: ['Samsung']
+      required:
+        - name
+    SupplierRequestDto:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: int32
+        page:
+          type: integer
+          format: int32
+    PaginatedResultResponseSupplierResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplierResponse'
+        count:
+          type: integer
+          format: int64
+          examples: [1]
+    OfferBySupplierIdRequestDto:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: int32
+        page:
+          type: integer
+          format: int32
+      required:
+        - page
+        - size
+    PaginatedResultResponseSupplierOfferReadResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplierOfferReadResponse'
+        count:
+          type: integer
+          format: int64
+          examples: [1]
+    SupplierOfferProductResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        sku:
+          type: string
+          examples: ['SAM-001-EL']
+        name:
+          type: string
+          examples: ['Samsung Galaxy S23']
+    SupplierOfferReadResponse:
+      type: object
+      properties:
+        product:
+          $ref: '#/components/schemas/SupplierOfferProductResponse'
+        stock:
+          type: integer
+          format: int32
+          examples: [10]
+        price:
+          type: number
+          examples: [79.99]
+    ProductRequestDto:
+      type: object
+      properties:
+        brandId:
+          type: string
+          pattern: >-
+            ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})(\|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})*$
+          examples: ['d0c85be3-154b-4ce4-82ee-d7d1687ac198|de0531ee-576c-4686-8cd9-16dec1e71070']
+        departmentId:
+          type: string
+          examples: ['f9c66d68-7047-470b-bbeb-f9862dfbd95b']
+        productStatusId:
+          type: string
+          pattern: >-
+            ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})(\|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})*$
+          examples: ['1e8b7e83-bf45-4838-80bd-aa9e2cb9c286']
+        sku:
+          type: string
+          pattern: ^([a-zA-Z0-9-]{4,20})(\|[a-zA-Z0-9-]{4,20})*$
+          examples: ['SAM-001-EL']
+        orderBy:
+          type: string
+          pattern: (created_at|sku)+-(asc|desc)$
+          examples: ['created_at-desc']
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+      required:
+        - orderBy
+        - page
+        - size
+    PaginatedResultResponseProductSummaryReadResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSummaryReadResponse'
+        count:
+          type: integer
+          format: int64
+          examples: [1]
+    ProductSummaryReadResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        sku:
+          type: string
+          examples: ['SAM-001-EL']
+        name:
+          type: string
+          examples: ['Samsung Galaxy S23']
+        brand:
+          type: string
+          examples: ['Samsung']
+        imageUrl:
+          type: string
+          examples: ['https://example.com/images/6e4573cc-06d3-48a7-a7b6-6e67f64f7045.jpg']
+        createdAt:
+          type: string
+          format: date-time
+          examples: ['2025-06-07T21:00:03.348+02:00']
+    ProductWithDetailsBrandResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          examples: ['27f2e42b-a68e-4c89-abe3-69ec78675fbb']
+        name:
+          type: string
+          examples: ['Samsung']
+    ProductWithDetailsDepartmentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          examples: ['fc7e4e78-46ac-47b6-b54f-b12a74a22aa7']
+        name:
+          type: string
+          examples: ['Electronics']
+    ProductWithDetailsReadResponse:
+      type: object
+      properties:
+        sku:
+          type: string
+          examples: ['SAM-001-EL']
+        name:
+          type: string
+          examples: ['Samsung Galaxy S23']
+        description:
+          type: string
+          examples: ['Último modelo de la serie Galaxy con pantalla AMOLED de 120Hz.']
+        brand:
+          $ref: '#/components/schemas/ProductWithDetailsBrandResponse'
+        department:
+          $ref: '#/components/schemas/ProductWithDetailsDepartmentResponse'
+        status:
+          type: string
+          examples: ['Active']
+        images:
+          type: array
+          items:
+            type: string
+            examples: ['https://example.com/images/productos/camiseta-deportiva.jpg']
+    ProductOfferReadResponse:
+      type: object
+      properties:
+        supplierId:
+          type: string
+          format: uuid
+        supplier:
+          type: string
+          examples: ['TechGear Partners']
+        stock:
+          type: integer
+          format: int32
+          examples: [10]
+        price:
+          type: number
+          examples: [79.99]
+    InventoryMovementRequestDto:
+      type: object
+      properties:
+        supplierId:
+          type: string
+          pattern: >-
+            ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})(\|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})*$
+          examples: ['0d95b4c4-a138-4e6a-9d86-4c27ea98a83c|fcb9a876-fe8a-4166-a22b-e37c95da0d49']
+        productId:
+          type: string
+          pattern: >-
+            ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})(\|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})*$
+          examples: ['839546df-e9ab-45c4-b5e0-06f10ca5c3d7']
+        movementTypeId:
+          type: string
+          pattern: >-
+            ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})(\|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})*$
+          examples: ['1e8b7e83-bf45-4838-80bd-aa9e2cb9c286']
+        productSku:
+          type: string
+          pattern: ^([a-zA-Z0-9-]{4,20})(\|[a-zA-Z0-9-]{4,20})*$
+          examples: ['SAM-001-EL']
+        orderBy:
+          type: string
+          pattern: ^[a-z_]+-(asc|desc)$
+          examples: ['created_at-desc']
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+          examples: [10]
+    InventoryMovementSummaryProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        sku:
+          type: string
+          examples: ['SAM-001-EL']
+        name:
+          type: string
+          examples: ['Samsung Galaxy S23']
+    InventoryMovementSummaryReadResponse:
+      type: object
+      properties:
+        supplier:
+          $ref: '#/components/schemas/InventoryMovementSummarySupplier'
+        product:
+          $ref: '#/components/schemas/InventoryMovementSummaryProduct'
+        movementType:
+          type: string
+          examples: ['Sale']
+        quantity:
+          type: integer
+          format: int32
+          examples: [10]
+        previousStock:
+          type: integer
+          format: int32
+          examples: [50]
+        newStock:
+          type: integer
+          format: int32
+          examples: [40]
+        createdAt:
+          type: string
+          format: date-time
+          examples: ['2025-06-07T21:00:03.348+02:00']
+    InventoryMovementSummarySupplier:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          examples: ['TechGear Partners']
+    PaginatedResultResponseInventoryMovementSummaryReadResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryMovementSummaryReadResponse'
+        count:
+          type: integer
+          format: int64
+    ImageResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        imageUrl:
+          type: string
+          examples: ['https://example.com/images/productos/camiseta-deportiva.jpg']
+  securitySchemes:
+    BambiOAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/auth
+          tokenUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/token
+          scopes:
+            - admin: Acceso administrativo
+            - supplier: Acceso proveedor

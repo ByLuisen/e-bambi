@@ -1,0 +1,636 @@
+openapi: 3.1.1
+info:
+  title: Swagger Order Service
+  description: |-
+    Bienvenido a la documentación oficial del microservicio 'Order Service'. Aquí podrás explorar e interactuar con los 
+    diversos recursos disponibles, facilitando la integración y gestión de órdenes a través de sus API. 
+    Esta documentación proporciona los detalles técnicos necesarios para utilizar las funcionalidades ofrecidas por el 
+    servicio de manera eficiente.
+
+    Algunos enlaces útiles:
+      - [El repositorio de Order Service](https://github.com/ByLuisen/my-k8s-project/tree/main/apps/order-service)
+      - [La definición de la API para Order Service](https://github.com/ByLuisen/my-k8s-project/blob/main/apps/order-service/src/main/resources/static/openapi.yaml)
+  version: 1.0.12
+servers:
+  - url: /api
+tags:
+  - name: Orders
+    description: Solicita información de tus pedidos
+  - name: Status history
+    description: Obtén el hisorial de estados acerca de un pedido
+paths:
+  /v1/me/orders:
+    get:
+      tags:
+        - Orders
+      summary: Obtén los pedidos que tienes
+      description: Obtén los pedidos que tienes
+      operationId: findOrdersByUserId
+      parameters:
+        - name: OrderByUserIdRequestDto
+          in: query
+          description: Filtros disponibles para obtener tus pedidos
+          required: true
+          schema:
+            $ref: '#/components/schemas/OrderByUserIdRequestDto'
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: >-
+                  #/components/schemas/PaginatedResultResponseOrderSummaryReadResponse
+        '404':
+          description: El usuario no tiene ningún pedido
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [ user ]
+      #       - BambiOAuth2: [user:read]
+      x-roles-required:
+        - USER
+    #      x-permissions:
+    #        - PERM_ORDERS_READ
+    post:
+      tags:
+        - Orders
+      summary: Crea un nuevo pedido
+      description: Crear un nuevo pedido
+      operationId: saveOrder
+      requestBody:
+        description: Datos necesarios para crear un nuevo pedido
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/CreateOrderResponse'
+        '400':
+          description: Solicitud incorrecta
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [ user ]
+      x-roles-required:
+        - USER
+  /v1/me/orders/{orderId}:
+    get:
+      tags:
+        - Orders
+      summary: Obtén los detalles de un pedido
+      description: Obtén los detalles de un pedido
+      operationId: findOrderByOrderIdAndUserId
+      parameters:
+        - name: orderId
+          in: path
+          description: ID del pedido que quieres obtener
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/OrderWithDetailReadResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Pedido no encontrado
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [ user ]
+      x-roles-required:
+        - USER
+  /v1/me/orders/{orderId}/tracking:
+    get:
+      tags:
+        - Orders
+      summary: Rastrea el estado de tu pedido
+      description: Rastrea el estado de tu pedido
+      operationId: trackOrder
+      parameters:
+        - name: orderId
+          in: path
+          description: ID del pedido a rastrear
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/TrackOrderReadResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Pedido no encontrado
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [ user ]
+      x-roles-required:
+        - USER
+  /v1/orders:
+    get:
+      tags:
+        - Orders
+      summary: Obtén todos los pedidos
+      description: Obtén todos los pedidos
+      operationId: findAllOrders
+      parameters:
+        - name: orderRequestDTO
+          in: query
+          description: Posibles filtros para obtener pedidos
+          required: true
+          schema:
+            $ref: '#/components/schemas/OrderRequestDto'
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: >-
+                  #/components/schemas/PaginatedResultResponseOrderSummaryReadResponse
+        '400':
+          description: Pedidos no encontrados
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [ admin ]
+      x-roles-required:
+        - ADMIN
+  /v1/orders/{orderId}:
+    get:
+      tags:
+        - Orders
+      summary: Obtén los detalles de un pedido
+      description: Obtén los detalles de un pedido
+      operationId: findOrderById
+      parameters:
+        - name: orderId
+          in: path
+          description: ID del pedido
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/OrderWithDetailReadResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Pedido no encontrado
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [ admin ]
+      x-roles-required:
+        - ADMIN
+  /v1/me/orders/{orderId}/status-history:
+    get:
+      tags:
+        - Status history
+      summary: Obtén el historial de estados de un pedido
+      description: Obtén el historial de estados de un pedido
+      operationId: findOrderStatusHistoryByOrderId
+      parameters:
+        - name: orderId
+          in: path
+          description: ID del pedido
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderStatusHistoryReadResponse'
+        '400':
+          description: Solicitud incorrecta
+        '404':
+          description: Historial de estados de pedido no encontrado
+        '401':
+          description: No autenticado
+        '403':
+          description: El token de acceso no tiene los roles o permisos requeridos
+        default:
+          description: Error inesperado
+      security:
+        - BambiOAuth2: [ user ]
+      x-roles-required:
+        - USER
+components:
+  schemas:
+    OrderByUserIdRequestDto:
+      type: object
+      properties:
+        page:
+          type: interger
+          format: int32
+          minimum: 0
+        date:
+          type: string
+          pattern: ^(3|30|\\d{4})$
+          examples: [3]
+    CreateOrderAddressRequestDto:
+      type: object
+      properties:
+        country:
+          type: string
+          pattern: ^(Canada|Spain)$
+          examples: ['Spain']
+        address:
+          type: string
+          maxLength: 255
+          minLength: 0
+          examples: ['Calle Gran Vía, 28']
+        city:
+          type: string
+          examples: ['Madrid']
+        province:
+          type: string
+          examples: ['Madrid']
+        postalCode:
+          type: string
+          pattern: ^[0-9]{5}(?:-[0-9]{4})?$
+          examples: ['28013']
+        phoneNumber:
+          type: string
+          pattern: ^\+?[0-9]{1,4}[\s-]?[0-9]+$
+          examples: ['+34 912 34 56 78']
+      required:
+        - address
+        - city
+        - country
+        - phoneNumber
+        - postalCode
+        - province
+    CreateOrderItemProductRequestDto:
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+        sku:
+          type: string
+          examples: ['SAM-001-EL']
+        name:
+          type: string
+          examples: ['Samsung Galaxy S23']
+      required:
+        - name
+        - productId
+        - sku
+    CreateOrderItemRequestDto:
+      type: object
+      properties:
+        imageUrl:
+          type: string
+          examples: ['https://example.com/images/productos/camiseta-deportiva.jpg']
+        supplier:
+          $ref: '#/components/schemas/CreateOrderItemSupplierRequestDto'
+        product:
+          $ref: '#/components/schemas/CreateOrderItemProductRequestDto'
+        price:
+          type: number
+          minimum: 0.01
+          examples: [799.99]
+        quantity:
+          type: integer
+          format: int32
+          examples: [1]
+        totalPrice:
+          type: number
+          minimum: 0.01
+          examples: [799.99]
+      required:
+        - imageUrl
+        - price
+        - quantity
+        - totalPrice
+    CreateOrderItemSupplierRequestDto:
+      type: object
+      properties:
+        supplierId:
+          type: string
+          format: uuid
+        name:
+          type: string
+          examples: ['Bambi']
+      required:
+        - name
+        - supplierId
+    CreateOrderPaymentMethodRequestDto:
+      type: object
+      properties:
+        paymentMethodId:
+          type: string
+          format: uuid
+        name:
+          type: string
+          pattern: ^[\p{L} ]+$
+          examples: ['PayPal']
+      required:
+        - name
+        - paymentMethodId
+    CreateOrderRequestDto:
+      type: object
+      properties:
+        paymentMethod:
+          $ref: '#/components/schemas/CreateOrderPaymentMethodRequestDto'
+        address:
+          $ref: '#/components/schemas/CreateOrderAddressRequestDto'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderItemRequestDto'
+        totalPrice:
+          type: number
+          minimum: 0
+          examples: [799.99]
+      required:
+        - address
+        - items
+        - paymentMethod
+        - totalPrice
+        - userId
+    CreateOrderResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        orderStatus:
+          type: string
+          examples: ['created']
+        message:
+          type: string
+          examples: ['Pedido creado exitosamente']
+    OrderRequestDto:
+      type: object
+      properties:
+        paymentMethodId:
+          type: string
+          pattern: >-
+            ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})(\|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})*$
+          examples: ['839546df-e9ab-45c4-b5e0-06f10ca5c3d7']
+        userId:
+          type: string
+          pattern: >-
+            ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})(\|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})*$
+          examples: ['511eefe6-ee90-4143-83b5-4331b5ebd0d0']
+        createdAt:
+          type: string
+          pattern: ^(\d{4}-\d{2}-\d{2})\|(\d{4}-\d{2}-\d{2})$
+          examples: ['2025-01-11|2025-05-23']
+        price:
+          type: string
+          pattern: ^\d+-\d+$
+          examples: ['400-700']
+        orderBy:
+          type: string
+          pattern: ^[a-z_]+-(desc|asc)$
+          examples: ['created_at-desc']
+        page:
+          type: integer
+          format: int32
+    OrderSummaryAddress:
+      type: object
+      properties:
+        country:
+          type: string
+          examples: ['España']
+        address:
+          type: string
+          examples: ['Calle Gran Vía, 28']
+        city:
+          type: string
+          examples: ['Madrid']
+        province:
+          type: string
+          examples: ['Madrid']
+        postalCode:
+          type: string
+          examples: ['28013']
+        phoneNumber:
+          type: string
+          examples: ['+34 912 34 56 78']
+    OrderSummaryItem:
+      type: object
+      properties:
+        imageUrl:
+          type: string
+          examples: ['https://example.com/images/productos/camiseta-deportiva.jpg']
+        productId:
+          type: string
+          format: uuid
+        name:
+          type: string
+          examples: ['Camiseta Deportiva']
+    OrderSummaryReadResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        orderStatus:
+          type: string
+          examples: ['created']
+        address:
+          $ref: '#/components/schemas/OrderSummaryAddress'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderSummaryItem'
+        totalPrice:
+          type: number
+          examples: [29.99]
+        createdAt:
+          type: string
+          formate: date-time
+          examples: ['2025-06-07T21:00:03.348+02:00']
+    PaginatedResultResponseOrderSummaryReadResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderSummaryReadResponse'
+        count:
+          type: integer
+          format: int64
+          examples: [1]
+    OrderWithDetailPaymentMethod:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          examples: ['PayPal']
+    OrderWithDetailAddress:
+      type: object
+      properties:
+        country:
+          type: string
+          examples: ['Spain']
+        address:
+          type : string
+          examples: ['Calle Gran Vía, 28']
+        city:
+          type: string
+          examples: ['Madrid']
+        province:
+          type: string
+          examples: ['Madrid']
+        postalCode:
+          type: string
+          examples: ['28013']
+        phoneNumber:
+          type: string
+          examples: ['+34 912 34 56 78']
+    OrderWithDetailItemSupplier:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          examples: ['Bambi']
+    OrderWithDetailItemProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          examples: ['Samsung Galaxy S23']
+    OrderWithDetailItem:
+      type: object
+      properties:
+        imageUrl:
+          type: string
+          examples: ['https://example.com/images/productos/camiseta-deportiva.jpg']
+        supplier:
+          $ref: '#/components/schemas/OrderWithDetailItemSupplier'
+        product:
+          $ref: '#/components/schemas/OrderWithDetailItemProduct'
+        price:
+          type: number
+          examples: [799.99]
+        quantity:
+          type: number
+          format: int32
+          examples: [1]
+        totalPrice:
+          type: number
+          examples: [799.99]
+    OrderWithDetailReadResponse:
+      type: object
+      properties:
+        orderStatus:
+          type: string
+          examples: ['created']
+        paymentMethod:
+          $ref: '#/components/schemas/OrderWithDetailPaymentMethod'
+        address:
+          $ref: '#/components/schemas/OrderWithDetailAddress'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderWithDetailItem'
+        totalPrice:
+          type: number
+          examples: [799.99]
+        createdAt:
+          type: string
+          format: date-time
+          examples: ['2025-06-07T21:00:03.348+02:00']
+    TrackOrderReadResponse:
+      type: object
+      properties:
+        orderStatus:
+          type: string
+          examples: ['created']
+        failureMessages:
+          type: array
+          items:
+            type: string
+            examples: ['La marca del producto no existe']
+    OrderStatusHistoryReadResponse:
+      type: object
+      properties:
+        orderStatus:
+          type: string
+          examples: ['created']
+        reason:
+          type: string
+          examples: ['El pedido se ha creado correctamente']
+        changedAt:
+          type: string
+          format: date-time
+          examples: ['2025-06-07T21:00:03.348+02:00']
+  securitySchemes:
+    BambiOAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/auth
+          tokenUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/token
+          scopes:
+            - admin: Acceso administrativo
+            - user: Acceso usuario
+#            - user:read: Permiso de lectura
+#            - user:write: Permiso de escritura

@@ -15,10 +15,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.e.bambi</groupId>
-            <artifactId>shared-kernel-security</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

@@ -1,16 +1,17 @@
 package com.e.bambi.order.infrastructure.persistence.order.entity;
 
+import com.e.bambi.order.domain.order.valueobject.OrderStatus;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,10 +22,11 @@ public class OrderStatusHistoryEntity {
     private UUID id;
     @Column("order_id")
     private UUID orderId;
-    @Column("order_status_id")
-    private UUID orderStatusId;
+    @Column("order_status")
+    private OrderStatus orderStatus;
     private String reason;
-    private ZonedDateTime changedAt;
+    @Column("changed_at")
+    private OffsetDateTime changedAt;
 
     @Override
     public boolean equals(Object o) {

@@ -12,5 +12,6 @@ CREATE TABLE IF NOT EXISTS payment_outbox_events (
   aggregateid VARCHAR(255) NOT NULL,
   event_type VARCHAR(255),
   payload JSONB,
-  CONSTRAINT pk_payment_outbox_events PRIMARY KEY (id)
+  CONSTRAINT pk_payment_outbox_events PRIMARY KEY (id),
+  CONSTRAINT uniq_payment_outbox_events_aggregatetype_aggregateid UNIQUE (aggregateid, aggregatetype)
 );
