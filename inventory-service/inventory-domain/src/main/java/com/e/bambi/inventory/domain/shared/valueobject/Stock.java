@@ -10,4 +10,12 @@ public class Stock {
     public Stock(Integer quantity) {
         this.quantity = quantity;
     }
+
+    public Stock subtract(Stock stock) {
+        return new Stock(this.quantity - stock.getQuantity());
+    }
+
+    public Stock add(Stock stock) {
+        return new Stock(this.quantity + stock.getQuantity());
+    }
 }

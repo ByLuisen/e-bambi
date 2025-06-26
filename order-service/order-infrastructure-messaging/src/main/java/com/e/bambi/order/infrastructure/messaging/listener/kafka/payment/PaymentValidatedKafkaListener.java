@@ -1,5 +1,6 @@
 package com.e.bambi.order.infrastructure.messaging.listener.kafka.payment;
 
+import com.e.bambi.order.domain.exception.OrderNotFoundException;
 import com.e.bambi.order.infrastructure.messaging.mapper.OrderMessagingMapper;
 import com.e.bambi.shared.infrastructure.messaging.kafka.consumer.KafkaConsumerHelper;
 import com.e.bambi.shared.infrastructure.messaging.kafka.consumer.ReactiveKafkaConsumer;
@@ -8,6 +9,7 @@ import com.e.bambi.shared.kernel.application.port.inbound.bus.CommandBus;
 import com.e.bambi.shared.kernel.domain.event.payload.payment.PaymentMethodValidatedEventPayload;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate;
 import org.springframework.stereotype.Component;
 import reactor.core.Disposable;
@@ -50,7 +52,16 @@ public class PaymentValidatedKafkaListener implements ReactiveKafkaConsumer<Paym
                             receiverRecord.offset());
 
                     return commandBus.dispatch(orderMessagingMapper.toValidatedPaymentCommand(payload))
-                            .thenReturn(Mono.fromRunnable(receiverRecord.receiverOffset()::acknowledge));
+                            .onErrorResume(DuplicateKeyException.class, e -> {
+                                log.error("Caught unique constraint exception in PaymentValidatedKafkaListener",
+                                        e);
+                                return Mono.empty();
+                            })
+                            .onErrorResume(OrderNotFoundException.class, e -> {
+                                log.error("Caught OrderNotFoundException in PaymentValidatedKafkaListener", e);
+                                return Mono.empty();
+                            })
+                            .then(Mono.fromRunnable(receiverRecord.receiverOffset()::acknowledge));
                 })
                 .subscribe();
     }

@@ -1,4 +1,4 @@
-package com.e.bambi.payment.application.outbox.model;
+package com.e.bambi.payment.domain.event;
 
 import lombok.Getter;
 

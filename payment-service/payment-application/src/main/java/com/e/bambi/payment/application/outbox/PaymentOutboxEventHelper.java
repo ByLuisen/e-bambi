@@ -36,20 +36,6 @@ public class PaymentOutboxEventHelper {
                 .build());
     }
 
-    public Mono<Void> deletePaymentOutboxEvent(UUID paymentOutboxEventId) {
-        return paymentOutboxEventRepository.deleteById(paymentOutboxEventId)
-                .handle((updatedRows, sink) -> {
-                            if (updatedRows < 1) {
-                                sink.error(new PaymentOutboxEventNotFoundException("PaymentOutboxEvent with id: " +
-                                        paymentOutboxEventId + "could not be found"));
-                            } else {
-                                log.info("PaymentOutboxEvent with id: {} successfully deleted", paymentOutboxEventId);
-                                sink.complete();
-                            }
-                        }
-                );
-    }
-
     public Mono<Boolean> existsPaymentOutboxEventByAggregateidAndAggregateType(String aggregateid,
                                                                                String... aggregatetype) {
         return paymentOutboxEventRepository

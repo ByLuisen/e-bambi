@@ -8,6 +8,7 @@ import com.e.bambi.shared.kernel.domain.event.payload.order.OrderPaymentValidate
 import com.e.bambi.shared.kernel.application.port.inbound.bus.CommandBus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate;
 import org.springframework.stereotype.Component;
 import reactor.core.Disposable;
@@ -47,10 +48,17 @@ public class OrderPaymentValidateKafkaListener implements ReactiveKafkaConsumer<
                                             OrderPaymentValidateEventPayload.class);
 
                             log.info("Incoming message in OrderPaymentValidateKafkaListener: {} with key: {}, " +
-                                            "partition: {} and offset: {}", receiverRecord.value(), sagaId, receiverRecord.partition(),
+                                            "partition: {} and offset: {}", receiverRecord.value(), sagaId,
+                                    receiverRecord.partition(),
                                     receiverRecord.offset());
 
-                            return commandBus.dispatch(paymentMethodMessagingMapper.toValidatePaymentCommand(sagaId, payload))
+                            return commandBus
+                                    .dispatch(paymentMethodMessagingMapper.toValidatePaymentCommand(sagaId, payload))
+                                    .onErrorResume(DuplicateKeyException.class, e -> {
+                                        log.error("Caught unique constraint exception in " +
+                                                "OrderPaymentValidateKafkaListener", e);
+                                        return Mono.empty();
+                                    })
                                     .then(Mono.fromRunnable(receiverRecord.receiverOffset()::acknowledge));
                         }
                 )

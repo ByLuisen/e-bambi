@@ -35,6 +35,6 @@ public class CreateOrderAddressRequestDto {
 
     @NotNull
     @NotBlank
-    @Pattern(regexp = "^\\+?[0-9]{1,4}[\\s-]?[0-9]+$", message = "Invalid phone number format")
+    @Pattern(regexp = "^\\+?[0-9]{1,4}[\\s-]?[0-9 ]+$", message = "Invalid phone number format")
     private String phoneNumber;
 }

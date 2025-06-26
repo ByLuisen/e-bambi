@@ -5,10 +5,10 @@ import com.e.bambi.order.application.order.dto.query.OrderByIdQuery;
 import com.e.bambi.order.application.order.dto.query.OrderByUserIdQuery;
 import com.e.bambi.order.application.order.dto.query.TrackOrderQuery;
 import com.e.bambi.order.application.order.dto.response.CreateOrderResponse;
+import com.e.bambi.order.application.order.dto.response.PaginatedResultResponse;
 import com.e.bambi.order.application.order.dto.response.TrackOrderReadResponse;
 import com.e.bambi.order.application.order.dto.response.ordersummary.OrderSummaryReadResponse;
 import com.e.bambi.order.application.order.dto.response.orderwithdetails.OrderWithDetailReadResponse;
-import com.e.bambi.order.application.order.dto.response.PaginatedResultResponse;
 import com.e.bambi.order.infrastructure.rest.order.dto.request.OrderByUserIdDto;
 import com.e.bambi.order.infrastructure.rest.order.dto.request.OrderRequestDto;
 import com.e.bambi.order.infrastructure.rest.order.dto.request.createorder.CreateOrderRequestDto;
@@ -18,9 +18,6 @@ import com.e.bambi.shared.kernel.application.port.inbound.bus.QueryBus;
 import com.e.bambi.shared.kernel.domain.valueobject.OrderId;
 import com.e.bambi.shared.kernel.domain.valueobject.UserId;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +42,7 @@ public class OrderController {
                 new OrderByUserIdQuery(
                         new UserId(java.util.UUID.fromString(auth.getToken().getClaimAsString("sub"))),
                         orderByUserIdDto.getPage(),
-                        orderByUserIdDto.getDate()
+                        Integer.parseInt(orderByUserIdDto.getDate())
                 )
         );
     }

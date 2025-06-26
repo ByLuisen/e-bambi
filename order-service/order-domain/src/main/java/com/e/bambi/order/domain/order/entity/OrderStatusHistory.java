@@ -14,14 +14,14 @@ public class OrderStatusHistory extends BaseEntity<OrderStatusHistoryId> {
     private final OrderId orderId;
     private final OrderStatus orderStatus;
     private final String reason;
-    private final OffsetDateTime changedAt;
+    private final OffsetDateTime createdAt;
 
     private OrderStatusHistory(Builder builder) {
          super.setId(builder.id);
         orderId = builder.orderId;
         orderStatus = builder.orderStatus;
         reason = builder.reason;
-        changedAt = builder.changedAt;
+        createdAt = builder.createdAt;
     }
 
     public static Builder builder() {
@@ -34,7 +34,7 @@ public class OrderStatusHistory extends BaseEntity<OrderStatusHistoryId> {
         private OrderId orderId;
         private OrderStatus orderStatus;
         private String reason;
-        private OffsetDateTime changedAt;
+        private OffsetDateTime createdAt;
 
         private Builder() {
         }
@@ -59,8 +59,8 @@ public class OrderStatusHistory extends BaseEntity<OrderStatusHistoryId> {
             return this;
         }
 
-        public Builder changedAt(OffsetDateTime val) {
-            changedAt = val;
+        public Builder createdAt(OffsetDateTime val) {
+            createdAt = val;
             return this;
         }
 

@@ -24,7 +24,7 @@ public class OrderApplicationMapper {
         return Order.builder()
                 .userId(command.getUserId())
                 .paymentMethod(new OrderPaymentMethod(
-                        command.getPaymentMethod().getPaymentMethodId(),
+                        command.getPaymentMethod().getId(),
                         command.getPaymentMethod().getName()
                 ))
                 .address(new OrderAddress(
@@ -54,11 +54,11 @@ public class OrderApplicationMapper {
                         OrderItem.builder()
                                 .imageUrl(command.getImageUrl())
                                 .supplier(new OrderItemSupplier(
-                                        command.getSupplier().getSupplierId(),
+                                        command.getSupplier().getId(),
                                         command.getSupplier().getName()
                                 ))
                                 .product(new OrderItemProduct(
-                                        command.getProduct().getProductId(),
+                                        command.getProduct().getId(),
                                         command.getProduct().getSku(),
                                         command.getProduct().getName()
                                 ))

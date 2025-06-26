@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class CreateOrderItemSupplierCommand {
-    private final SupplierId supplierId;
+    private final SupplierId id;
     private final String name;
 
 }

@@ -1,3 +1,4 @@
+CREATE INDEX idx_offers_supplier_id_product_id ON offers(supplier_id, product_id);
 CREATE INDEX idx_brands_name ON brands(name);
 CREATE INDEX idx_departments_name ON departments(name);
 CREATE INDEX idx_product_statuses_name ON product_statuses(name);

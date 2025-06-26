@@ -22,7 +22,7 @@ public class OrderRestMapper {
         return CreateOrderCommand.builder()
                 .userId(new UserId(UUID.fromString(userId)))
                 .paymentMethod(new CreateOrderPaymentMethodCommand(
-                        new PaymentMethodId(UUID.fromString(request.getPaymentMethod().getPaymentMethodId())),
+                        new PaymentMethodId(UUID.fromString(request.getPaymentMethod().getId())),
                         request.getPaymentMethod().getName()
                 ))
                 .address(toCreateOrderAddressCommand(request.getAddress()))
@@ -59,11 +59,11 @@ public class OrderRestMapper {
                         CreateOrderItemCommand.builder()
                                 .imageUrl(item.getImageUrl())
                                 .supplier(new CreateOrderItemSupplierCommand(
-                                        new SupplierId(UUID.fromString(item.getSupplier().getSupplierId())),
+                                        new SupplierId(UUID.fromString(item.getSupplier().getId())),
                                         item.getSupplier().getName()
                                 ))
                                 .product(new CreateOrderItemProductCommand(
-                                        new ProductId(UUID.fromString(item.getProduct().getProductId())),
+                                        new ProductId(UUID.fromString(item.getProduct().getId())),
                                         item.getProduct().getSku(),
                                         item.getProduct().getName()
                                 ))

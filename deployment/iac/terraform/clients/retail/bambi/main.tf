@@ -104,6 +104,14 @@ resource "keycloak_user_roles" "admin_roles" {
 }
 
 # -------------------------------
+# Create bambi USER role
+# -------------------------------
+resource "keycloak_role" "user" {
+    name     = "USER"
+    realm_id = module.bambi_realm.realm_id
+}
+
+# -------------------------------
 # Create bambi normal user
 # -------------------------------
 resource "keycloak_user" "e_bambi_user" {
@@ -119,4 +127,13 @@ resource "keycloak_user" "e_bambi_user" {
   email      = "e-bambi-user@your-domain.com"
   first_name = "User"
   last_name  = "Bambi"
+}
+
+resource "keycloak_user_roles" "user_roles" {
+    realm_id = module.bambi_realm.realm_id
+    user_id  = keycloak_user.e_bambi_user.id
+
+    role_ids = [
+        keycloak_role.user.id,
+    ]
 }

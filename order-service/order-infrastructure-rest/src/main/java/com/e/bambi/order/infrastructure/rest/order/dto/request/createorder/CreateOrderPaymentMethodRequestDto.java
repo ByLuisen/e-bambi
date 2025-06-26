@@ -13,7 +13,7 @@ public class CreateOrderPaymentMethodRequestDto {
 
     @UUID
     @NotNull
-    private String paymentMethodId;
+    private String id;
 
     @NotNull
     @NotBlank

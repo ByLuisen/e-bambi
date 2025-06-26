@@ -3,7 +3,7 @@ info:
   title: Swagger Inventory Service
   description: |-
     Bienvenido a la documentación oficial del microservicio 'Payment Service'. Aquí podrás explorar e interactuar con los 
-    diversos recursos disponibles través de sus API. 
+    diversos recursos disponibles través de su API. 
     Esta documentación proporciona los detalles técnicos necesarios para utilizar las funcionalidades ofrecidas por el 
     servicio de manera eficiente.
 
@@ -1501,6 +1501,8 @@ components:
         size:
           type: integer
           format: int32
+          minimum: 1
+          examples: [20]
         page:
           type: integer
           format: int32
@@ -1521,6 +1523,8 @@ components:
         size:
           type: integer
           format: int32
+          minimum: 1
+          examples: [10]
         page:
           type: integer
           format: int32
@@ -1592,6 +1596,7 @@ components:
         size:
           type: integer
           format: int32
+          examples: [20]
       required:
         - orderBy
         - page
@@ -1721,7 +1726,7 @@ components:
         size:
           type: integer
           format: int32
-          examples: [10]
+          examples: [20]
     InventoryMovementSummaryProduct:
       type: object
       properties:

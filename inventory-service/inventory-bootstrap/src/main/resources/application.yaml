@@ -15,13 +15,12 @@ logging:
     org:
       #      apache.kafka: DEBUG
       springframework: DEBUG
-#      springframework.r2dbc: DEBUG
-#      springframework.data.r2dbc: DEBUG
+      springframework.r2dbc: DEBUG
+#      springframework.data.r2dbc: TRACE
 
 inventory-service:
   order.inventory.cancel_reservation-topic-name: order.inventory.cancel_reservation
   order.inventory.reserve-topic-name: order.inventory.reserve
-#  order.payment.validate-topic-name: order.payment.validate
 
 spring:
   webflux:

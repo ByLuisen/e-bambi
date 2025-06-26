@@ -22,30 +22,21 @@ public class InventoryOutboxEventHelper {
     private final ObjectMapper objectMapper;
     private final InventoryOutboxEventRepository inventoryOutboxEventRepository;
 
-    public Mono<UUID> saveInventoryOutboxEvent(String aggregatetype, String aggregateid, @Nullable String eventype,
+    public Mono<Void> saveInventoryOutboxEvent(String aggregatetype, String aggregateid, @Nullable String eventype,
                                                InventoryEventPayload payload) {
-        UUID inventoryOutboxEventId = UUID.randomUUID();
-
         return save(new InventoryOutboxEvent(
                 UUID.randomUUID(),
                 aggregatetype,
                 aggregateid,
                 eventype,
                 createPayload(payload)
-        )).thenReturn(inventoryOutboxEventId);
+        ));
     }
 
-    public Mono<Void> deleteInventoryOutboxEvent(UUID inventoryOutboxEventId) {
-        return inventoryOutboxEventRepository.deleteById(inventoryOutboxEventId)
-                .handle(((updatedRows, sink) -> {
-                    if (updatedRows < 1) {
-                        sink.error(new InventoryDomainException("InventoryOutboxEvent with id: " +
-                                inventoryOutboxEventId + " could not be found"));
-                    } else {
-                        log.info("InventoryOutboxEvent with id: {} successfully deleted", inventoryOutboxEventId);
-                        sink.complete();
-                    }
-                }));
+    public Mono<Boolean> existsInventoryOutboxEventByAggregateidAndAggregateType(String aggregateid,
+                                                                               String... aggregatetype) {
+        return inventoryOutboxEventRepository
+                .existsByAggregateIdAndAggregateTypeIn(aggregateid, aggregatetype);
     }
 
     private Mono<Void> save(InventoryOutboxEvent inventoryOutboxEvent) {
@@ -55,7 +46,7 @@ public class InventoryOutboxEventHelper {
                                 "aggregateid: " + inventoryOutboxEvent.getAggregateid() + " and payload: " +
                                 inventoryOutboxEvent.getPayload()))
                 ).doOnSuccess(saved ->
-                        log.info("InventoryOutboxEvent is saved with id: ", inventoryOutboxEvent.getId())
+                        log.info("InventoryOutboxEvent is saved with id: {}", inventoryOutboxEvent.getId())
                 ).then();
     }
 

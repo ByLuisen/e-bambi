@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties({R2dbcProperties.class, FlywayProperties.class})
-public class DatabaseConfig {
+public class FlywayConfig {
 
     @Bean(initMethod = "migrate")
     Flyway flyway(FlywayProperties flywayProperties, R2dbcProperties r2dbcProperties) {

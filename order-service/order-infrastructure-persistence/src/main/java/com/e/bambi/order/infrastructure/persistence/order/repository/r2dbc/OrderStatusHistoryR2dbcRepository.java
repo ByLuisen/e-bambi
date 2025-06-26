@@ -14,10 +14,13 @@ import java.util.UUID;
 @Repository
 public interface OrderStatusHistoryR2dbcRepository extends R2dbcRepository<OrderStatusHistoryEntity, UUID> {
 
-    @Query("SELECT osh.orderStatus, osh.reason, osh.changedAt FROM OrderStatusHistoryEntity osh " +
-            "WHERE osh.orderId = :orderId")
+    @Query("SELECT order_status, reason, changed_at FROM order_status_history " +
+            "WHERE order_id = :orderId")
     Flux<OrderStatusHistoryReadResponse> findByOrderId(UUID orderId);
 
+    @Query("SELECT case when (count(osh) > 0) then true else false end " +
+            "id FROM order_status_history osh " +
+            "WHERE osh.order_id = :orderId AND osh.order_status = :orderStatus::type_order_status LIMIT 1")
     Mono<Boolean> existsByOrderIdAndOrderStatus(UUID orderId, OrderStatus orderStatus);
 
 }

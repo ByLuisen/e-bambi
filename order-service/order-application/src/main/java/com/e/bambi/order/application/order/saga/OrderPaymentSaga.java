@@ -6,7 +6,7 @@ import com.e.bambi.order.application.order.dto.command.message.payment.Validatio
 import com.e.bambi.order.application.order.port.outbound.repository.OrderRepository;
 import com.e.bambi.order.application.order.port.outbound.repository.OrderStatusHistoryQueryRepository;
 import com.e.bambi.order.application.outbox.OrderOutboxEventHelper;
-import com.e.bambi.order.application.outbox.model.OrderAggregateType;
+import com.e.bambi.order.domain.event.OrderAggregateType;
 import com.e.bambi.order.domain.OrderDomainService;
 import com.e.bambi.order.domain.event.OrderInventoryCancelReservationEvent;
 import com.e.bambi.order.domain.order.valueobject.OrderStatus;
@@ -15,7 +15,6 @@ import com.e.bambi.shared.kernel.application.saga.SagaStep;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import static com.e.bambi.shared.kernel.application.saga.order.SagaConstants.ORDER_SAGA_NAME;
@@ -32,7 +31,6 @@ public class OrderPaymentSaga implements SagaStep<ValidatedPaymentCommand, Valid
     private final OrderStatusHistoryQueryRepository orderStatusHistoryQueryRepository;
 
     @Override
-    @Transactional
     public Mono<Void> process(ValidatedPaymentCommand data) {
         return orderStatusHistoryQueryRepository
                 .existsByOrderIdAndOrderStatus(data.getOrderId(), OrderStatus.CREATED)
@@ -48,7 +46,6 @@ public class OrderPaymentSaga implements SagaStep<ValidatedPaymentCommand, Valid
     }
 
     @Override
-    @Transactional
     public Mono<Void> rollback(ValidationFailedPaymentCommand data) {
         return orderStatusHistoryQueryRepository
                 .existsByOrderIdAndOrderStatus(data.getOrderId(), OrderStatus.CANCELLING)
@@ -83,7 +80,7 @@ public class OrderPaymentSaga implements SagaStep<ValidatedPaymentCommand, Valid
 
     private Mono<Void> createOrder(ValidatedPaymentCommand data) {
         log.info("Creating order for order id: {}", data.getOrderId().getValue());
-        return orderRepository.findById(data.getOrderId())
+        return orderApplicationService.findOrder(data.getOrderId())
                 .flatMap(order -> {
                     order.created();
 

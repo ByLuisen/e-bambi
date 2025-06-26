@@ -58,7 +58,7 @@ public class OrderOutboxEventHelper {
                             orderOutboxEvent.getAggregateid() + " and payload: " + orderOutboxEvent.getPayload()));
                 })
                 .doOnSuccess(saved ->
-                        log.info("OrderOutboxEvent is saved with id: " + orderOutboxEvent.getId()))
+                        log.info("OrderOutboxEvent is saved with id: {}", orderOutboxEvent.getId()))
                 .then();
     }
 

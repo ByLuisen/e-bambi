@@ -21,6 +21,10 @@
             <artifactId>shared-kernel-bus</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.e.bambi</groupId>
+            <artifactId>shared-kernel-saga</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
         </dependency>

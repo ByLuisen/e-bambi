@@ -12,7 +12,7 @@ public class CreateOrderItemSupplierRequestDto {
 
     @UUID
     @NotNull
-    private String supplierId;
+    private String id;
 
     @NotNull
     @NotBlank

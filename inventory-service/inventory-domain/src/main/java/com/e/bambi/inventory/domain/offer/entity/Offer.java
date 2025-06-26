@@ -1,5 +1,6 @@
 package com.e.bambi.inventory.domain.offer.entity;
 
+import com.e.bambi.inventory.domain.exception.InventoryDomainException;
 import com.e.bambi.inventory.domain.offer.valueobject.OfferId;
 import com.e.bambi.inventory.domain.shared.valueobject.Stock;
 import com.e.bambi.shared.kernel.domain.valueobject.SupplierId;
@@ -16,10 +17,28 @@ public class Offer extends AggregateRoot<OfferId> {
     private final SupplierId supplierId;
     private final ProductId productId;
     private final Money price;
-    private final Stock stock;
+    private Stock stock;
 
     public void initializeOffer() {
         super.setId(new OfferId(UUID.randomUUID()));
+    }
+
+    public void validateAndReserve(Money requestPrice, Stock quantity) {
+        if (!price.getAmount().equals(requestPrice.getAmount())
+                && this.stock.getQuantity() - quantity.getQuantity() < 0) {
+            throw new InventoryDomainException("The price provided doesn't match with the current price," +
+                    "There is not enough stock to reserve " + quantity.getQuantity() + " units");
+        } else if (!price.getAmount().equals(requestPrice.getAmount())) {
+            throw new InventoryDomainException("The price provided doesn't match with the current price");
+        } else if (this.stock.getQuantity() - quantity.getQuantity() < 0) {
+            throw new InventoryDomainException("There is not enough stock to reserve " + quantity.getQuantity() +
+                    " units");
+        }
+        stock = stock.subtract(quantity);
+    }
+
+    public void cancelReservation(Stock quantity) {
+        stock = stock.add(quantity);
     }
 
     private Offer(Builder builder) {

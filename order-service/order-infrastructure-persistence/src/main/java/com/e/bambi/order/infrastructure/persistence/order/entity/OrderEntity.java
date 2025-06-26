@@ -1,5 +1,6 @@
 package com.e.bambi.order.infrastructure.persistence.order.entity;
 
+import com.e.bambi.order.domain.order.valueobject.OrderStatus;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
@@ -23,7 +24,7 @@ public class OrderEntity {
     @Column("user_id")
     private UUID userId;
     @Column("order_status")
-    private String orderStatus;
+    private OrderStatus orderStatus;
     @Column("payment_method_id")
     private UUID paymentMethodId;
     @Column("payment_method")

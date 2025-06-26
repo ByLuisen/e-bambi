@@ -8,9 +8,11 @@ import com.e.bambi.shared.kernel.application.port.inbound.bus.CommandBus;
 import com.e.bambi.shared.kernel.domain.event.payload.order.OrderInventoryReserveEventPayload;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate;
 import org.springframework.stereotype.Component;
 import reactor.core.Disposable;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
@@ -40,16 +42,21 @@ public class OrderInventoryReserveKafkaListener implements ReactiveKafkaConsumer
     public void receive() {
         subscription = template.receive()
                 .concatMap(receiverRecord -> {
+                    String sagaId = receiverRecord.key();
                     OrderInventoryReserveEventPayload payload = kafkaConsumerHelper
                             .getEventPayload(receiverRecord.value().toString(),
                                     OrderInventoryReserveEventPayload.class);
-                    String sagaId = receiverRecord.key();
 
                     log.info("Incoming message in OrderInventoryReserveKafkaListener: {} with key: {}, partition: {} " +
-                            "and offset: {}", payload, sagaId, receiverRecord.partition(), receiverRecord.offset());
+                                    "and offset: {}", receiverRecord.value(), sagaId, receiverRecord.partition(),
+                            receiverRecord.offset());
 
-//                    commandBus.dispatch();
-                    return null;
+                    return commandBus.dispatch(inventoryMessagingMapper.toReserveInventoryCommand(payload, sagaId))
+                            .onErrorResume(DuplicateKeyException.class, e -> {
+                                log.error("Caught unique constraint exception in OrderInventoryReserveKafkaListener", e);
+                                return Mono.empty();
+                            })
+                            .then(Mono.fromRunnable(receiverRecord.receiverOffset()::acknowledge));
                 })
                 .subscribe();
     }

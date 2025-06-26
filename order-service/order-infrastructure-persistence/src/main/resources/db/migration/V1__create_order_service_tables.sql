@@ -3,7 +3,6 @@ AS ENUM ('PENDING', 'PRODUCTS_RESERVED', 'CREATED', 'CANCELLED', 'CANCELLING');
 
 CREATE TABLE IF NOT EXISTS orders (
     id UUID NOT NULL,
-    tracking_id UUID NOT NULL,
     user_id UUID NOT NULL,
     order_status type_order_status NOT NULL,
     payment_method_id UUID NOT NULL,
@@ -43,7 +42,8 @@ CREATE TABLE IF NOT EXISTS order_status_history (
     reason TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL,
     CONSTRAINT pk_order_status_history PRIMARY KEY (id),
-    CONSTRAINT fk_order_status_history_orders_order_id FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE
+    CONSTRAINT fk_order_status_history_orders_order_id FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE,
+    CONSTRAINT uniq_order_status_history_order_id_order_status UNIQUE (order_id, order_status)
 );
 
 CREATE TABLE IF NOT EXISTS order_outbox_events (

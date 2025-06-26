@@ -6,7 +6,7 @@ import com.e.bambi.order.application.order.dto.response.CreateOrderResponse;
 import com.e.bambi.order.application.order.mapper.OrderApplicationMapper;
 import com.e.bambi.order.application.order.port.outbound.repository.OrderRepository;
 import com.e.bambi.order.application.outbox.OrderOutboxEventHelper;
-import com.e.bambi.order.application.outbox.model.OrderAggregateType;
+import com.e.bambi.order.domain.event.OrderAggregateType;
 import com.e.bambi.order.domain.OrderDomainService;
 import com.e.bambi.order.domain.event.OrderInventoryReserveEvent;
 import com.e.bambi.order.domain.exception.OrderDomainException;

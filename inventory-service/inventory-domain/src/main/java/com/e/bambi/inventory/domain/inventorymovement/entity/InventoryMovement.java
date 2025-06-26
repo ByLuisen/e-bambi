@@ -1,6 +1,6 @@
 package com.e.bambi.inventory.domain.inventorymovement.entity;
 
-import com.e.bambi.inventory.domain.exception.InsufficientStockException;
+import com.e.bambi.inventory.domain.exception.InventoryDomainException;
 import com.e.bambi.inventory.domain.inventorymovement.valueobject.InventoryMovementId;
 import com.e.bambi.inventory.domain.shared.valueobject.MovementTypeId;
 import com.e.bambi.inventory.domain.shared.valueobject.Stock;
@@ -31,7 +31,7 @@ public class InventoryMovement extends AggregateRoot<InventoryMovementId> {
 
     public void calculateStock(Stock stock, Integer quantity) {
         if ((stock.getQuantity() + quantity) < 0) {
-            throw new InsufficientStockException("The product does not have enough stock to carry out the operation." +
+            throw new InventoryDomainException("The product does not have enough stock to carry out the operation." +
                     " Current stock: " + stock.getQuantity());
         }
         previousStock = stock.getQuantity();

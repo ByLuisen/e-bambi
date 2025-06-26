@@ -16,7 +16,7 @@ logging:
       #      apache.kafka: DEBUG
       springframework: DEBUG
       springframework.r2dbc: DEBUG
-      springframework.data.r2dbc: TRACE
+#      springframework.data.r2dbc: TRACE
 
 payment-service:
   order.payment.validate-topic-name: order.payment.validate

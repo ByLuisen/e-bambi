@@ -1,7 +1,7 @@
 package com.e.bambi.payment.application.paymentmethod.handler.command.message;
 
 import com.e.bambi.payment.application.outbox.PaymentOutboxEventHelper;
-import com.e.bambi.payment.application.outbox.model.PaymentAggregateType;
+import com.e.bambi.payment.domain.event.PaymentAggregateType;
 import com.e.bambi.payment.application.paymentmethod.dto.command.message.ValidatePaymentCommand;
 import com.e.bambi.payment.application.paymentmethod.port.outbound.repository.PaymentMethodRepository;
 import com.e.bambi.payment.domain.PaymentDomainService;
@@ -32,7 +32,7 @@ public class ValidatePaymentCommandHandler implements CommandHandler<Mono<Void>,
     }
 
     private Mono<Void> validatePayment(ValidatePaymentCommand command) {
-        return ifPaymentOutboxEventProcessed(command.getSagaId())
+        return isPaymentOutboxEventProcessed(command.getSagaId())
                 .flatMap(existsPaymentOutboxEvent -> {
 
                     if (existsPaymentOutboxEvent) {
@@ -54,7 +54,7 @@ public class ValidatePaymentCommandHandler implements CommandHandler<Mono<Void>,
                 });
     }
 
-    private Mono<Boolean> ifPaymentOutboxEventProcessed(String aggregateid) {
+    private Mono<Boolean> isPaymentOutboxEventProcessed(String aggregateid) {
         return paymentOutboxEventHelper
                 .existsPaymentOutboxEventByAggregateidAndAggregateType(aggregateid,
                         PaymentAggregateType.VALIDATED.getValue(),

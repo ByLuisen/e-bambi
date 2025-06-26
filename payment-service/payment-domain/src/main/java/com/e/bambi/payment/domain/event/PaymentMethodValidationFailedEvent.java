@@ -1,5 +1,6 @@
 package com.e.bambi.payment.domain.event;
 
+import com.e.bambi.shared.kernel.domain.event.payload.payment.PaymentMethodEventPayload;
 import com.e.bambi.shared.kernel.domain.event.payload.payment.PaymentMethodValidationFailedEventPayload;
 import com.e.bambi.shared.kernel.domain.valueobject.OrderId;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class PaymentMethodValidationFailedEvent extends PaymentMethodEvent {
     }
 
     @Override
-    public PaymentMethodValidationFailedEventPayload toPayload() {
+    public PaymentMethodEventPayload toPayload() {
         return new PaymentMethodValidationFailedEventPayload(
                 orderId.getValue(),
                 failureMessages

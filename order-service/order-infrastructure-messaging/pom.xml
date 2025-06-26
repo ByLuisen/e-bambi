@@ -20,10 +20,6 @@
             <groupId>com.e.bambi</groupId>
             <artifactId>kafka-consumer</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

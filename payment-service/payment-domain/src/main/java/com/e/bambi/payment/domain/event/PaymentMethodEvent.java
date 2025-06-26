@@ -11,7 +11,7 @@ public abstract class PaymentMethodEvent implements DomainEvent<PaymentMethod> {
     protected final String aggregatetype;
     protected final OrderId orderId;
 
-    public PaymentMethodEvent(String aggregatetype, OrderId orderId) {
+    protected PaymentMethodEvent(String aggregatetype, OrderId orderId) {
         this.aggregatetype = aggregatetype;
         this.orderId = orderId;
     }

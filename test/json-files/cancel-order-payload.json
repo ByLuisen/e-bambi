@@ -1,8 +1,0 @@
-{
-  "type": "cancelled",           // nuevo estado
-  "actor": "system|customer|admin",
-  "reason": "Customer requested", // opcional, contexto
-  "metadata": {                   // opcional, extensión
-    "refundAmount": 42.90
-  }
-}

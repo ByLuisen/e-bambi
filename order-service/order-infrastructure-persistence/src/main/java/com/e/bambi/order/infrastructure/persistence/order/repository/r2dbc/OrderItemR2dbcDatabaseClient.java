@@ -1,6 +1,5 @@
 package com.e.bambi.order.infrastructure.persistence.order.repository.r2dbc;
 
-import com.e.bambi.order.domain.order.entity.OrderItem;
 import com.e.bambi.order.infrastructure.persistence.order.entity.OrderItemEntity;
 import com.e.bambi.order.infrastructure.persistence.order.mapper.OrderPersistenceMapper;
 import lombok.RequiredArgsConstructor;

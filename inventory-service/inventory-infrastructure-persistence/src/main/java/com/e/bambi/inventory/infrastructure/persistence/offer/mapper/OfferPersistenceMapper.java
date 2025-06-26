@@ -6,6 +6,7 @@ import com.e.bambi.inventory.application.offer.dto.response.SupplierOfferReadRes
 import com.e.bambi.inventory.domain.offer.entity.Offer;
 import com.e.bambi.inventory.domain.offer.valueobject.OfferId;
 import com.e.bambi.inventory.domain.shared.valueobject.Stock;
+import com.e.bambi.inventory.infrastructure.persistence.jooq.tables.Offers;
 import com.e.bambi.shared.kernel.domain.valueobject.SupplierId;
 import com.e.bambi.inventory.infrastructure.persistence.offer.entity.OfferEntity;
 import com.e.bambi.shared.kernel.domain.valueobject.Money;
@@ -14,6 +15,7 @@ import org.jooq.Record;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -58,5 +60,17 @@ public class OfferPersistenceMapper {
                 r.get("stock", Integer.class),
                 r.get("price", BigDecimal.class)
         );
+    }
+
+    public List<OfferEntity> toOfferEntities(List<Offer> offers) {
+        return offers.stream()
+                .map(offer ->
+                        new OfferEntity(
+                                offer.getId().getValue(),
+                                offer.getSupplierId().getValue(),
+                                offer.getProductId().getValue(),
+                                offer.getPrice().getAmount(),
+                                offer.getStock().getQuantity()
+                        )).toList();
     }
 }

@@ -16,6 +16,10 @@
             <groupId>com.e.bambi</groupId>
             <artifactId>shared-kernel-domain</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.e.bambi</groupId>
+            <artifactId>shared-kernel-event</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

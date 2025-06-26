@@ -25,8 +25,8 @@ public class OrderStatusHistoryEntity {
     @Column("order_status")
     private OrderStatus orderStatus;
     private String reason;
-    @Column("changed_at")
-    private OffsetDateTime changedAt;
+    @Column("created_at")
+    private OffsetDateTime createdAt;
 
     @Override
     public boolean equals(Object o) {

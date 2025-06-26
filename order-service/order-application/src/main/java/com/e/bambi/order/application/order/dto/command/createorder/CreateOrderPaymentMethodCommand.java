@@ -8,6 +8,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CreateOrderPaymentMethodCommand {
 
-    private final PaymentMethodId paymentMethodId;
+    private final PaymentMethodId id;
     private final String name;
 }

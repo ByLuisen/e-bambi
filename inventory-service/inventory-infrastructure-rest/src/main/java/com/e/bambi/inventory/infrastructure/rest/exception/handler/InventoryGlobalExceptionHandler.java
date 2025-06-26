@@ -15,12 +15,6 @@ import reactor.core.publisher.Mono;
 @ControllerAdvice
 public class InventoryGlobalExceptionHandler extends GlobalExceptionHandler {
 
-    @ExceptionHandler(InsufficientStockException.class)
-    public Mono<ResponseEntity<Object>> handleInsufficientStockException(InsufficientStockException ex,
-                                                                         ServerWebExchange exchange) {
-        return handleExceptionInternal(ex, (Object) null, HttpHeaders.EMPTY, HttpStatusCode.valueOf(409), exchange);
-    }
-
     @ExceptionHandler(ProductNotFoundException.class)
     private Mono<ResponseEntity<Object>> handleProductNotFoundException(ProductNotFoundException ex,
                                                                         ServerWebExchange exchange) {

@@ -3,7 +3,7 @@ info:
   title: Swagger Order Service
   description: |-
     Bienvenido a la documentación oficial del microservicio 'Order Service'. Aquí podrás explorar e interactuar con los 
-    diversos recursos disponibles, facilitando la integración y gestión de órdenes a través de sus API. 
+    diversos recursos disponibles, facilitando la integración y gestión de órdenes a través de su API. 
     Esta documentación proporciona los detalles técnicos necesarios para utilizar las funcionalidades ofrecidas por el 
     servicio de manera eficiente.
 
@@ -317,7 +317,7 @@ components:
     CreateOrderItemProductRequestDto:
       type: object
       properties:
-        productId:
+        id:
           type: string
           format: uuid
         sku:
@@ -328,7 +328,7 @@ components:
           examples: ['Samsung Galaxy S23']
       required:
         - name
-        - productId
+        - id
         - sku
     CreateOrderItemRequestDto:
       type: object
@@ -342,7 +342,7 @@ components:
           $ref: '#/components/schemas/CreateOrderItemProductRequestDto'
         price:
           type: number
-          minimum: 0.01
+          minimum: 0
           examples: [799.99]
         quantity:
           type: integer
@@ -360,7 +360,7 @@ components:
     CreateOrderItemSupplierRequestDto:
       type: object
       properties:
-        supplierId:
+        id:
           type: string
           format: uuid
         name:
@@ -368,11 +368,11 @@ components:
           examples: ['Bambi']
       required:
         - name
-        - supplierId
+        - id
     CreateOrderPaymentMethodRequestDto:
       type: object
       properties:
-        paymentMethodId:
+        id:
           type: string
           format: uuid
         name:
@@ -381,7 +381,7 @@ components:
           examples: ['PayPal']
       required:
         - name
-        - paymentMethodId
+        - id
     CreateOrderRequestDto:
       type: object
       properties:
@@ -629,6 +629,7 @@ components:
         authorizationCode:
           authorizationUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/auth
           tokenUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/token
+          refreshUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/token
           scopes:
             - admin: Acceso administrativo
             - user: Acceso usuario

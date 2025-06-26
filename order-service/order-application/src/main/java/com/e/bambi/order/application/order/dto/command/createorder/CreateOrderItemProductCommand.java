@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class CreateOrderItemProductCommand {
-    private final ProductId productId;
+    private final ProductId id;
     private final String sku;
     private final String name;
 }

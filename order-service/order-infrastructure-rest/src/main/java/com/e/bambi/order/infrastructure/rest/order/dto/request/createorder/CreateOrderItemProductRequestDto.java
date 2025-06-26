@@ -12,7 +12,7 @@ public class CreateOrderItemProductRequestDto {
 
     @UUID
     @NotNull
-    private String productId;
+    private String id;
 
     @NotNull
     @NotBlank

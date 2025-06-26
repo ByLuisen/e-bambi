@@ -6,9 +6,10 @@ import com.e.bambi.shared.kernel.application.bus.CommandHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
-import static com.e.bambi.order.domain.order.entity.Order.FAILURE_MESSAGE_DELIMITER;
+import static com.e.bambi.shared.kernel.application.saga.order.SagaConstants.FAILURE_MESSAGE_DELIMITER;
 
 @Slf4j
 @Component
@@ -19,6 +20,7 @@ public class ReservationFailedInventoryCommandHandler implements
     private final OrderInventorySaga orderInventorySaga;
 
     @Override
+    @Transactional
     public Mono<Void> handle(ReservationFailedInventoryCommand command) {
         return orderInventorySaga.rollback(command)
                 .doOnSuccess(__ -> log.info("Order is roll backed for order id: {} with failure messages: {}",

@@ -7,7 +7,7 @@ debug:
 logging:
   level:
     com.e.bambi: DEBUG
-    #    reactor.kafka: DEBUG
+    reactor.kafka: DEBUG
     io:
     #      r2dbc: DEBUG
     #      r2dbc.pool: DEBUG
@@ -15,8 +15,8 @@ logging:
     org:
       #      apache.kafka: DEBUG
       springframework: DEBUG
-      #      springframework.r2dbc: DEBUG
-      springframework.data.r2dbc: DEBUG
+      springframework.r2dbc: DEBUG
+#      springframework.data.r2dbc: TRACE
 
 order-service:
   inventory.reserved-topic-name: inventory.reserved

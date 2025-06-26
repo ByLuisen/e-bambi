@@ -22,7 +22,7 @@ public class CreateOrderItemRequestDto {
     private CreateOrderItemProductRequestDto product;
 
     @NotNull
-    @DecimalMin(value = "0.01", message = "The product price must be greater than zero")
+    @DecimalMin(value = "0.0", message = "The product price must be greater than zero")
     @Digits(integer = 10, fraction = 2, message = "The product price cannot have more than 2 decimal places")
     private BigDecimal price;
 

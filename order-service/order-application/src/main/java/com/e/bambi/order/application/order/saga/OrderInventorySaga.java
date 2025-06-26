@@ -6,15 +6,18 @@ import com.e.bambi.order.application.order.dto.command.message.inventory.Reserve
 import com.e.bambi.order.application.order.port.outbound.repository.OrderRepository;
 import com.e.bambi.order.application.order.port.outbound.repository.OrderStatusHistoryQueryRepository;
 import com.e.bambi.order.application.outbox.OrderOutboxEventHelper;
-import com.e.bambi.order.application.outbox.model.OrderAggregateType;
+import com.e.bambi.order.domain.event.OrderAggregateType;
 import com.e.bambi.order.domain.OrderDomainService;
 import com.e.bambi.order.domain.event.OrderPaymentValidateEvent;
+import com.e.bambi.order.domain.exception.OrderNotFoundException;
 import com.e.bambi.order.domain.order.valueobject.OrderStatus;
 import com.e.bambi.shared.kernel.application.saga.SagaStatus;
 import com.e.bambi.shared.kernel.application.saga.SagaStep;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Mono;
 
 import static com.e.bambi.shared.kernel.application.saga.order.SagaConstants.ORDER_SAGA_NAME;
@@ -31,6 +34,7 @@ public class OrderInventorySaga implements SagaStep<ReservedInventoryCommand, Re
     private final OrderStatusHistoryQueryRepository orderStatusHistoryQueryRepository;
 
     @Override
+    @Transactional
     public Mono<Void> process(ReservedInventoryCommand data) {
         return orderStatusHistoryQueryRepository
                 .existsByOrderIdAndOrderStatus(data.getOrderId(), OrderStatus.PRODUCTS_RESERVED)
@@ -41,6 +45,7 @@ public class OrderInventorySaga implements SagaStep<ReservedInventoryCommand, Re
                         return Mono.empty();
                     }
 
+                    log.info("Confirming products reservation for order id: {}", data.getOrderId().getValue());
                     return confirmOrderReservation(data)
                             .flatMap(event -> {
                                 SagaStatus sagaStatus =
@@ -64,6 +69,7 @@ public class OrderInventorySaga implements SagaStep<ReservedInventoryCommand, Re
     }
 
     @Override
+    @Transactional
     public Mono<Void> rollback(ReservationFailedInventoryCommand data) {
         return orderStatusHistoryQueryRepository.existsByOrderIdAndOrderStatus(data.getOrderId(), OrderStatus.CANCELLED)
                 .flatMap(exists -> {
@@ -92,7 +98,7 @@ public class OrderInventorySaga implements SagaStep<ReservedInventoryCommand, Re
 
     private Mono<Void> rollbackOrder(ReservationFailedInventoryCommand data) {
         log.info("Cancelling order for order id: {}", data.getOrderId().getValue());
-        return orderRepository.findById(data.getOrderId())
+        return orderApplicationService.findOrder(data.getOrderId())
                 .flatMap(order -> {
                     order.cancel(data.getFailureMessages());
                     return orderRepository.update(order)

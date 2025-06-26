@@ -10,6 +10,7 @@ import lombok.Getter;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,8 +25,6 @@ public class Order extends AggregateRoot<OrderId> {
     private OffsetDateTime createdAt;
     private final List<OrderItem> items;
     private List<OrderStatusHistory> statusHistories;
-
-    public static final String FAILURE_MESSAGE_DELIMITER = ",";
 
     public void initializeOrder() {
         super.setId(new OrderId(UUID.randomUUID()));
@@ -118,15 +117,21 @@ public class Order extends AggregateRoot<OrderId> {
     }
 
     private void addStatusHistory() {
-        statusHistories.add(
+        OrderStatusHistory orderStatusHistory =
                 OrderStatusHistory.builder()
                         .id(new OrderStatusHistoryId(UUID.randomUUID()))
                         .orderId(super.getId())
                         .orderStatus(orderStatus)
                         .reason(orderStatus.getReason())
-                        .changedAt(OffsetDateTime.now())
-                        .build()
-        );
+                        .createdAt(OffsetDateTime.now())
+                        .build();
+
+        if (statusHistories != null) {
+            statusHistories.add(orderStatusHistory);
+        }
+        if (statusHistories == null) {
+            statusHistories = new ArrayList<>(List.of(orderStatusHistory));
+        }
     }
 
     private void initializeOrderItems() {

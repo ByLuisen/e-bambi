@@ -1,4 +1,4 @@
-package com.e.bambi.order.application.outbox.model;
+package com.e.bambi.order.domain.event;
 
 import lombok.Getter;
 

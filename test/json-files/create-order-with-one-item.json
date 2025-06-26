@@ -1,0 +1,32 @@
+{
+  "paymentMethod": {
+    "id": "3fdc42b4-8341-43a4-aa78-c9fa792d4d9e",
+    "name": "PayPal"
+  },
+  "address": {
+    "country": "Spain",
+    "address": "Calle Gran Vía, 28",
+    "city": "Madrid",
+    "province": "Madrid",
+    "postalCode": "28013",
+    "phoneNumber": "+34 912 34 56 78"
+  },
+  "items": [
+    {
+      "imageUrl": "https://example.com/images/productos/camiseta-deportiva.jpg",
+      "supplier": {
+        "id": "0d95b4c4-a138-4e6a-9d86-4c27ea98a83c",
+        "name": "Bambi"
+      },
+      "product": {
+        "id": "839546df-e9ab-45c4-b5e0-06f10ca5c3d7",
+        "sku": "SAM-001-EL",
+        "name": "Samsung Galaxy S23"
+      },
+      "price": 789.99,
+      "quantity": 1,
+      "totalPrice": 789.99
+    }
+  ],
+  "totalPrice": 789.99
+}

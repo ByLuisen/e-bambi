@@ -12,5 +12,5 @@ public class OrderByUserIdDto {
     @PositiveOrZero
     private int page = 0;
     @Pattern(regexp = "^(3|30|\\d{4})$")
-    private Integer date = 30;
+    private String date = "30";
 }

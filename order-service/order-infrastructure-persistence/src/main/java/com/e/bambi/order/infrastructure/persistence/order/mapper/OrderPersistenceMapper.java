@@ -1,9 +1,9 @@
 package com.e.bambi.order.infrastructure.persistence.order.mapper;
 
-import com.e.bambi.order.application.order.dto.response.orderwithdetails.*;
 import com.e.bambi.order.application.order.dto.response.ordersummary.OrderSummaryAddress;
 import com.e.bambi.order.application.order.dto.response.ordersummary.OrderSummaryItem;
 import com.e.bambi.order.application.order.dto.response.ordersummary.OrderSummaryReadResponse;
+import com.e.bambi.order.application.order.dto.response.orderwithdetails.*;
 import com.e.bambi.order.domain.order.entity.Order;
 import com.e.bambi.order.domain.order.entity.OrderItem;
 import com.e.bambi.order.domain.order.entity.OrderStatusHistory;
@@ -15,19 +15,18 @@ import com.e.bambi.shared.kernel.domain.valueobject.*;
 import io.r2dbc.spi.Readable;
 import org.jooq.Record;
 import org.jooq.Result;
-import org.postgresql.core.Tuple;
 import org.springframework.stereotype.Component;
 import reactor.util.annotation.Nullable;
-import reactor.util.function.Tuple3;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static com.e.bambi.order.domain.order.entity.Order.FAILURE_MESSAGE_DELIMITER;
+import static com.e.bambi.shared.kernel.application.saga.order.SagaConstants.FAILURE_MESSAGE_DELIMITER;
 
 @Component
 public class OrderPersistenceMapper {
@@ -35,20 +34,40 @@ public class OrderPersistenceMapper {
     public OrderEntity toOrderEntity(Order order) {
         return OrderEntity.builder()
                 .id(order.getId().getValue())
-                .userId(order.getUserId().getValue())
-                .orderStatus(order.getOrderStatus().name())
-                .paymentMethodId(order.getPaymentMethod().getId().getValue())
-                .paymentMethod(order.getPaymentMethod().getName())
-                .country(order.getAddress().getCountry())
-                .address(order.getAddress().getAddress())
-                .city(order.getAddress().getCity())
-                .province(order.getAddress().getProvince())
-                .postalCode(order.getAddress().getPostalCode())
-                .phoneNumber(order.getAddress().getPhoneNumber())
-                .totalPrice(order.getTotalPrice().getAmount())
+                .userId(order.getUserId().getValue() == null ? null : order.getUserId().getValue())
+                .orderStatus(order.getOrderStatus())
+                .paymentMethodId(order.getPaymentMethod().getId().getValue() != null ?
+                        order.getPaymentMethod().getId().getValue() : null)
+                .paymentMethod(order.getPaymentMethod().getName() != null ? order.getPaymentMethod().getName() : null)
+                .country(order.getAddress().getCountry() != null ? order.getAddress().getCountry() : null)
+                .address(order.getAddress().getAddress() != null ? order.getAddress().getAddress() : null)
+                .city(order.getAddress().getCity() != null ? order.getAddress().getCity() : null)
+                .province(order.getAddress().getProvince() != null ? order.getAddress().getProvince() : null)
+                .postalCode(order.getAddress().getPostalCode() != null ? order.getAddress().getPostalCode() : null)
+                .phoneNumber(order.getAddress().getPhoneNumber() != null ? order.getAddress().getPhoneNumber() : null)
+                .totalPrice(order.getTotalPrice().getAmount() != null ? order.getTotalPrice().getAmount() : null)
                 .failureMessages(order.getFailureMessages() != null ?
                         String.join(FAILURE_MESSAGE_DELIMITER, order.getFailureMessages()) : "")
-                .createdAt(order.getCreatedAt())
+                .createdAt(order.getCreatedAt() != null ? order.getCreatedAt() : null)
+                .build();
+    }
+
+    public OrderEntity rowToOrderEntity(Readable r) {
+        return OrderEntity.builder()
+                .id(r.get("id", UUID.class))
+                .userId(r.get("user_id", UUID.class))
+                .orderStatus(OrderStatus.valueOf(r.get("order_status", String.class)))
+                .paymentMethodId(r.get("payment_method_id", UUID.class))
+                .paymentMethod(r.get("payment_method", String.class))
+                .country(r.get("country", String.class))
+                .address(r.get("address", String.class))
+                .city(r.get("city", String.class))
+                .province(r.get("province", String.class))
+                .postalCode(r.get("postal_code", String.class))
+                .phoneNumber(r.get("phone_number", String.class))
+                .totalPrice(r.get("total_price", BigDecimal.class))
+                .failureMessages(r.get("failure_messages", String.class))
+                .createdAt(r.get("created_at", OffsetDateTime.class))
                 .build();
     }
 
@@ -79,14 +98,25 @@ public class OrderPersistenceMapper {
                 .orderId(statusHistory.getOrderId().getValue())
                 .orderStatus(statusHistory.getOrderStatus())
                 .reason(statusHistory.getReason())
-                .changedAt(statusHistory.getChangedAt())
+                .createdAt(statusHistory.getCreatedAt())
+                .build();
+    }
+
+    public OrderStatusHistoryEntity rowToOrderStatusHistory(Readable r) {
+        return OrderStatusHistoryEntity.builder()
+                .id(r.get("id", UUID.class))
+                .orderId(r.get("order_id", UUID.class))
+                .orderStatus(OrderStatus.valueOf(r.get("order_status", String.class)))
+                .reason(r.get("reason", String.class))
+                .createdAt(r.get("created_at", OffsetDateTime.class))
                 .build();
     }
 
     public Order toOrder(OrderEntity orderEntity) {
         return Order.builder()
                 .id(new OrderId(orderEntity.getId()))
-                .orderStatus(OrderStatus.valueOf(orderEntity.getOrderStatus()))
+                .orderStatus(orderEntity.getOrderStatus())
+                .paymentMethod(new OrderPaymentMethod(new PaymentMethodId(orderEntity.getPaymentMethodId())))
                 .build();
     }
 
@@ -95,7 +125,7 @@ public class OrderPersistenceMapper {
         return Order.builder()
                 .id(new OrderId(orderEntity.getId()))
                 .userId(new UserId(orderEntity.getUserId()))
-                .orderStatus(OrderStatus.valueOf(orderEntity.getOrderStatus()))
+                .orderStatus(orderEntity.getOrderStatus())
                 .paymentMethod(new OrderPaymentMethod(
                         new PaymentMethodId(orderEntity.getPaymentMethodId()),
                         orderEntity.getPaymentMethod()))
@@ -118,7 +148,7 @@ public class OrderPersistenceMapper {
                         .orderId(new OrderId(orderStatusHistoryEntity.getOrderId()))
                         .orderStatus(orderStatusHistoryEntity.getOrderStatus())
                         .reason(orderStatusHistoryEntity.getReason())
-                        .changedAt(orderStatusHistoryEntity.getChangedAt())
+                        .createdAt(orderStatusHistoryEntity.getCreatedAt())
                         .build()))
                 )
                 .build();

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.e.bambi.order.domain.order.entity.Order.FAILURE_MESSAGE_DELIMITER;
+import static com.e.bambi.shared.kernel.application.saga.order.SagaConstants.FAILURE_MESSAGE_DELIMITER;
 
 @Getter
 public class TrackOrderReadResponse {

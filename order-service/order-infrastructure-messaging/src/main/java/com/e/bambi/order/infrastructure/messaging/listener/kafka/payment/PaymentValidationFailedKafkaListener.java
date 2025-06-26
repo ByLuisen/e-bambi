@@ -1,5 +1,6 @@
 package com.e.bambi.order.infrastructure.messaging.listener.kafka.payment;
 
+import com.e.bambi.order.domain.exception.OrderNotFoundException;
 import com.e.bambi.order.infrastructure.messaging.mapper.OrderMessagingMapper;
 import com.e.bambi.shared.infrastructure.messaging.kafka.consumer.KafkaConsumerHelper;
 import com.e.bambi.shared.infrastructure.messaging.kafka.consumer.ReactiveKafkaConsumer;
@@ -7,15 +8,12 @@ import com.e.bambi.shared.infrastructure.messaging.kafka.consumer.ReactiveKafkaC
 import com.e.bambi.shared.kernel.application.port.inbound.bus.CommandBus;
 import com.e.bambi.shared.kernel.domain.event.payload.payment.PaymentMethodValidationFailedEventPayload;
 import lombok.extern.slf4j.Slf4j;
-import org.postgresql.util.PSQLState;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate;
 import org.springframework.stereotype.Component;
 import reactor.core.Disposable;
 import reactor.core.publisher.Mono;
-
-import java.sql.SQLException;
 
 @Slf4j
 @Component
@@ -52,25 +50,23 @@ public class PaymentValidationFailedKafkaListener implements ReactiveKafkaConsum
                                     PaymentMethodValidationFailedEventPayload.class);
 
                     log.info("Incoming message in PaymentValidationFailedKafkaListener: {}, with key: {}, " +
-                                    "partition: {} and offset: {}", payload, sagaId,
+                                    "partition: {} and offset: {}", receiverRecord.value(), sagaId,
                             receiverRecord.partition(),
                             receiverRecord.offset());
 
                     return commandBus.dispatch(orderMessagingMapper.toValidationFailedPaymentCommand(payload, sagaId))
+                            .onErrorResume(DuplicateKeyException.class, e -> {
+                                log.error("Caught unique constraint exception in " +
+                                        "PaymentValidationFailedKafkaListener", e);
+                                return Mono.empty();
+                            })
+                            .onErrorResume(OrderNotFoundException.class, e -> {
+                                log.error("Caught OrderNotFoundException in PaymentValidationFailedKafkaListener", e);
+                                return Mono.empty();
+                            })
                             .then(Mono.fromRunnable(receiverRecord.receiverOffset()::acknowledge));
 
                 })
-                .doOnError(DataAccessException.class, e -> {
-                            SQLException sqlException = (SQLException) e.getRootCause();
-                            if (sqlException != null && sqlException.getSQLState() != null &&
-                                    PSQLState.UNIQUE_VIOLATION.getState().equals(sqlException.getSQLState())) {
-                                //NO-OP for unique constraint exception
-                                log.error("Caught unique constraint exception with sql state: {} in " +
-                                                "PaymentValidationFailedKafkaListener",
-                                        sqlException.getSQLState());
-                            }
-                        }
-                )
                 .subscribe();
     }
 
