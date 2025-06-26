@@ -12,10 +12,10 @@ import java.util.UUID;
 @Repository
 public interface OrderR2dbcRepository extends R2dbcRepository<OrderEntity, UUID> {
 
-    @Query("SELECT id, order_status, payment_method_id FROM orders WHERE id = :orderId")
+    @Query("SELECT id, order_status, payment_method_id, failure_messages FROM orders WHERE id = :orderId")
     Mono<OrderEntity> findOrderById(UUID orderId);
 
-    @Query("SELECT order_status, failure_messages FROM orders WHERE user_id = :userId AND order_id = :orderId")
+    @Query("SELECT order_status, failure_messages FROM orders WHERE user_id = :userId AND id = :orderId")
     Mono<TrackOrderReadResponse> trackOrder(UUID userId, UUID orderId);
 
 }

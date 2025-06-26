@@ -34,21 +34,29 @@ public class OrderPersistenceMapper {
     public OrderEntity toOrderEntity(Order order) {
         return OrderEntity.builder()
                 .id(order.getId().getValue())
-                .userId(order.getUserId().getValue() == null ? null : order.getUserId().getValue())
+                .userId(order.getUserId().getValue())
                 .orderStatus(order.getOrderStatus())
-                .paymentMethodId(order.getPaymentMethod().getId().getValue() != null ?
-                        order.getPaymentMethod().getId().getValue() : null)
-                .paymentMethod(order.getPaymentMethod().getName() != null ? order.getPaymentMethod().getName() : null)
-                .country(order.getAddress().getCountry() != null ? order.getAddress().getCountry() : null)
-                .address(order.getAddress().getAddress() != null ? order.getAddress().getAddress() : null)
-                .city(order.getAddress().getCity() != null ? order.getAddress().getCity() : null)
-                .province(order.getAddress().getProvince() != null ? order.getAddress().getProvince() : null)
-                .postalCode(order.getAddress().getPostalCode() != null ? order.getAddress().getPostalCode() : null)
-                .phoneNumber(order.getAddress().getPhoneNumber() != null ? order.getAddress().getPhoneNumber() : null)
-                .totalPrice(order.getTotalPrice().getAmount() != null ? order.getTotalPrice().getAmount() : null)
+                .paymentMethodId(order.getPaymentMethod().getId().getValue())
+                .paymentMethod(order.getPaymentMethod().getName())
+                .country(order.getAddress().getCountry())
+                .address(order.getAddress().getAddress())
+                .city(order.getAddress().getCity())
+                .province(order.getAddress().getProvince())
+                .postalCode(order.getAddress().getPostalCode())
+                .phoneNumber(order.getAddress().getPhoneNumber())
+                .totalPrice(order.getTotalPrice().getAmount())
                 .failureMessages(order.getFailureMessages() != null ?
                         String.join(FAILURE_MESSAGE_DELIMITER, order.getFailureMessages()) : "")
-                .createdAt(order.getCreatedAt() != null ? order.getCreatedAt() : null)
+                .createdAt(order.getCreatedAt())
+                .build();
+    }
+
+    public OrderEntity forStatusUpdate(Order order) {
+        return OrderEntity.builder()
+                .id(order.getId().getValue())
+                .orderStatus(order.getOrderStatus())
+                .failureMessages(order.getFailureMessages() != null ?
+                        String.join(FAILURE_MESSAGE_DELIMITER, order.getFailureMessages()) : "")
                 .build();
     }
 
@@ -112,11 +120,39 @@ public class OrderPersistenceMapper {
                 .build();
     }
 
+    public Order toOrderWithItems(Record r) {
+        @SuppressWarnings("unchecked")
+        Result<Record> items = r.get("order_items", Result.class);
+
+        return Order.builder()
+                .id(new OrderId(r.get("id", UUID.class)))
+                .orderStatus(OrderStatus.valueOf(r.get("order_status", String.class)))
+                .paymentMethod(new OrderPaymentMethod(new PaymentMethodId(
+                        r.get("payment_method_id", UUID.class))))
+                .items(items.map(item ->
+                        OrderItem.builder()
+                                .product(OrderItemProduct.builder()
+                                        .productId(new ProductId(item.get("product_id", UUID.class)))
+                                        .build())
+                                .supplier(OrderItemSupplier.builder()
+                                        .supplierId(new SupplierId(item.get("supplier_id", UUID.class)))
+                                        .build())
+                                .quantity(item.get("quantity", Integer.class))
+                                .build()
+                ))
+                .failureMessages(new ArrayList<>(Arrays.asList(r.get("failure_messages", String.class)
+                        .split(FAILURE_MESSAGE_DELIMITER))))
+                .build();
+    }
+
+
     public Order toOrder(OrderEntity orderEntity) {
         return Order.builder()
                 .id(new OrderId(orderEntity.getId()))
                 .orderStatus(orderEntity.getOrderStatus())
                 .paymentMethod(new OrderPaymentMethod(new PaymentMethodId(orderEntity.getPaymentMethodId())))
+                .failureMessages(new ArrayList<>(Arrays.asList(orderEntity.getFailureMessages()
+                        .split(FAILURE_MESSAGE_DELIMITER))))
                 .build();
     }
 
@@ -243,15 +279,17 @@ public class OrderPersistenceMapper {
                                 .id(new OrderItemId(item.getId()))
                                 .orderId(new OrderId(item.getOrderId()))
                                 .imageUrl(item.getImageUrl())
-                                .supplier(new OrderItemSupplier(
-                                        new SupplierId(item.getSupplierId()),
-                                        item.getSupplier()
-                                ))
-                                .product(new OrderItemProduct(
-                                        new ProductId(item.getProductId()),
-                                        item.getSku(),
-                                        item.getName()
-                                ))
+                                .supplier(OrderItemSupplier.builder()
+                                        .supplierId(new SupplierId(item.getSupplierId()))
+                                        .name(item.getSupplier())
+                                        .build()
+                                )
+                                .product(OrderItemProduct.builder()
+                                        .productId(new ProductId(item.getProductId()))
+                                        .sku(item.getSku())
+                                        .name(item.getName())
+                                        .build()
+                                )
                                 .price(new Money(item.getPrice()))
                                 .quantity(item.getQuantity())
                                 .totalPrice(new Money(item.getTotalPrice()))

@@ -7,6 +7,8 @@ import reactor.core.publisher.Mono;
 public interface OrderRepository {
     Mono<Order> findById(OrderId orderId);
 
+    Mono<Order> findOrderWithItems(OrderId orderId);
+
     Mono<Order> insert(Order order);
 
     Mono<Order> update(Order order);

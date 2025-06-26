@@ -9,9 +9,12 @@ import com.e.bambi.order.application.outbox.OrderOutboxEventHelper;
 import com.e.bambi.order.domain.event.OrderAggregateType;
 import com.e.bambi.order.domain.OrderDomainService;
 import com.e.bambi.order.domain.event.OrderInventoryCancelReservationEvent;
+import com.e.bambi.order.domain.exception.OrderNotFoundException;
+import com.e.bambi.order.domain.order.entity.Order;
 import com.e.bambi.order.domain.order.valueobject.OrderStatus;
 import com.e.bambi.shared.kernel.application.saga.SagaStatus;
 import com.e.bambi.shared.kernel.application.saga.SagaStep;
+import com.e.bambi.shared.kernel.domain.valueobject.OrderId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -93,7 +96,13 @@ public class OrderPaymentSaga implements SagaStep<ValidatedPaymentCommand, Valid
 
     private Mono<OrderInventoryCancelReservationEvent> rollbackOrder(ValidationFailedPaymentCommand data) {
         log.info("Cancelling order with id: {}", data.getOrderId().getValue());
-        return orderApplicationService.findOrder(data.getOrderId())
+        return orderRepository.findOrderWithItems(data.getOrderId())
+                .switchIfEmpty(Mono.defer(() -> {
+                    log.error("Order with id: {} could not be found!", data.getOrderId().getValue());
+
+                    return Mono.error(new OrderNotFoundException("Order with id: " + data.getOrderId().getValue() + " could " +
+                            "not be found!"));
+                }))
                 .flatMap(order -> {
                     OrderInventoryCancelReservationEvent event =
                             orderDomainService.cancelOrderInventory(

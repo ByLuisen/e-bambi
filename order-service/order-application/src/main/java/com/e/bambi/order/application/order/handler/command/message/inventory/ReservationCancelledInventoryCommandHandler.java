@@ -43,9 +43,7 @@ public class ReservationCancelledInventoryCommandHandler implements
                                         .doOnSuccess(__ -> log.info("Order with id: {} is cancelled",
                                                 command.getOrderId().getValue()))
                                         .then();
-                            })
-                            .switchIfEmpty(Mono.error(new OrderNotFoundException("Order with id: " +
-                                    command.getOrderId().getValue() + " could not be found")));
+                            });
                 });
     }
 }

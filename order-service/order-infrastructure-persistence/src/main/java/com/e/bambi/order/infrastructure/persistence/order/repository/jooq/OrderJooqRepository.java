@@ -5,6 +5,8 @@ import com.e.bambi.order.application.order.dto.response.ordersummary.OrderSummar
 import com.e.bambi.order.application.order.dto.response.orderwithdetails.OrderWithDetailReadResponse;
 import com.e.bambi.order.application.order.dto.response.PaginatedResultResponse;
 import com.e.bambi.order.domain.exception.OrderNotFoundException;
+import com.e.bambi.order.domain.order.entity.Order;
+import com.e.bambi.order.infrastructure.persistence.order.entity.OrderEntity;
 import com.e.bambi.order.infrastructure.persistence.order.mapper.OrderPersistenceMapper;
 import lombok.RequiredArgsConstructor;
 import org.jooq.*;
@@ -33,6 +35,13 @@ public class OrderJooqRepository {
 
     private final DSLContext dslContext;
     private final OrderPersistenceMapper orderPersistenceMapper;
+
+    public Mono<Order> findOrderWithItems(UUID orderId) {
+        Condition where = ORDERS.ID.eq(orderId);
+
+        return Mono.from(getOrderWithItemsQuery(where))
+                .map(orderPersistenceMapper::toOrderWithItems);
+    }
 
     public Mono<PaginatedResultResponse<OrderSummaryReadResponse>> findByUserId(UUID userId, int page, Integer date) {
         var o = ORDERS;
@@ -124,14 +133,12 @@ public class OrderJooqRepository {
             default -> {
                 ZoneOffset offset = ZoneOffset.of("UTC");
 
-                // Primera fecha del año: 1 de enero a las 00:00:00
                 minDate = OffsetDateTime.of(
                         date, 1, 1,
                         0, 0, 0, 0,
                         offset
                 );
 
-                // Última fecha del año: 31 de diciembre a las 23:59:59.999999999
                 maxDate = OffsetDateTime.of(
                         date, 12, 31,
                         23, 59, 59, 999_999_999,
@@ -238,6 +245,29 @@ public class OrderJooqRepository {
                         o.TOTAL_PRICE.as("order_total_price"),
                         o.CREATED_AT.as("created_at"),
                         multiset(orderItemsSubquery).as("order_items")
+                ).from(o)
+                .where(where != null ? where : DSL.trueCondition());
+    }
+
+    private SelectConditionStep<?> getOrderWithItemsQuery(Condition where) {
+        var o = ORDERS;
+        var oi = ORDER_ITEMS;
+
+        var orderItemSubquery = dslContext
+                .select(
+                        oi.PRODUCT_ID.as("product_id"),
+                        oi.SUPPLIER_ID.as("supplier_id"),
+                        oi.QUANTITY.as("quantity")
+                ).from(oi)
+                .where(oi.ORDER_ID.eq(o.ID));
+
+        return dslContext
+                .select(
+                        o.ID.as("id"),
+                        o.ORDER_STATUS.as("order_status"),
+                        o.PAYMENT_METHOD_ID.as("payment_method_id"),
+                        o.FAILURE_MESSAGES.as("failure_messages"),
+                        multiset(orderItemSubquery).as("order_items")
                 ).from(o)
                 .where(where != null ? where : DSL.trueCondition());
     }

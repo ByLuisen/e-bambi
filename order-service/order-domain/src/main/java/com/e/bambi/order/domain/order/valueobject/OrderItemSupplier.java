@@ -8,8 +8,35 @@ public class OrderItemSupplier {
     private final SupplierId supplierId;
     private final String name;
 
-    public OrderItemSupplier(SupplierId supplierId, String name) {
-        this.supplierId = supplierId;
-        this.name = name;
+    private OrderItemSupplier(Builder builder) {
+        supplierId = builder.supplierId;
+        name = builder.name;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+
+    public static final class Builder {
+        private SupplierId supplierId;
+        private String name;
+
+        private Builder() {
+        }
+
+        public Builder supplierId(SupplierId val) {
+            supplierId = val;
+            return this;
+        }
+
+        public Builder name(String val) {
+            name = val;
+            return this;
+        }
+
+        public OrderItemSupplier build() {
+            return new OrderItemSupplier(this);
+        }
     }
 }

@@ -9,9 +9,42 @@ public class OrderItemProduct {
     private final String sku;
     private final String name;
 
-    public OrderItemProduct(ProductId productId, String sku, String name) {
-        this.productId = productId;
-        this.sku = sku;
-        this.name = name;
+    private OrderItemProduct(Builder builder) {
+        productId = builder.productId;
+        sku = builder.sku;
+        name = builder.name;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+
+    public static final class Builder {
+        private ProductId productId;
+        private String sku;
+        private String name;
+
+        private Builder() {
+        }
+
+        public Builder productId(ProductId val) {
+            productId = val;
+            return this;
+        }
+
+        public Builder sku(String val) {
+            sku = val;
+            return this;
+        }
+
+        public Builder name(String val) {
+            name = val;
+            return this;
+        }
+
+        public OrderItemProduct build() {
+            return new OrderItemProduct(this);
+        }
     }
 }

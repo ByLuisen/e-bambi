@@ -53,15 +53,17 @@ public class OrderApplicationMapper {
                 .stream().map(command ->
                         OrderItem.builder()
                                 .imageUrl(command.getImageUrl())
-                                .supplier(new OrderItemSupplier(
-                                        command.getSupplier().getId(),
-                                        command.getSupplier().getName()
-                                ))
-                                .product(new OrderItemProduct(
-                                        command.getProduct().getId(),
-                                        command.getProduct().getSku(),
-                                        command.getProduct().getName()
-                                ))
+                                .supplier(OrderItemSupplier.builder()
+                                        .supplierId(command.getSupplier().getId())
+                                        .name(command.getSupplier().getName())
+                                        .build()
+                                )
+                                .product(OrderItemProduct.builder()
+                                        .productId(command.getProduct().getId())
+                                        .sku(command.getProduct().getSku())
+                                        .name(command.getProduct().getName())
+                                        .build()
+                                )
                                 .price(command.getPrice())
                                 .quantity(command.getQuantity())
                                 .totalPrice(command.getTotalPrice())

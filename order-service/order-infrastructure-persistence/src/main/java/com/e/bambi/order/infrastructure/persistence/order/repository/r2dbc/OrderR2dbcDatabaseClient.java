@@ -42,12 +42,13 @@ public class OrderR2dbcDatabaseClient {
     public Mono<OrderEntity> update(OrderEntity entity) {
         return databaseClient.sql("""
                         UPDATE orders
-                        SET order_status = :orderStatus::type_order_status
+                        SET order_status = :orderStatus::type_order_status, failure_messages = :failureMessages
                         WHERE id = :id
                         RETURNING *
                         """)
                 .bind("id", entity.getId())
                 .bind("orderStatus", entity.getOrderStatus().name())
+                .bind("failureMessages", entity.getFailureMessages())
                 .map(orderPersistenceMapper::rowToOrderEntity)
                 .one();
     }
