@@ -10,7 +10,7 @@
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
-        <intProp name="ThreadGroup.num_threads">8000</intProp>
+        <intProp name="ThreadGroup.num_threads">7000</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
@@ -30,7 +30,7 @@
           <stringProp name="HTTPSampler.implementation">HttpClient4</stringProp>
         </ConfigTestElement>
         <hashTree/>
-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
@@ -38,7 +38,7 @@
             </elementProp>
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Authorization</stringProp>
-              <stringProp name="Header.value">Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJWd19GcWczMHZrcXhoYXlXRGN4Q3pBalE4Ri1SODZQY3lpMHQ5YlRxVWNzIn0.eyJleHAiOjE3NTIxMzc4NTUsImlhdCI6MTc1MjEzNzU1NSwiYXV0aF90aW1lIjoxNzUxMTI0MjM4LCJqdGkiOiJvbnJ0cnQ6NTJhZjYyZmYtNmM4MS00MjM1LTg4YTItZjVkM2MwOWJiNTgxIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgxL3JlYWxtcy9iYW1iaSIsInN1YiI6ImE1MTIzZGE4LTYxOWItNGRjYi1hYzQ3LWU3M2Y0YThlYmU1MSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUtYmFtYmkiLCJzaWQiOiI1NmFjOGI4NC1lNjY3LTQ5NzAtYjg4MC04YmNjNTE3MTQ0ZmYiLCJhY3IiOiIxIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIlVTRVIiXX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6IlVzZXIgQmFtYmkiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJlLWJhbWJpLXVzZXIiLCJnaXZlbl9uYW1lIjoiVXNlciIsImZhbWlseV9uYW1lIjoiQmFtYmkiLCJlbWFpbCI6ImUtYmFtYmktdXNlckB5b3VyLWRvbWFpbi5jb20ifQ.SXmdnm28X_q6cvxSAyLs6dlUz_7O0xFtKaOjoH61BY0vlJDk0J3VwZXqxloq-KclaNzTR-CKewpop-rBepvyTl6z5NQNyq85u2Zzv1dZCmZFHkRWHGq3epjS4HP54U803NAQL8lrGb0N4Q9f9T9Zfqkz__Lzdv9H_By41wO49ctl63FuROGw5AvIvcSYZCuosOJLR8aBtXBfhYJO1XjMmuFgk3njAI0ms1L-MVhfU075DL6WzQ0yH4PYIdMJj-MXDS4HG0Ivm3C_7Bg73JaSZWNZ3zdHy332RPPCfVKBAB1ygfnSxARaxEK9Bn0mkRHNW1ohm_iJlZ-ucgEO9SOEaQ </stringProp>
+              <stringProp name="Header.value">Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJWd19GcWczMHZrcXhoYXlXRGN4Q3pBalE4Ri1SODZQY3lpMHQ5YlRxVWNzIn0.eyJleHAiOjE3NTIxNDAzODAsImlhdCI6MTc1MjE0MDA4MCwiYXV0aF90aW1lIjoxNzUxMTI0MjM4LCJqdGkiOiJvbnJ0cnQ6MzdhMTE2OGUtNDYzYS00NzA0LWI4ZmMtNjA3YWY5MGNkMmJhIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgxL3JlYWxtcy9iYW1iaSIsInN1YiI6ImE1MTIzZGE4LTYxOWItNGRjYi1hYzQ3LWU3M2Y0YThlYmU1MSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUtYmFtYmkiLCJzaWQiOiI1NmFjOGI4NC1lNjY3LTQ5NzAtYjg4MC04YmNjNTE3MTQ0ZmYiLCJhY3IiOiIxIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIlVTRVIiXX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6IlVzZXIgQmFtYmkiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJlLWJhbWJpLXVzZXIiLCJnaXZlbl9uYW1lIjoiVXNlciIsImZhbWlseV9uYW1lIjoiQmFtYmkiLCJlbWFpbCI6ImUtYmFtYmktdXNlckB5b3VyLWRvbWFpbi5jb20ifQ.Euc5UtJqPya5CikkN7Wuc__vCw11cgY6II75MkLlDlyJZWhHxb1JfA8zqR3bqUQ2tUfOaGa9qQ7WoVKBkTMYxdpShBF2cegTqGzWTuDYzBnupWUvEidOKPcLTOFXkEuwB5btTzHnTEK_UXYKthdYaG1sFBeNg1nTa1h0QmhGtjrV2LWA4LkBRbN6E0ZG5mtJcxFST-xvYlugWhKb5K_m3tXt7ExdlpA1riqCtkR3NdKYgGfqEg99Zuqr-7yjPxluGIGlZhyRxIEtvsrnY20osFenUfd7i1zWgmiL0JC051srQtNhc_ehDn8iMQzvD9jBaD13OV8-l0yNKvcjPJvz-w </stringProp>
             </elementProp>
           </collectionProp>
         </HeaderManager>
@@ -159,7 +159,7 @@
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>

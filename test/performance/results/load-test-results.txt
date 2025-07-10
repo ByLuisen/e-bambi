@@ -1,6 +1,7 @@
-219 records  ->
-438 records  ->
-875 records  ->
-1750 records ->
-3500 records ->
+219 records  -> 00:03 seconds
+438 records  -> 00:09 seconds
+875 records  -> 00:10 seconds
+1750 records -> 00:16 seconds
+3500 records -> 00:25 seconds
+5000 records -> 00:46 seconds
 7000 records -> 01:00 seconds
