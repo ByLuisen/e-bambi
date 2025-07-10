@@ -1,8 +1,10 @@
 package com.e.bambi.inventory.application.inventorymovement.mapper;
 
 import com.e.bambi.inventory.application.inventorymovement.dto.command.CreateInventoryMovementCommand;
+import com.e.bambi.inventory.application.inventorymovement.dto.response.InventoryMovementProductResponse;
 import com.e.bambi.inventory.application.inventorymovement.dto.response.InventoryMovementResponse;
 import com.e.bambi.inventory.domain.inventorymovement.entity.InventoryMovement;
+import com.e.bambi.inventory.domain.inventorymovement.valueobject.InventoryMovementProduct;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -10,11 +12,13 @@ public class InventoryMovementApplicationMapper {
 
     public InventoryMovement createInventoryMovementCommandToInventoryMovement(CreateInventoryMovementCommand command) {
         return InventoryMovement.builder()
-                .productId(command.getProductId())
                 .supplierId(command.getSupplierId())
+                .product(new InventoryMovementProduct(
+                        command.getProduct().getId(),
+                        command.getProduct().getSku(),
+                        command.getProduct().getName()
+                ))
                 .movementTypeId(command.getMovementTypeId())
-                .productSku(command.getProductSku())
-                .productName(command.getProductName())
                 .quantity(command.getQuantity())
                 .build();
     }
@@ -23,10 +27,12 @@ public class InventoryMovementApplicationMapper {
         return InventoryMovementResponse.builder()
                 .id(inventoryMovement.getId().getValue())
                 .supplierId(inventoryMovement.getSupplierId().getValue())
-                .productId(inventoryMovement.getProductId().getValue())
+                .product(new InventoryMovementProductResponse(
+                        inventoryMovement.getProduct().getId().getValue(),
+                        inventoryMovement.getProduct().getSku(),
+                        inventoryMovement.getProduct().getName()
+                ))
                 .movementTypeId(inventoryMovement.getMovementTypeId().getValue())
-                .productSku(inventoryMovement.getProductSku())
-                .productName(inventoryMovement.getProductName())
                 .quantity(inventoryMovement.getQuantity())
                 .previousStock(inventoryMovement.getPreviousStock())
                 .newStock(inventoryMovement.getNewStock())

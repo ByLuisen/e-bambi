@@ -43,7 +43,7 @@ public class OrderInventoryCancelReservationKafkaListener
     @Override
     public void receive() {
         subscription = template.receive()
-                .concatMap(receiverRecord -> {
+                .flatMap(receiverRecord -> {
                     String sagaId = receiverRecord.key();
                     OrderInventoryCancelReservationEventPayload payload =
                             kafkaConsumerHelper.getEventPayload(
@@ -51,9 +51,9 @@ public class OrderInventoryCancelReservationKafkaListener
                                     OrderInventoryCancelReservationEventPayload.class);
 
                     log.info("Incoming message in OrderInventoryCancelReservationKafkaListener: {} with key: {}, " +
-                                    "partition: {} and offset: {}", receiverRecord.value(), sagaId,
-                            receiverRecord.partition(),
-                            receiverRecord.offset());
+                                    "topic: {}, partition: {}, offset: {} and timestamp: {}", receiverRecord.value(),
+                            sagaId, receiverRecord.topic(), receiverRecord.partition(), receiverRecord.offset(),
+                            kafkaConsumerHelper.formatTimestamp(receiverRecord.timestamp()));
 
                     return commandBus
                             .dispatch(inventoryMessagingMapper.toCancelReservationInventoryCommand(payload, sagaId))

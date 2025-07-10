@@ -43,16 +43,16 @@ public class PaymentValidationFailedKafkaListener implements ReactiveKafkaConsum
     @Override
     public void receive() {
         subscription = template.receive()
-                .concatMap(receiverRecord -> {
+                .flatMap(receiverRecord -> {
                     String sagaId = receiverRecord.key();
                     PaymentMethodValidationFailedEventPayload payload =
                             kafkaConsumerHelper.getEventPayload(receiverRecord.value().toString(),
                                     PaymentMethodValidationFailedEventPayload.class);
 
-                    log.info("Incoming message in PaymentValidationFailedKafkaListener: {}, with key: {}, " +
-                                    "partition: {} and offset: {}", receiverRecord.value(), sagaId,
-                            receiverRecord.partition(),
-                            receiverRecord.offset());
+                    log.info("Incoming message in PaymentValidationFailedKafkaListener: {}, with key: {}, topic: {}, " +
+                                    "partition: {}, offset: {} and timestamp: {}", receiverRecord.value(), sagaId,
+                            receiverRecord.topic(), receiverRecord.partition(), receiverRecord.offset(),
+                            kafkaConsumerHelper.formatTimestamp(receiverRecord.timestamp()));
 
                     return commandBus.dispatch(orderMessagingMapper.toValidationFailedPaymentCommand(payload, sagaId))
                             .onErrorResume(DuplicateKeyException.class, e -> {

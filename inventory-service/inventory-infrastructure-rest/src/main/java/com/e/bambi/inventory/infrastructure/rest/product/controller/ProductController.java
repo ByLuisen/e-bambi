@@ -46,7 +46,6 @@ public class ProductController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<ProductResponse>> saveProduct(@RequestBody @Valid
                                                              CreateProductRequestDto createProductRequestDto) {
         return commandBus.dispatch(productRestMapper
@@ -55,7 +54,6 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<ProductResponse>> updateProduct(@PathVariable @UUID String productId,
                                                                    @RequestBody @Valid
                                                                    UpdateProductRequestDto updateProductRequestDto) {
@@ -68,7 +66,6 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<Void>> deleteProduct(@PathVariable @UUID String productId) {
         return commandBus.dispatch(new DeleteProductCommand(
                 new ProductId(java.util.UUID.fromString(productId))

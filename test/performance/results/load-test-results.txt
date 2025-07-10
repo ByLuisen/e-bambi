@@ -1,0 +1,6 @@
+219 records  ->
+438 records  ->
+875 records  ->
+1750 records ->
+3500 records ->
+7000 records -> 01:00 seconds

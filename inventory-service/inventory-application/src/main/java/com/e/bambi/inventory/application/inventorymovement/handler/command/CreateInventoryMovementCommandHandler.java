@@ -51,17 +51,20 @@ public class CreateInventoryMovementCommandHandler implements
         List<String> errors = new ArrayList<>(3);
 
         Mono<Stock> supplierExists = offerQueryRepository.findOfferStock(inventoryMovement.getSupplierId(),
-                inventoryMovement.getProductId());
-        Mono<Boolean> productExists = productQueryRepository.existsById(inventoryMovement.getProductId());
+                inventoryMovement.getProduct().getId());
+        Mono<Boolean> productExists = productQueryRepository.existsById(inventoryMovement.getProduct().getId());
         Mono<Boolean> movementTypeExists = movementTypeQueryRepository.existsById(inventoryMovement.getMovementTypeId());
 
         return Mono.zip(supplierExists, productExists, movementTypeExists)
+                .switchIfEmpty(
+                        Mono.error(new InventoryMovementBadRequestException("Inventory movement could not be created",
+                                List.of("Product for supplier id: " + inventoryMovement.getSupplierId().getValue() +
+                                        " and product id: " + inventoryMovement.getProduct().getId().getValue() +
+                                        " does not exists"))))
                 .flatMap(t -> {
-                    if (t.getT1() == null) {
-                        errors.add("Supplier with id: " + inventoryMovement.getSupplierId().getValue() + " does not exists");
-                    }
                     if (!t.getT2()) {
-                        errors.add("Product with id: " + inventoryMovement.getProductId().getValue() + " does not exists");
+                        errors.add("Product with id: " + inventoryMovement.getProduct().getId().getValue() +
+                                " does not exists");
                     }
                     if (!t.getT3()) {
                         errors.add("Movement type with id: " + inventoryMovement.getMovementTypeId().getValue() +
@@ -70,7 +73,9 @@ public class CreateInventoryMovementCommandHandler implements
 
                     if (!errors.isEmpty()) {
                         log.error("Inventory movement could not be created");
-                        return Mono.error(new InventoryMovementBadRequestException("Inventory movement could not be created"));
+                        return Mono.error(
+                                new InventoryMovementBadRequestException("Inventory movement could not be created",
+                                        errors));
                     }
 
                     return Mono.just(t.getT1());

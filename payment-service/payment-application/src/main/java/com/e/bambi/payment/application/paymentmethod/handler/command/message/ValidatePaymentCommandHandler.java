@@ -64,13 +64,15 @@ public class ValidatePaymentCommandHandler implements CommandHandler<Mono<Void>,
     private Mono<PaymentMethodEvent> validatePaymentMethodId(ValidatePaymentCommand command) {
         return paymentMethodRepository.findById(command.getPaymentMethodId())
                 .map(paymentMethod -> {
-                            log.info("The payment method has been successfully validated");
+                            log.info("Payment method successfully validated for order id: {}",
+                                    command.getOrderId().getValue());
                             return (PaymentMethodEvent) paymentDomainService.validatePayment(
                                     PaymentAggregateType.VALIDATED.getValue(),
                                     command.getOrderId());
                         }
                 ).switchIfEmpty(Mono.defer(() -> {
-                            log.error("Error validating the payment method");
+                            log.error("Error while validating payment method for order id: {}",
+                                    command.getOrderId().getValue());
                             return Mono.just(new PaymentMethodValidationFailedEvent(
                                     PaymentAggregateType.VALIDATION_FAILED.getValue(),
                                     command.getOrderId(),

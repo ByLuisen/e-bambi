@@ -104,7 +104,7 @@ services:
   # Contains Redis Stack server and RedisInsight
   # If you don't have redis-cli installed locally, you can run it from the Docker container:
   # $ docker exec -it e-bambi-redis-stack redis-cli <command> ## MONITOR
-  redis-stack:
+  redis:
     restart: unless-stopped
     image: redis/redis-stack:latest
     container_name: e-bambi-redis-stack

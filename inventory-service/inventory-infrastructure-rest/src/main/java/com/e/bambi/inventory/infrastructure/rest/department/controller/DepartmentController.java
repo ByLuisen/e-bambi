@@ -33,7 +33,6 @@ public class DepartmentController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<DepartmentResponse>> saveDepartment(@RequestBody @Valid
                                                                    CreateDepartmentRequestDto createDepartmentRequestDto) {
         return commandBus.dispatch(new CreateDepartmentCommand(
@@ -42,7 +41,6 @@ public class DepartmentController {
     }
 
     @PutMapping("/{departmentId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<DepartmentResponse>> updateDepartment(@PathVariable @UUID
                                                                      String departmentId,
                                                                      @RequestBody @Valid
@@ -54,7 +52,6 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/{departmentId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<Object>> deleteDepartmentById(@PathVariable @UUID String departmentId) {
         return commandBus.dispatch(new DeleteDepartmentCommand(
                 new DepartmentId(java.util.UUID.fromString(departmentId))

@@ -9,7 +9,7 @@ import com.e.bambi.order.application.order.dto.response.PaginatedResultResponse;
 import com.e.bambi.order.application.order.dto.response.TrackOrderReadResponse;
 import com.e.bambi.order.application.order.dto.response.ordersummary.OrderSummaryReadResponse;
 import com.e.bambi.order.application.order.dto.response.orderwithdetails.OrderWithDetailReadResponse;
-import com.e.bambi.order.infrastructure.rest.order.dto.request.OrderByUserIdDto;
+import com.e.bambi.order.infrastructure.rest.order.dto.request.OrderByUserIdRequestDto;
 import com.e.bambi.order.infrastructure.rest.order.dto.request.OrderRequestDto;
 import com.e.bambi.order.infrastructure.rest.order.dto.request.createorder.CreateOrderRequestDto;
 import com.e.bambi.order.infrastructure.rest.order.mapper.OrderRestMapper;
@@ -37,7 +37,7 @@ public class OrderController {
 
     @GetMapping("/me/orders")
     public Mono<PaginatedResultResponse<OrderSummaryReadResponse>>
-    getUserOrders(JwtAuthenticationToken auth, @Valid OrderByUserIdDto orderByUserIdDto) {
+    getUserOrders(JwtAuthenticationToken auth, @Valid OrderByUserIdRequestDto orderByUserIdDto) {
         return queryBus.dispatch(
                 new OrderByUserIdQuery(
                         new UserId(java.util.UUID.fromString(auth.getToken().getClaimAsString("sub"))),
@@ -81,7 +81,6 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
-    @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<PaginatedResultResponse<OrderSummaryReadResponse>>> searchOrders(@Valid
                                                                                                 OrderRequestDto
                                                                                                         orderRequestDTO) {
@@ -93,7 +92,6 @@ public class OrderController {
     }
 
     @GetMapping("/orders/{orderId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<OrderWithDetailReadResponse>> getOrderById(@PathVariable @UUID String orderId) {
         return queryBus
                 .dispatch(new OrderByIdQuery(

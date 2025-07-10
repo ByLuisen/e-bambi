@@ -8,7 +8,6 @@ import com.e.bambi.shared.kernel.domain.valueobject.OrderId;
 import com.e.bambi.shared.kernel.domain.valueobject.UserId;
 import lombok.Getter;
 
-import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +73,7 @@ public class Order extends AggregateRoot<OrderId> {
         addStatusHistory();
     }
 
-    public void updateFailureMessages(List<String> failureMessages) {
+    private void updateFailureMessages(List<String> failureMessages) {
         if (this.failureMessages != null && failureMessages != null) {
             this.failureMessages.addAll(failureMessages.stream().filter(messages -> !messages.isBlank()).toList());
         }
@@ -84,7 +83,7 @@ public class Order extends AggregateRoot<OrderId> {
         }
     }
 
-    public void validateInitialOrder() {
+    private void validateInitialOrder() {
         if (orderStatus != null || super.getId() != null || statusHistories != null) {
             throw new OrderDomainException("Order is not in the correct state for initialization!");
         }
@@ -112,7 +111,7 @@ public class Order extends AggregateRoot<OrderId> {
     private void validateItemPrice(OrderItem orderItem) {
         if (!orderItem.isPriceValid()) {
             throw new OrderDomainException("Order item price: " + orderItem.getPrice().getAmount() +
-                    " is not valid for product: " + orderItem.getProduct().getProductId());
+                    " is not valid for product: " + orderItem.getProduct().getProductId().getValue());
         }
     }
 

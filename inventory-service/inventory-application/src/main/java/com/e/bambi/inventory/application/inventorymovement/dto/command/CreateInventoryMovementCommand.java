@@ -13,9 +13,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class CreateInventoryMovementCommand extends Command<Mono<InventoryMovementResponse>> {
     private final SupplierId supplierId;
-    private final ProductId productId;
+    private final CreateInventoryMovementProduct product;
     private final MovementTypeId movementTypeId;
-    private final String productSku;
-    private final String productName;
     private final Integer quantity;
 }

@@ -47,7 +47,6 @@ public class PaymentMethodController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<PaymentMethodResponse>> createPaymentMethod(@RequestBody @Valid
                                                                                CreatePaymentMethodRequestDto
                                                                                    createPaymentMethodRequestDto) {
@@ -61,7 +60,6 @@ public class PaymentMethodController {
     }
 
     @PutMapping("/{paymentMethodId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<PaymentMethodResponse>> updatePaymentMethod(@PathVariable @UUID
                                                                            String paymentMethodId,
                                                                            @RequestBody @Valid
@@ -76,7 +74,6 @@ public class PaymentMethodController {
     }
 
     @DeleteMapping("/{paymentMethodId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<Void>> deletePaymentMethodById(@PathVariable @UUID String paymentMethodId) {
         return commandBus.dispatch(new DeletePaymentMethodByIdCommand(
                         new PaymentMethodId(java.util.UUID.fromString(paymentMethodId))

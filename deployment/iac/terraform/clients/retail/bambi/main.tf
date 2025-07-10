@@ -104,6 +104,41 @@ resource "keycloak_user_roles" "admin_roles" {
 }
 
 # -------------------------------
+# Create bambi SUPPLIER role
+# -------------------------------
+resource "keycloak_role" "supplier" {
+    name     = "SUPPLIER"
+    realm_id = module.bambi_realm.realm_id
+}
+
+# -------------------------------
+# Create bambi supplier user
+# -------------------------------
+resource "keycloak_user" "e_bambi_supplier" {
+    realm_id = module.bambi_realm.realm_id
+    username = "e-bambi-supplier"
+    enabled  = true
+
+    initial_password {
+        value     = var.supplier_password
+        temporary = false
+    }
+
+    email   = "e-bambi-supplier@your-domain.com"
+    first_name = "Bambi"
+    last_name  = "Supplier"
+}
+
+resource "keycloak_user_roles" "supplier_roles" {
+    realm_id = module.bambi_realm.realm_id
+    user_id  = keycloak_user.e_bambi_supplier.id
+
+    role_ids = [
+        keycloak_role.supplier.id,
+    ]
+}
+
+# -------------------------------
 # Create bambi USER role
 # -------------------------------
 resource "keycloak_role" "user" {

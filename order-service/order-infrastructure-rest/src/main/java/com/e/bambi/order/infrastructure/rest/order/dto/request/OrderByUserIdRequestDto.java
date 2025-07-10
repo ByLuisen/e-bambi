@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OrderByUserIdDto {
+public class OrderByUserIdRequestDto {
 
     @PositiveOrZero
     private int page = 0;

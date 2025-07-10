@@ -277,10 +277,11 @@ components:
           type: interger
           format: int32
           minimum: 0
+          examples: [0]
         date:
           type: string
           pattern: ^(3|30|\\d{4})$
-          examples: [3]
+          examples: [30]
     CreateOrderAddressRequestDto:
       type: object
       properties:
@@ -443,6 +444,7 @@ components:
         page:
           type: integer
           format: int32
+          examples: [0]
     OrderSummaryAddress:
       type: object
       properties:
@@ -627,9 +629,10 @@ components:
       type: oauth2
       flows:
         authorizationCode:
-          authorizationUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/auth
-          tokenUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/token
-          refreshUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/token
+#          authorizationUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/auth
+#          tokenUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/token
+          authorizationUrl: http://keycloak.local/realms/bambi/protocol/openid-connect/auth
+          tokenUrl: http://keycloak.local/realms/bambi/protocol/openid-connect/token
           scopes:
             - admin: Acceso administrativo
             - user: Acceso usuario

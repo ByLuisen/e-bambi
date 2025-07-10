@@ -5,6 +5,8 @@ import com.e.bambi.shared.kernel.domain.valueobject.ProductId;
 import reactor.core.publisher.Mono;
 
 public interface ProductRepository {
+    Mono<Product> findById(ProductId productId);
+
     Mono<Product> insert(Product product);
 
     Mono<Product> updated(Product product);

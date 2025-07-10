@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.e.bambi.inventory.infrastructure.persistence.jooq.Tables.*;
-import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.multiset;
+import static org.jooq.impl.DSL.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -98,16 +97,23 @@ public class ProductJooqRepository {
         var b = BRANDS;
         var i = IMAGES;
 
+        var firstImage =
+                select(i.IMAGE_URL)
+                        .from(i)
+                        .where(i.PRODUCT_ID.eq(p.ID))
+                        .orderBy(i.ID.asc())
+                        .limit(1);
+
         return dslContext.select(
                         p.ID.as("id"),
                         p.SKU.as("sku"),
                         p.NAME.as("name"),
                         p.CREATED_AT.as("created_at"),
                         b.NAME.as("brand"),
-                        i.IMAGE_URL.as("image_url")
+                        field(firstImage).as("image_url")
                 ).from(p)
                 .join(b).on(b.ID.eq(p.BRAND_ID))
-                .join(i).on(i.PRODUCT_ID.eq(p.ID))
+                .leftJoin(lateral(firstImage)).on(DSL.trueCondition())
                 .where(where != null ? where : DSL.trueCondition());
     }
 

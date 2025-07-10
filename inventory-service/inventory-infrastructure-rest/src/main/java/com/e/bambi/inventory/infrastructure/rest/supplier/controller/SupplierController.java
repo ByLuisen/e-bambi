@@ -39,7 +39,6 @@ public class SupplierController {
     }
 
     @PutMapping("/me")
-    @PreAuthorize("hasRole('SUPPLIER')")
     public Mono<ResponseEntity<SupplierResponse>> updateSupplier(JwtAuthenticationToken auth,
                                                                  @RequestBody @Valid
                                                                  UpdateSupplierRequestDto updateSupplierRequestDTO) {
@@ -52,7 +51,6 @@ public class SupplierController {
     }
 
     @DeleteMapping("/me")
-    @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<Object>> deleteSupplierById(JwtAuthenticationToken auth) {
         return commandBus.dispatch(new DeleteSupplierCommand(
                 new SupplierId(java.util.UUID.fromString(auth.getToken().getClaimAsString("sub")))

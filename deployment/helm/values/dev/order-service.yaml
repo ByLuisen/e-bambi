@@ -63,14 +63,9 @@ service:
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
   enabled: true
-  className: "nginx"
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
-    nginx.ingress.kubernetes.io/limit-connections: "100"
-    nginx.ingress.kubernetes.io/limit-rps: "20"
-    nginx.ingress.kubernetes.io/custom-http-errors: "404,500,502,503"
     nginx.ingress.kubernetes.io/cors-allow-origin: "*"
-    nginx.ingress.kubernetes.io/cache-control: "public, max-age=3600"
+  className: "nginx"
 
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
@@ -91,7 +86,7 @@ resources:
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   requests:
     cpu: 500m
-    memory: 512Mi
+    memory: 1Gi
   # limits:
   #   cpu: 700m
   #   memory: 999Mi
@@ -115,8 +110,8 @@ autoscaling:
   enabled: true
   minReplicas: 3
   maxReplicas: 10
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: 80
 
 # Additional volumes on the output Deployment definition.
 volumes: []
@@ -139,11 +134,11 @@ affinity: {}
 
 # Additional env on the output Deployment definition.
 env:
-  - name: JWT_ISSUER_URI
+  - name: JWT_PROVIDER_URI
     valueFrom:
       configMapKeyRef:
         name: order-service-config
-        key: jwt_issuer_uri
+        key: jwt_provider_uri
   - name: REDIS_HOST
     valueFrom:
       configMapKeyRef:
@@ -183,11 +178,11 @@ configMap:
     # Example of secret credential definition
     # port: 5432
     # name: "my_database"
-    jwt_issuer_uri: "http://bitnami-keycloak:8080/realms/bambi"
+    jwt_provider_uri: "http://keycloak.local/realms/bambi"
     redis_host: "redis"
     datasource_url: "order-service-db:5432"
     kafka_bootstrap_servers: "redpanda-0:9092, redpanda-1:9092, redpanda-2:9092"
-    kafka_schema_registry_url: "redpanda-0:8081"
+    kafka_schema_registry_url: "http://redpanda-0:8081"
 
 # This section is for setting up Secrets
 secrets:

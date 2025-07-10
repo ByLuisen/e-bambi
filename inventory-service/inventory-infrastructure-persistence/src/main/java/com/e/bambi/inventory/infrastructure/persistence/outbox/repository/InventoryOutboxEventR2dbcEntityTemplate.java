@@ -2,9 +2,7 @@ package com.e.bambi.inventory.infrastructure.persistence.outbox.repository;
 
 import com.e.bambi.inventory.infrastructure.persistence.outbox.entity.InventoryOutboxEventEntity;
 import lombok.RequiredArgsConstructor;
-import org.jooq.Require;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
-import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 

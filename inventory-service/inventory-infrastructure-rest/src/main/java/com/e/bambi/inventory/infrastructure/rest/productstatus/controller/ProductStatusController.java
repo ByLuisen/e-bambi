@@ -4,6 +4,7 @@ import com.e.bambi.inventory.application.productstatus.dto.query.ProductStatusFi
 import com.e.bambi.inventory.application.productstatus.dto.response.ProductStatusResponse;
 import com.e.bambi.shared.kernel.application.port.inbound.bus.QueryBus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
@@ -15,6 +16,7 @@ public class ProductStatusController {
 
     private final QueryBus queryBus;
 
+    @GetMapping
     public Flux<ProductStatusResponse> getProductStatuses() {
         return queryBus.dispatch(new ProductStatusFindAllQuery());
     }

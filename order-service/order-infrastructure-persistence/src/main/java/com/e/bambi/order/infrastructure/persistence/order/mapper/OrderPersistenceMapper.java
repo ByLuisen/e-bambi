@@ -140,8 +140,9 @@ public class OrderPersistenceMapper {
                                 .quantity(item.get("quantity", Integer.class))
                                 .build()
                 ))
-                .failureMessages(new ArrayList<>(Arrays.asList(r.get("failure_messages", String.class)
-                        .split(FAILURE_MESSAGE_DELIMITER))))
+                .failureMessages(r.get("failure_messages", String.class).isEmpty() ? new ArrayList<>() :
+                        new ArrayList<>(Arrays.asList(r.get("failure_messages", String.class)
+                                .split(FAILURE_MESSAGE_DELIMITER))))
                 .build();
     }
 
@@ -151,8 +152,9 @@ public class OrderPersistenceMapper {
                 .id(new OrderId(orderEntity.getId()))
                 .orderStatus(orderEntity.getOrderStatus())
                 .paymentMethod(new OrderPaymentMethod(new PaymentMethodId(orderEntity.getPaymentMethodId())))
-                .failureMessages(new ArrayList<>(Arrays.asList(orderEntity.getFailureMessages()
-                        .split(FAILURE_MESSAGE_DELIMITER))))
+                .failureMessages(orderEntity.getFailureMessages().isEmpty() ? new ArrayList<>() :
+                        new ArrayList<>(Arrays.asList(orderEntity.getFailureMessages()
+                                .split(FAILURE_MESSAGE_DELIMITER))))
                 .build();
     }
 
@@ -225,11 +227,11 @@ public class OrderPersistenceMapper {
                         new OrderSummaryItem(
                                 item.get("image_url", String.class),
                                 item.get("product_id", UUID.class),
-                                item.get("name", String.class)
+                                item.get("product_name", String.class)
                         )
                 ),
                 r.get("total_price", BigDecimal.class),
-                r.get("created_at", Instant.class)
+                r.get("created_at", OffsetDateTime.class)
         );
     }
 
@@ -253,22 +255,22 @@ public class OrderPersistenceMapper {
                 ),
                 items.map(item ->
                         new OrderWithDetailItem(
-                                r.get("image_url", String.class),
+                                item.get("image_url", String.class),
                                 new OrderWithDetailItemSupplier(
-                                        r.get("supplier_id", UUID.class),
-                                        r.get("supplier", String.class)
+                                        item.get("supplier_id", UUID.class),
+                                        item.get("supplier", String.class)
                                 ),
                                 new OrderWithDetailItemProduct(
-                                        r.get("product_id", UUID.class),
-                                        r.get("product_name", String.class)
+                                        item.get("product_id", UUID.class),
+                                        item.get("product_name", String.class)
                                 ),
-                                r.get("price", BigDecimal.class),
-                                r.get("quantity", Integer.class),
-                                r.get("item_total_price", BigDecimal.class)
+                                item.get("price", BigDecimal.class),
+                                item.get("quantity", Integer.class),
+                                item.get("item_total_price", BigDecimal.class)
                         )
                 ),
                 r.get("order_total_price", BigDecimal.class),
-                r.get("created_at", Instant.class)
+                r.get("created_at", OffsetDateTime.class)
         );
     }
 

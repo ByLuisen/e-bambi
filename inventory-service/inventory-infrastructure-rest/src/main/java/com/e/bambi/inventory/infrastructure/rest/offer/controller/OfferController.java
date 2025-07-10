@@ -47,7 +47,6 @@ public class OfferController {
     }
 
     @PostMapping("/me/offers")
-    @PreAuthorize("hasRole('SUPPLIER')")
     public Mono<ResponseEntity<OfferResponse>> createOffer(JwtAuthenticationToken auth,
                                                            @RequestBody @Valid
                                                            CreateOfferRequestDto createOfferRequestDto) {
@@ -60,7 +59,6 @@ public class OfferController {
     }
 
     @PutMapping("/me/offers/{offerId}")
-    @PreAuthorize("hasRole('SUPPLIER')")
     public Mono<ResponseEntity<OfferResponse>> updateOffer(JwtAuthenticationToken auth,
                                                            @PathVariable @UUID String offerId,
                                                            @RequestBody @Valid
@@ -74,7 +72,6 @@ public class OfferController {
     }
 
     @DeleteMapping("/me/offers/{offerId}")
-    @PreAuthorize("hasRole('SUPPLIER')")
     public Mono<ResponseEntity<Void>> deleteOffer(JwtAuthenticationToken auth,
                                                   @PathVariable @UUID String offerId) {
         return commandBus.dispatch(

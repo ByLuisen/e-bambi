@@ -22,25 +22,25 @@ public class PaymentSecurityFilterChain {
     SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http,
                                                Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthenticationConverter) {
         http.oauth2ResourceServer(oauth2 ->
-                oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)));
+                        oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
+                .cors(Customizer.withDefaults())
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .authorizeExchange(exchanges ->
+                        exchanges.pathMatchers(HttpMethod.GET,
+                                        "/v*/payment-methods/**",
+                                        "/v3/api-docs/**",
+                                        "/openapi.yaml",
+                                        "/swagger-ui.html",
+                                        "/swagger-ui/**",
+                                        "/debug",
+                                        "/actuator/health/**"
+                                )
+                                .permitAll()
+                                .pathMatchers("/v*/payment-methods/**")
+                                .hasRole("ADMIN")
+                                .anyExchange().authenticated()
+                );
 
-        http.cors(Customizer.withDefaults());
-
-        http.csrf(ServerHttpSecurity.CsrfSpec::disable);
-
-        http.authorizeExchange(exchanges ->
-                exchanges.pathMatchers(HttpMethod.GET,
-                                "/v3/api-docs/**",
-                                "/openapi.yaml",
-                                "/swagger-ui.html",
-                                "/swagger-ui/**",
-                                "/debug",
-                                "/v*/payment-methods/**",
-                                "/actuator/health/**"
-                        )
-                        .permitAll()
-                        .anyExchange().authenticated()
-        );
         return http.build();
     }
 }

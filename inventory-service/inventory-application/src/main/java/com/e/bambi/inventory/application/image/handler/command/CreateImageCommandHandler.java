@@ -8,6 +8,7 @@ import com.e.bambi.inventory.domain.image.entity.Image;
 import com.e.bambi.shared.kernel.application.bus.CommandHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -25,6 +26,11 @@ public class CreateImageCommandHandler implements CommandHandler<Mono<ImageRespo
         Image image = imageApplicationMapper.toImage(command);
         image.initializeImage();
         return imageRepository.insert(image)
+                .onErrorMap(DataIntegrityViolationException.class, e -> {
+                    log.info("Product with id: {} could not be found", command.getProductId().getValue());
+                    return new DataIntegrityViolationException("Product with id: " + command.getProductId().getValue() +
+                            " could not be found");
+                })
                 .onErrorMap(DuplicateKeyException.class, e -> {
                     log.error("Image with url: {} already exists", command.getImageUrl());
                     return new DuplicateKeyException("Image with url: " + command.getImageUrl() + " already exists");

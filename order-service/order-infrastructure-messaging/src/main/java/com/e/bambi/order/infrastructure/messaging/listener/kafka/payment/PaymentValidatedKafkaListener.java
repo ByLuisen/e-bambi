@@ -42,14 +42,15 @@ public class PaymentValidatedKafkaListener implements ReactiveKafkaConsumer<Paym
     @Override
     public void receive() {
         subscription = template.receive()
-                .concatMap(receiverRecord -> {
+                .flatMap(receiverRecord -> {
                     String sagaId = receiverRecord.key();
                     PaymentMethodValidatedEventPayload payload = kafkaConsumerHelper
                             .getEventPayload(receiverRecord.value().toString(), PaymentMethodValidatedEventPayload.class);
 
-                    log.info("Incoming message in PaymentValidatedKafkaListener: {} with key: {}, partition: {} and " +
-                                    "offset: {}", receiverRecord.value(), sagaId, receiverRecord.partition(),
-                            receiverRecord.offset());
+                    log.info("Incoming message in PaymentValidatedKafkaListener: {} with key: {}, topic: {}, " +
+                                    "partition: {}, offset: {} and timestamp: {}", receiverRecord.value(), sagaId,
+                            receiverRecord.topic(), receiverRecord.partition(), receiverRecord.offset(),
+                            kafkaConsumerHelper.formatTimestamp(receiverRecord.timestamp()));
 
                     return commandBus.dispatch(orderMessagingMapper.toValidatedPaymentCommand(payload))
                             .onErrorResume(DuplicateKeyException.class, e -> {

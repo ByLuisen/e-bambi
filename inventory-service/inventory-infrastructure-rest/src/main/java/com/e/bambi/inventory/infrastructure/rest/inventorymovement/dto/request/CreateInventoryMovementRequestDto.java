@@ -1,9 +1,7 @@
 package com.e.bambi.inventory.infrastructure.rest.inventorymovement.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.UUID;
@@ -16,24 +14,15 @@ public class CreateInventoryMovementRequestDto {
     @NotNull(message = "The product id cannot be null.")
     private String supplierId;
 
-    @UUID
-    @NotNull(message = "The product id cannot be null.")
-    private String productId;
+    @Valid
+    private CreateInventoryMovementProduct product;
 
     @UUID
     @NotNull(message = "The movement type id cannot be null.")
     private String movementTypeId;
 
-    @NotNull(message = "The product SKU cannot be null.")
-    @Pattern(regexp = "^[A-Za-z0-9_-]+$", message = "The product SKU can only contain letters, numbers, hyphens, and underscores.")
-    private String productSku;
-
-    @NotBlank(message = "The product name cannot be blank.")
-    @NotNull(message = "The product name cannot be null.")
-    @Pattern(regexp = "^[A-Za-z0-9\\s\\-_,.]+$", message = "The product name can only contain letters, numbers, spaces, and basic punctuation marks.")
-    private String productName;
-
     @NotNull(message = "The quantity cannot be null.")
-    @Positive(message = "The amount must be a positive integer")
+    @Min(value = -1000)
+    @Max(value = 1000)
     private Integer quantity;
 }

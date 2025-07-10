@@ -12,6 +12,5 @@ variable "keycloak_admin_password" {
 
 variable "keycloak_url" {
   type      = string
-  #default   = "http://keycloak.local" // Minikube
   default   = "http://localhost:8081" // Local
 }

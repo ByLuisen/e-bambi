@@ -9,10 +9,12 @@ import com.e.bambi.inventory.domain.exception.OfferNotFoundException;
 import com.e.bambi.shared.kernel.application.bus.CommandHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
 import static com.e.bambi.shared.kernel.application.saga.order.SagaConstants.ORDER_SAGA_NAME;
 
@@ -58,26 +60,30 @@ public class CancelReservationInventoryCommandHandler implements
     private Mono<InventoryReservationCancelledEvent> cancelReservation(CancelReservationInventoryCommand command) {
         return tx.execute(status ->
                         Flux.fromIterable(command.getProducts())
-                                .flatMap(product ->
-                                        offerRepository.findBySupplierIdAndProductId(
-                                                        product.getSupplierId(),
-                                                        product.getProductId()
-                                                )
-                                                .flatMap(offer -> {
-                                                    offer.cancelReservation(product.getQuantity());
-                                                    return offerRepository.update(offer);
-                                                })
-                                                .switchIfEmpty(
-                                                        Mono.error(new OfferNotFoundException("Product doesn't exists " +
-                                                                "for the given supplier id and product id"))
-                                                ))
+                                .flatMap(product -> offerRepository
+                                        .findBySupplierIdAndProductId(
+                                                product.getSupplierId(),
+                                                product.getProductId())
+                                        .flatMap(offer -> {
+                                            offer.cancelReservation(product.getQuantity());
+                                            return offerRepository.update(offer);
+                                        })
+                                        .retryWhen(Retry.max(Integer.MAX_VALUE).filter(this::isOptimisticLockFailure))
+                                        .switchIfEmpty(
+                                                Mono.error(new OfferNotFoundException("Product doesn't exists " +
+                                                        "for the given supplier id and product id")))
+                                )
                                 .then()
                 )
                 .then(Mono.defer(() -> {
-                    log.info("Products successfully cancelled for order id: {}", command.getOrderId());
+                    log.info("Products successfully cancelled for order id: {}", command.getOrderId().getValue());
                     return Mono.just(new InventoryReservationCancelledEvent(
                             InventoryAggregateType.RESERVATION_CANCELLED.getValue(),
                             command.getOrderId()));
                 }));
+    }
+
+    private boolean isOptimisticLockFailure(Throwable throwable) {
+        return throwable instanceof OptimisticLockingFailureException;
     }
 }

@@ -3,11 +3,9 @@ package com.e.bambi.shared.infrastructure.rest.exception.handler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ProblemDetail;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
@@ -36,12 +34,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
     }
 
     @ExceptionHandler(AuthorizationDeniedException.class)
-    public Mono<ResponseEntity<Object>> handleAccessDenied(AuthorizationDeniedException ex, ServerWebExchange exchange) {
+    public Mono<ResponseEntity<Object>> handleAuthorizationDeniedException(AuthorizationDeniedException ex,
+                                                                           ServerWebExchange exchange) {
+        log.error(ex.getMessage(), ex);
         return Mono.just(ResponseEntity.status(403).build());
     }
 
     @ExceptionHandler(DuplicateKeyException.class)
     protected Mono<ResponseEntity<Object>> handleDuplicateKeyException(DuplicateKeyException ex, ServerWebExchange exchange) {
+        log.error(ex.getMessage(), ex);
+        return handleExceptionInternal(ex, (Object) null, HttpHeaders.EMPTY, HttpStatusCode.valueOf(400), exchange);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    protected Mono<ResponseEntity<Object>> handleDAtaIntegrityViolationException(DataIntegrityViolationException ex,
+                                                                                 ServerWebExchange exchange) {
         log.error(ex.getMessage(), ex);
         return handleExceptionInternal(ex, (Object) null, HttpHeaders.EMPTY, HttpStatusCode.valueOf(400), exchange);
     }

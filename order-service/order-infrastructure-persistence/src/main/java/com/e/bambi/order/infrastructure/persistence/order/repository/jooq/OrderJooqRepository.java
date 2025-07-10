@@ -16,10 +16,7 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -131,7 +128,7 @@ public class OrderJooqRepository {
                 maxDate = OffsetDateTime.now();
             }
             default -> {
-                ZoneOffset offset = ZoneOffset.of("UTC");
+                ZoneOffset offset = ZoneOffset.of("Z");
 
                 minDate = OffsetDateTime.of(
                         date, 1, 1,

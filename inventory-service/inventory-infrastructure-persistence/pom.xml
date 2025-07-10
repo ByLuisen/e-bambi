@@ -28,6 +28,10 @@
             <groupId>com.e.bambi</groupId>
             <artifactId>shared-infrastructure-persistence-jooq</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.e.bambi</groupId>
+            <artifactId>shared-infrastructure-persistence-flyway</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

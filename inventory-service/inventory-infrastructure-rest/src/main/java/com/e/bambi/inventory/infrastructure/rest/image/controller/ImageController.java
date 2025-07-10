@@ -35,7 +35,6 @@ public class ImageController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<ImageResponse>> saveImage(@RequestBody @Valid CreateImageRequestDto createImageRequestDto) {
         return commandBus.dispatch(new CreateImageCommand(
                 new ProductId(java.util.UUID.fromString(createImageRequestDto.getProductId())),
@@ -44,7 +43,6 @@ public class ImageController {
     }
 
     @DeleteMapping("/{imageId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<Void>> deleteImageById(@PathVariable @UUID String imageId) {
         return commandBus.dispatch(new DeleteImageCommand(
                 new ImageId(java.util.UUID.fromString(imageId))

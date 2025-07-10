@@ -5,10 +5,10 @@ volumes:
 services:
   bitnami-keycloak:
     restart: unless-stopped
-    image: bitnami/keycloak:26.1.0-debian-12-r1
+    image: bitnami/keycloak:26.2.5-debian-12-r3
     container_name: e-bambi-keycloak
     volumes:
-      - ../keycloak-themes/keywind:/opt/bitnami/keycloak/themes/keywind
+      - ../keycloak/themes/keywind:/opt/bitnami/keycloak/themes/keywind
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
@@ -33,7 +33,7 @@ services:
       POSTGRES_PASSWORD: nil
       POSTGRES_DB: bitnami_keycloak
     ports:
-      - "5432:5432"
+      - "5432"
     networks:
       - e-bambi-network
     healthcheck:

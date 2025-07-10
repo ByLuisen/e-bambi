@@ -24,8 +24,8 @@ public class DeleteInventoryMovementCommandHandler implements CommandHandler<Mon
                     if (updatedRows < 1) {
                         log.error("Inventory movement with id: {} could not be deleted",
                                 command.getInventoryMovementId().getValue());
-                        sink.error(new InventoryMovementNotFoundException("Inventory movement with id: {} could not " +
-                                "be deleted"));
+                        sink.error(new InventoryMovementNotFoundException("Inventory movement with id: " +
+                                command.getInventoryMovementId().getValue() + " could not be deleted"));
                     } else {
                         sink.complete();
                     }

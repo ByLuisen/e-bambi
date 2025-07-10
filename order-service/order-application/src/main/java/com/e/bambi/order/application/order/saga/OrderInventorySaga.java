@@ -40,7 +40,7 @@ public class OrderInventorySaga implements SagaStep<ReservedInventoryCommand, Re
                 .existsByOrderIdAndOrderStatus(data.getOrderId(), OrderStatus.PRODUCTS_RESERVED)
                 .flatMap(exists -> {
                     if (exists) {
-                        log.info("Products for order id: {} and order status: {} is already reserved",
+                        log.info("Products for order id: {} with order status: {} is already reserved",
                                 data.getOrderId().getValue(), OrderStatus.PRODUCTS_RESERVED);
                         return Mono.empty();
                     }
@@ -74,7 +74,7 @@ public class OrderInventorySaga implements SagaStep<ReservedInventoryCommand, Re
         return orderStatusHistoryQueryRepository.existsByOrderIdAndOrderStatus(data.getOrderId(), OrderStatus.CANCELLED)
                 .flatMap(exists -> {
                     if (exists) {
-                        log.info("An order id: {} and order status: {} is already roll backed!",
+                        log.info("An order id: {} with order status: {} is already roll backed!",
                                 data.getOrderId().getValue(), OrderStatus.CANCELLED);
                         return Mono.empty();
                     }

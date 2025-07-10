@@ -1,28 +1,51 @@
 services:
-  swaggerapi:
+  order-service:
     restart: unless-stopped
-    image: swaggerapi/swagger-ui
-    container_name: e-bambi-swagger-api
-    volumes:
-      - ./swagger-ui/index.html:/usr/share/nginx/html/index.html
-      - ./swagger-ui/dark-mode.css:/usr/share/nginx/html/dark-mode.css
+    image: com.e.bambi/order.service:1.0-SNAPSHOT
+    container_name: e-bambi-order-service
     environment:
-      SHOW_EXTENSIONS: true
-      URLS: "[
-                { 
-                  url: \"http://localhost:8182/api/openapi.yaml\", 
-                  name: \"inventory\" 
-                },
-                { 
-                  url: \"http://localhost:8183/api/openapi.yaml\", 
-                  name: \"payment\" 
-                },
-                {
-                  url: \"http://localhost:8181/api/openapi.yaml\",
-                  name: \"order\"
-                }
-             ]"
+      JWT_PROVIDER_URI: http://bitnami-keycloak:8080/realms/bambi
+      DATASOURCE_URL: order-service-db:5432
+      KAFKA_BOOTSTRAP_SERVERS: redpanda-0:9092,redpanda-1:9092,redpanda-2:9092
+      KAFKA_SCHEMA_REGISTRY_URL: http://redpanda-0:8081
     ports:
-      - "80:8080"
+      - "8181:8181"
     networks:
       - e-bambi-network
+    depends_on:
+      order-service-db:
+        condition: service_healthy
+
+  inventory-service:
+    restart: unless-stopped
+    image: com.e.bambi/inventory.service:1.0-SNAPSHOT
+    environment:
+      JWT_PROVIDER_URI: http://bitnami-keycloak:8080/realms/bambi
+      REDIS_HOST: redis-stack
+      DATASOURCE_URL: inventory-service-db:5432
+      KAFKA_BOOTSTRAP_SERVERS: redpanda-0:9092,redpanda-1:9092,redpanda-2:9092
+      KAFKA_SCHEMA_REGISTRY_URL: http://redpanda-0:8081
+    ports:
+      - "8182:8182"
+    networks:
+      - e-bambi-network
+    depends_on:
+      inventory-service-db:
+        condition: service_healthy
+
+  payment-service:
+    restart: unless-stopped
+    image: com.e.bambi/payment.service:1.0-SNAPSHOT
+    container_name: e-bambi-payment-service
+    environment:
+      JWT_PROVIDER_URI: http://bitnami-keycloak:8080/realms/bambi
+      DATASOURCE_URL: payment-service-db:5432
+      KAFKA_BOOTSTRAP_SERVERS: redpanda-0:9092,redpanda-1:9092,redpanda-2:9092
+      KAFKA_SCHEMA_REGISTRY_URL: http://redpanda-0:8081
+    ports:
+      - "8183:8183"
+    networks:
+      - e-bambi-network
+    depends_on:
+      payment-service-db:
+        condition: service_healthy

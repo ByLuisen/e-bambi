@@ -18,7 +18,7 @@ public class CreateMovementTypeRequestDto {
 
     @NotNull
     @NotBlank(message = "Description is required")
-    @Pattern(regexp = "^[a-zA-Z0-9 ]+$", message = "Description must only contain letters, numbers and spaces.")
+    @Pattern(regexp = "^[a-zA-Z0-9. ]+$", message = "Description must only contain letters, numbers and spaces.")
     @Size(min = 5, max = 100, message = "Description must be between 5 and 100 characters.")
     private String description;
 }

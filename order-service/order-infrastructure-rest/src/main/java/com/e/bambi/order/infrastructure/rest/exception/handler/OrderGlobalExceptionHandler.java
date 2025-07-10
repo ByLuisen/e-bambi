@@ -1,5 +1,6 @@
 package com.e.bambi.order.infrastructure.rest.exception.handler;
 
+import com.e.bambi.order.domain.exception.OrderBadRequestException;
 import com.e.bambi.order.domain.exception.OrderDomainException;
 import com.e.bambi.order.domain.exception.OrderNotFoundException;
 import com.e.bambi.order.domain.exception.OrderStatusHistoryNotFoundException;
@@ -35,5 +36,12 @@ public class OrderGlobalExceptionHandler extends GlobalExceptionHandler {
                                                                                      ServerWebExchange exchange) {
         log.error(ex.getMessage(), ex);
         return handleExceptionInternal(ex, (Object) null, HttpHeaders.EMPTY, HttpStatusCode.valueOf(404), exchange);
+    }
+
+    @ExceptionHandler(OrderBadRequestException.class)
+    protected Mono<ResponseEntity<Object>> handleOrderBadRequestException(OrderBadRequestException ex,
+                                                                          ServerWebExchange exchange) {
+        log.error(ex.getMessage(), ex);
+        return handleExceptionInternal(ex, ex.getErrors(), HttpHeaders.EMPTY, HttpStatusCode.valueOf(400), exchange);
     }
 }

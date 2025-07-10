@@ -26,14 +26,15 @@ public class UpdateProductCommandHandler implements CommandHandler<Mono<ProductR
         Product product = productApplicationMapper.updateProductCommandToProduct(command);
 
         return inventoryApplicationService.ensureProductIsValid(product)
-                .flatMap(__ -> {
-                    product.updateProduct();
-                    return productRepository.updated(product);
-                })
+                .then(productRepository.findById(command.getProductId()))
                 .switchIfEmpty(
                         Mono.error(new ProductNotFoundException("Product with id: " + product.getId().getValue() +
                                 " could not be found"))
                 )
+                .flatMap(obtainedProduct -> {
+                    obtainedProduct.updateProduct(product);
+                    return productRepository.updated(obtainedProduct);
+                })
                 .onErrorMap(DuplicateKeyException.class, e ->
                         new DuplicateKeyException("Please, ensure the product has unique properties")
                 )

@@ -1,0 +1,47 @@
+2025-07-10 11:06:02,547 INFO o.a.j.u.JMeterUtils: Setting Locale to en_EN
+2025-07-10 11:06:02,571 INFO o.a.j.JMeter: Loading user properties from: /home/linuxbrew/.linuxbrew/Cellar/jmeter/5.6.3/libexec/bin/user.properties
+2025-07-10 11:06:02,572 INFO o.a.j.JMeter: Loading system properties from: /home/linuxbrew/.linuxbrew/Cellar/jmeter/5.6.3/libexec/bin/system.properties
+2025-07-10 11:06:02,579 INFO o.a.j.JMeter: Copyright (c) 1998-2024 The Apache Software Foundation
+2025-07-10 11:06:02,580 INFO o.a.j.JMeter: Version 5.6.3
+2025-07-10 11:06:02,580 INFO o.a.j.JMeter: java.version=21.0.7
+2025-07-10 11:06:02,580 INFO o.a.j.JMeter: java.vm.name=OpenJDK 64-Bit Server VM
+2025-07-10 11:06:02,580 INFO o.a.j.JMeter: os.name=Linux
+2025-07-10 11:06:02,580 INFO o.a.j.JMeter: os.arch=amd64
+2025-07-10 11:06:02,580 INFO o.a.j.JMeter: os.version=6.11.0-29-generic
+2025-07-10 11:06:02,580 INFO o.a.j.JMeter: file.encoding=UTF-8
+2025-07-10 11:06:02,580 INFO o.a.j.JMeter: java.awt.headless=null
+2025-07-10 11:06:02,580 INFO o.a.j.JMeter: Max memory     =1073741824
+2025-07-10 11:06:02,580 INFO o.a.j.JMeter: Available Processors =16
+2025-07-10 11:06:02,593 INFO o.a.j.JMeter: Default Locale=English (EN)
+2025-07-10 11:06:02,593 INFO o.a.j.JMeter: JMeter  Locale=English (EN)
+2025-07-10 11:06:02,593 INFO o.a.j.JMeter: JMeterHome=/home/linuxbrew/.linuxbrew/Cellar/jmeter/5.6.3/libexec
+2025-07-10 11:06:02,594 INFO o.a.j.JMeter: user.dir  =/media/luisen/T7 Shield/Documents/Software/e-bambi/test/performance
+2025-07-10 11:06:02,594 INFO o.a.j.JMeter: PWD       =/media/luisen/T7 Shield/Documents/Software/e-bambi/test/performance
+2025-07-10 11:06:02,594 INFO o.a.j.JMeter: IP: 127.0.1.1 Name: luisen FullName: luisen
+2025-07-10 11:06:02,611 INFO o.a.j.JMeter: Loaded icon properties from org/apache/jmeter/images/icon.properties
+2025-07-10 11:06:02,884 INFO o.a.j.JMeterGuiLauncher: Setting LAF to: com.github.weisj.darklaf.DarkLaf:com.github.weisj.darklaf.theme.DarculaTheme
+2025-07-10 11:06:04,294 INFO o.a.j.r.ClassFinder: Will scan jar /home/linuxbrew/.linuxbrew/Cellar/jmeter/5.6.3/libexec/lib/ext/jmeter-plugins-manager-1.9.jar with filter ExtendsClassFilter [parents=[interface org.apache.jmeter.gui.action.Command], inner=false, contains=null, notContains=null]. Consider exposing JMeter plugins via META-INF/services, and add JMeter-Skip-Class-Scanning=true manifest attribute so JMeter can skip classfile scanning
+2025-07-10 11:06:04,612 INFO o.a.j.r.ClassFinder: Will scan jar /home/linuxbrew/.linuxbrew/Cellar/jmeter/5.6.3/libexec/lib/ext/jmeter-plugins-manager-1.9.jar with filter ExtendsClassFilter [parents=[interface org.apache.jmeter.gui.plugin.MenuCreator], inner=false, contains=null, notContains=null]. Consider exposing JMeter plugins via META-INF/services, and add JMeter-Skip-Class-Scanning=true manifest attribute so JMeter can skip classfile scanning
+2025-07-10 11:06:04,760 INFO o.j.r.JARSourceHTTP: Requesting https://jmeter-plugins.org/repo/?installID=docker-ca8ae11e3da17f27c5c1c8c0f40b0e80-gui
+2025-07-10 11:06:06,942 INFO o.j.r.PluginManager: Plugins Status: [jpgc-plugins-manager=1.9, jmeter-core=5.6.3, jmeter-ftp=5.6.3, jmeter-http=5.6.3, jmeter-jdbc=5.6.3, jmeter-jms=5.6.3, jmeter-junit=5.6.3, jmeter-java=5.6.3, jmeter-ldap=5.6.3, jmeter-mail=5.6.3, jmeter-mongodb=5.6.3, jmeter-native=5.6.3, jmeter-tcp=5.6.3, jmeter-components=5.6.3]
+2025-07-10 11:06:06,944 INFO o.j.r.PluginManagerMenuItem: Plugins Manager has upgrades: [jpgc-plugins-manager]
+2025-07-10 11:06:12,289 INFO o.a.j.s.FileServer: Default base='/media/luisen/T7 Shield/Documents/Software/e-bambi/test/performance'
+2025-07-10 11:06:12,293 INFO o.a.j.g.a.Load: Loading file: /media/luisen/T7 Shield/Documents/Software/e-bambi/test/performance/e-bambi-load-test.jmx
+2025-07-10 11:06:12,293 INFO o.a.j.s.FileServer: Set new base='/media/luisen/T7 Shield/Documents/Software/e-bambi/test/performance'
+2025-07-10 11:06:12,490 INFO o.a.j.s.SaveService: Testplan (JMX) version: 2.2. Testlog (JTL) version: 2.2
+2025-07-10 11:06:12,498 INFO o.a.j.s.SaveService: Using SaveService properties version 5.0
+2025-07-10 11:06:12,500 INFO o.a.j.s.SaveService: Using SaveService properties file encoding UTF-8
+2025-07-10 11:06:12,501 INFO o.a.j.s.SaveService: Loading file: /media/luisen/T7 Shield/Documents/Software/e-bambi/test/performance/e-bambi-load-test.jmx
+2025-07-10 11:06:12,608 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/html is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2025-07-10 11:06:12,608 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xhtml+xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2025-07-10 11:06:12,608 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2025-07-10 11:06:12,608 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2025-07-10 11:06:12,608 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/vnd.wap.wml is org.apache.jmeter.protocol.http.parser.RegexpHTMLParser
+2025-07-10 11:06:12,608 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/css is org.apache.jmeter.protocol.http.parser.CssParser
+2025-07-10 11:06:12,980 INFO o.a.j.s.SampleResult: Note: Sample TimeStamps are START times
+2025-07-10 11:06:12,981 INFO o.a.j.s.SampleResult: sampleresult.default.encoding is set to UTF-8
+2025-07-10 11:06:12,981 INFO o.a.j.s.SampleResult: sampleresult.useNanoTime=true
+2025-07-10 11:06:12,981 INFO o.a.j.s.SampleResult: sampleresult.nanoThreadSleep=5000
+2025-07-10 11:06:13,095 INFO o.a.j.r.ClassFinder: Will scan jar /home/linuxbrew/.linuxbrew/Cellar/jmeter/5.6.3/libexec/lib/ext/jmeter-plugins-manager-1.9.jar with filter ExtendsClassFilter [parents=[interface org.apache.jmeter.visualizers.ResultRenderer], inner=false, contains=null, notContains=null]. Consider exposing JMeter plugins via META-INF/services, and add JMeter-Skip-Class-Scanning=true manifest attribute so JMeter can skip classfile scanning
+2025-07-10 11:06:13,120 INFO o.a.j.r.ClassFinder: Will scan jar /home/linuxbrew/.linuxbrew/Cellar/jmeter/5.6.3/libexec/lib/ext/jmeter-plugins-manager-1.9.jar with filter ExtendsClassFilter [parents=[interface org.apache.jmeter.visualizers.RequestView], inner=false, contains=null, notContains=null]. Consider exposing JMeter plugins via META-INF/services, and add JMeter-Skip-Class-Scanning=true manifest attribute so JMeter can skip classfile scanning
+2025-07-10 11:06:13,178 INFO o.a.j.s.FileServer: Set new base='/media/luisen/T7 Shield/Documents/Software/e-bambi/test/performance'

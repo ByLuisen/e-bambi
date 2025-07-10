@@ -8,18 +8,19 @@ import com.e.bambi.shared.kernel.domain.valueobject.ProductId;
 import lombok.Getter;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Getter
 public class Product extends AggregateRoot<ProductId> {
-    private final BrandId brandId;
-    private final DepartmentId departmentId;
-    private final ProductStatusId productStatusId;
-    private final String sku;
-    private final String name;
-    private final String description;
-    private Instant createAt;
-    private Instant updatedAt;
+    private BrandId brandId;
+    private DepartmentId departmentId;
+    private ProductStatusId productStatusId;
+    private String sku;
+    private String name;
+    private String description;
+    private OffsetDateTime createAt;
+    private OffsetDateTime updatedAt;
 
     private Product(Builder builder) {
         super.setId(builder.id);
@@ -39,11 +40,17 @@ public class Product extends AggregateRoot<ProductId> {
 
     public void initializeProduct() {
         super.setId(new ProductId(UUID.randomUUID()));
-        createAt = Instant.now();
+        createAt = OffsetDateTime.now();
     }
 
-    public void updateProduct() {
-        updatedAt = Instant.now();
+    public void updateProduct(Product product) {
+        this.brandId = product.getBrandId();
+        this.departmentId = product.getDepartmentId();
+        this.productStatusId = product.getProductStatusId();
+        this.sku = product.getSku();
+        this.name = product.getName();
+        this.description = product.getDescription();
+        updatedAt = OffsetDateTime.now();
     }
 
 
@@ -55,8 +62,8 @@ public class Product extends AggregateRoot<ProductId> {
         private String sku;
         private String name;
         private String description;
-        private Instant createAt;
-        private Instant updatedAt;
+        private OffsetDateTime createAt;
+        private OffsetDateTime updatedAt;
 
         private Builder() {
         }
@@ -96,12 +103,12 @@ public class Product extends AggregateRoot<ProductId> {
             return this;
         }
 
-        public Builder createAt(Instant val) {
+        public Builder createAt(OffsetDateTime val) {
             createAt = val;
             return this;
         }
 
-        public Builder updatedAt(Instant val) {
+        public Builder updatedAt(OffsetDateTime val) {
             updatedAt = val;
             return this;
         }

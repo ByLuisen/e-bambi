@@ -33,7 +33,6 @@ public class BrandController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<BrandResponse>> createBrand(@RequestBody @Valid
                                                            CreateBrandRequestDto createBrandRequestDto) {
         return commandBus.dispatch(new CreateBrandCommand(
@@ -42,7 +41,6 @@ public class BrandController {
     }
 
     @PutMapping("/{brandId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<BrandResponse>> updateBrand(@PathVariable @UUID
                                                            String brandId,
                                                            @RequestBody @Valid
@@ -54,7 +52,6 @@ public class BrandController {
     }
 
     @DeleteMapping("/{brandId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<Void>> deleteBrandById(@PathVariable @UUID String brandId) {
         return commandBus.dispatch(new DeleteBrandCommand(
                         new BrandId(java.util.UUID.fromString(brandId))

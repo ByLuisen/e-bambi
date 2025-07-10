@@ -26,7 +26,10 @@ resource "keycloak_openid_client" "e_bambi" {
   valid_redirect_uris   = [
     "http://localhost:8181/*",
     "http://localhost:8182/*",
-    "http://localhost/*"
+    "http://localhost/*",
+    "http://order.ebambi.com/*",
+    "http://inventory.ebambi.com/*",
+    "http://payment.ebambi.com/*"
   ]
 
   web_origins           = [

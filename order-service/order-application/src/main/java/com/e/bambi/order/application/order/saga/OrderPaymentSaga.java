@@ -88,8 +88,6 @@ public class OrderPaymentSaga implements SagaStep<ValidatedPaymentCommand, Valid
                     order.created();
 
                     return orderRepository.update(order)
-                            .doOnSuccess(__ ->
-                                    log.info("Order with id: {} is created", order.getId().getValue()))
                             .then();
                 });
     }

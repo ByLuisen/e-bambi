@@ -1,6 +1,5 @@
 package com.e.bambi.inventory.infrastructure.persistence.offer.repository.r2dbc;
 
-import com.e.bambi.inventory.domain.offer.entity.Offer;
 import com.e.bambi.inventory.infrastructure.persistence.offer.entity.OfferEntity;
 import org.springframework.data.r2dbc.repository.Modifying;
 import org.springframework.data.r2dbc.repository.Query;

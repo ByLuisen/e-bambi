@@ -19,6 +19,13 @@ public class ProductRepositoryImpl implements ProductRepository {
     private final ProductPersistenceMapper productPersistenceMapper;
 
     @Override
+    public Mono<Product> findById(ProductId productId) {
+        return productR2dbcRepository
+                .findById(productId.getValue())
+                .map(productPersistenceMapper::toProduct);
+    }
+
+    @Override
     public Mono<Product> insert(Product product) {
         return productR2dbcEntityTemplate
                 .insert(productPersistenceMapper.toProductEntity(product))

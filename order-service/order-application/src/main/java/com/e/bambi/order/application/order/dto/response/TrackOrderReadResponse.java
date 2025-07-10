@@ -16,6 +16,7 @@ public class TrackOrderReadResponse {
 
     public TrackOrderReadResponse(String orderStatus, String failureMessages) {
         this.orderStatus = orderStatus;
-        this.failureMessages = new ArrayList<>(Arrays.asList(failureMessages.split(FAILURE_MESSAGE_DELIMITER)));
+        this.failureMessages = failureMessages.isEmpty() ? new ArrayList<>() :
+                new ArrayList<>(Arrays.asList(failureMessages.split(FAILURE_MESSAGE_DELIMITER)));
     }
 }

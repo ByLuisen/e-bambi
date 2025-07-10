@@ -14,7 +14,7 @@ import java.util.UUID;
 @Repository
 public interface OrderStatusHistoryR2dbcRepository extends R2dbcRepository<OrderStatusHistoryEntity, UUID> {
 
-    @Query("SELECT order_status, reason, changed_at FROM order_status_history " +
+    @Query("SELECT order_status, reason, created_at FROM order_status_history " +
             "WHERE order_id = :orderId")
     Flux<OrderStatusHistoryReadResponse> findByOrderId(UUID orderId);
 

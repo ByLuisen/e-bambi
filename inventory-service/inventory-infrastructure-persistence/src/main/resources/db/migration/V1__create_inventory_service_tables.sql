@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS offers (
     product_id UUID NOT NULL,
     stock INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
+    version INTEGER NOT NULL,
     CONSTRAINT pk_offers PRIMARY KEY (id),
     CONSTRAINT uniq_offers_supplier_id_product_id UNIQUE (supplier_id, product_id),
     CONSTRAINT fk_offers_suppliers_supplier_id FOREIGN KEY (supplier_id) REFERENCES suppliers(id) ON DELETE CASCADE,
@@ -73,7 +74,7 @@ CREATE TABLE IF NOT EXISTS movement_types (
 );
 
 CREATE TABLE IF NOT EXISTS inventory_movements (
-    id UUID DEFAULT NOT NULL,
+    id UUID NOT NULL,
     supplier_id UUID NOT NULL,
     product_id UUID NOT NULL,
     movement_type_id UUID NOT NULL,

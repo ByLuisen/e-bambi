@@ -43,15 +43,15 @@ public class InventoryReservationFailedKafkaListener implements ReactiveKafkaCon
     @Override
     public void receive() {
         subscription = template.receive()
-                .concatMap(receiverRecord -> {
+                .flatMap(receiverRecord -> {
                     InventoryReservationFailedEventPayload payload =
                             kafkaConsumerHelper.getEventPayload(receiverRecord.value().toString(),
                                     InventoryReservationFailedEventPayload.class);
 
                     log.info("Incoming message in InventoryReservationFailedKafkaListener: {}, with key: {}, " +
-                                    "partition: {} and offset: {}", receiverRecord.value(), receiverRecord.key(),
-                            receiverRecord.partition(),
-                            receiverRecord.offset());
+                                    "topic: {}, partition: {}, offset: {} and timestamp: {}", receiverRecord.value(),
+                            receiverRecord.key(), receiverRecord.topic(), receiverRecord.partition(),
+                            receiverRecord.offset(), kafkaConsumerHelper.formatTimestamp(receiverRecord.timestamp()));
 
                     return commandBus.dispatch(orderMessagingMapper.toReservationFailedInventoryCommand(payload))
                             .onErrorResume(DuplicateKeyException.class, e -> {

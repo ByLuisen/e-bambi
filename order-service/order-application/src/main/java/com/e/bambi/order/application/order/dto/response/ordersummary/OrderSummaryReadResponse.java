@@ -1,12 +1,14 @@
 package com.e.bambi.order.application.order.dto.response.ordersummary;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Getter
 @RequiredArgsConstructor
 public class OrderSummaryReadResponse {
     private final UUID id;
@@ -14,5 +16,5 @@ public class OrderSummaryReadResponse {
     private final OrderSummaryAddress address;
     private final List<OrderSummaryItem> items;
     private final BigDecimal totalPrice;
-    private final Instant createdAt;
+    private final OffsetDateTime createdAt;
 }

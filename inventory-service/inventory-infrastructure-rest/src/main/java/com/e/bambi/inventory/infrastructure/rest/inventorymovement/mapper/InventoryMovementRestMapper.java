@@ -1,6 +1,7 @@
 package com.e.bambi.inventory.infrastructure.rest.inventorymovement.mapper;
 
 import com.e.bambi.inventory.application.inventorymovement.dto.command.CreateInventoryMovementCommand;
+import com.e.bambi.inventory.application.inventorymovement.dto.command.CreateInventoryMovementProduct;
 import com.e.bambi.inventory.application.inventorymovement.dto.command.UpdateInventoryMovementCommand;
 import com.e.bambi.inventory.application.inventorymovement.dto.query.InventoryMovementQuery;
 import com.e.bambi.inventory.domain.inventorymovement.valueobject.InventoryMovementId;
@@ -34,10 +35,12 @@ public class InventoryMovementRestMapper {
     public CreateInventoryMovementCommand toCreateInventoryMovementCommand(CreateInventoryMovementRequestDto request) {
         return new CreateInventoryMovementCommand(
                 new SupplierId(UUID.fromString(request.getSupplierId())),
-                new ProductId(UUID.fromString(request.getProductId())),
+                new CreateInventoryMovementProduct(
+                        new ProductId(UUID.fromString(request.getProduct().getId())),
+                        request.getProduct().getSku(),
+                        request.getProduct().getName()
+                ),
                 new MovementTypeId(UUID.fromString(request.getMovementTypeId())),
-                request.getProductSku(),
-                request.getProductName(),
                 request.getQuantity()
         );
     }
@@ -51,17 +54,18 @@ public class InventoryMovementRestMapper {
     }
 
     private <T> List<T> convert(String chain, Class<T> type) {
-        return Arrays.stream(chain.split("\\|"))
-                .map(item -> {
-                    if (UUID.class.equals(type)) {
-                        @SuppressWarnings("unchecked")
-                        T value = (T) UUID.fromString(item);
-                        return value;
-                    }
-                    @SuppressWarnings("unchecked")
-                    T value = (T) item;
-                    return value;
-                })
-                .toList();
+        return chain == null ? null :
+                Arrays.stream(chain.split("\\|"))
+                        .map(item -> {
+                            if (UUID.class.equals(type)) {
+                                @SuppressWarnings("unchecked")
+                                T value = (T) UUID.fromString(item);
+                                return value;
+                            }
+                            @SuppressWarnings("unchecked")
+                            T value = (T) item;
+                            return value;
+                        })
+                        .toList();
     }
 }

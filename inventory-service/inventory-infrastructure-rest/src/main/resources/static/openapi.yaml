@@ -16,6 +16,8 @@ servers:
 tags:
   - name: Suppliers
     description: Nuestros diferentes proveedores
+  - name: Images
+    description: Imagenes de nuestros productos
   - name: Products
     description: Explora nuesto catálogo de productos
   - name: Movement types
@@ -28,8 +30,8 @@ tags:
     description: Nuestros diferentes departamentos
   - name: Brands
     description: Marcas
-  - name: Images
-    description: Imagenes de nuestros productos
+  - name: Product statuses
+    description: Obtén los estados en los que nuestros productos pueden estar
 paths:
   /v1/suppliers/me:
     put:
@@ -1102,6 +1104,26 @@ paths:
         - BambiOAuth2: [admin]
       x-roles-required:
         - ADMIN
+  /v1/product-statuses:
+    get:
+      tags:
+        - Product statuses
+      summary: Lista nuestros diferentes estados de producto
+      description: Lista nuestros diferentes estados de producto
+      operationId: getProductStatuses
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductStatusResponse'
+        '404':
+          description: Estados de producto no encontradoo
+        default:
+          description: Error inesperado
 components:
   schemas:
     UpdateSupplierRequestDto:
@@ -1197,12 +1219,12 @@ components:
           maxLength: 50
           minLength: 3
           pattern: ^[A-Za-z0-9][A-Za-z0-9 .-]*[A-Za-z0-9]$
-          example: ['Sale']
+          examples: ['Sale']
         description:
           type: string
           maxLength: 100
           minLength: 5
-          pattern: ^[a-zA-Z0-9 ]+$
+          pattern: ^[\p{L}\p{N} .]+$
           examples: ['Último modelo de la serie Galaxy con pantalla AMOLED de 120Hz.']
       required:
         - description
@@ -1244,33 +1266,56 @@ components:
           type: integer
           format: int32
           examples: [10]
+    UpdateInventoryMovementProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        sku:
+          type: string
+          pattern: ^[A-Za-z0-9_-]+$
+          examples: [ 'SAM-001-EL' ]
+        name:
+          type: string
+          pattern: ^[A-Za-z0-9\s\-_,.]+$
+          examples: [ 'Samsung Galaxy S23' ]
+      required:
+        - id
+        - sku
+        - name
     UpdateInventoryMovementRequestDto:
       type: object
       properties:
-        productId:
-          type: string
-          format: uuid
+        product:
+          $ref: '#/components/schemas/UpdateInventoryMovementProduct'
         movementTypeId:
           type: string
           format: uuid
-        productSku:
-          type: string
-          pattern: ^[A-Za-z0-9_-]+$
-          examples: ['SAM-001-EL']
-        productName:
-          type: string
-          pattern: ^[A-Za-z0-9\s\-_,.]+$
-          examples: ['Samsung Galaxy S23']
         quantity:
           type: integer
           format: int32
-          examples: [10]
+          minimum: -1000
+          maximum: 1000
+          examples: [-10]
       required:
         - movementTypeId
         - productId
         - productName
         - productSku
         - quantity
+    InventoryMovementProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        sku:
+          type: string
+          examples: ['SAM-001-EL']
+        name:
+          type: string
+          examples: ['Samsung Galaxy S23']
     InventoryMovementResponse:
       type: object
       properties:
@@ -1280,18 +1325,11 @@ components:
         supplierId:
           type: string
           format: uuid
-        productId:
-          type: string
-          format: uuid
+        product:
+          $ref: '#/components/schemas/InventoryMovementProduct'
         movementTypeId:
           type: string
           format: uuid
-        productSku:
-          type: string
-          examples: ['SAM-001-EL']
-        productName:
-          type: string
-          examples: ['Samsung Galaxy S23']
         quantity:
           type: integer
           format: int32
@@ -1395,7 +1433,7 @@ components:
           type: string
           maxLength: 100
           minLength: 5
-          pattern: ^[a-zA-Z0-9 ]+$
+          pattern: ^[\p{L}\p{N} .]+$
           examples: ['Movimiento en el que un producto es vendido a un cliente.']
       required:
         - description
@@ -1429,30 +1467,41 @@ components:
         - price
         - productId
         - stock
+    CreateInventoryMovementProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        sku:
+          type: string
+          pattern: ^[A-Za-z0-9_-]+$
+          examples: [ 'SAM-001-EL' ]
+        name:
+          type: string
+          pattern: ^[A-Za-z0-9\s\-_,.]+$
+          examples: [ 'Samsung Galaxy S23' ]
+      required:
+        - id
+        - sku
+        - name
     CreateInventoryMovementRequestDto:
       type: object
       properties:
         supplierId:
           type: string
           format: uuid
-        productId:
-          type: string
-          format: uuid
+        product:
+          $ref: '#/components/schemas/CreateInventoryMovementProduct'
         movementTypeId:
           type: string
           format: uuid
-        productSku:
-          type: string
-          pattern: ^[A-Za-z0-9_-]+$
-          examples: ['SAM-001-EL']
-        productName:
-          type: string
-          pattern: ^[A-Za-z0-9\s\-_,.]+$
-          examples: ['Samsung Galaxy S23']
         quantity:
           type: integer
           format: int32
-          examples: [10]
+          minimum: -1000
+          maximum: 1000
+          examples: [-10]
       required:
         - movementTypeId
         - productId
@@ -1506,6 +1555,7 @@ components:
         page:
           type: integer
           format: int32
+          examples: [0]
     PaginatedResultResponseSupplierResponse:
       type: object
       properties:
@@ -1528,6 +1578,7 @@ components:
         page:
           type: integer
           format: int32
+          examples: [0]
       required:
         - page
         - size
@@ -1593,6 +1644,7 @@ components:
         page:
           type: integer
           format: int32
+          examples: [0]
         size:
           type: integer
           format: int32
@@ -1678,15 +1730,20 @@ components:
           items:
             type: string
             examples: ['https://example.com/images/productos/camiseta-deportiva.jpg']
+    ProductOfferSupplierResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          examples: ['Bambi']
     ProductOfferReadResponse:
       type: object
       properties:
-        supplierId:
-          type: string
-          format: uuid
         supplier:
-          type: string
-          examples: ['TechGear Partners']
+          $ref: '#/components/schemas/ProductOfferSupplierResponse'
         stock:
           type: integer
           format: int32
@@ -1742,6 +1799,9 @@ components:
     InventoryMovementSummaryReadResponse:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
         supplier:
           $ref: '#/components/schemas/InventoryMovementSummarySupplier'
         product:
@@ -1793,13 +1853,24 @@ components:
         imageUrl:
           type: string
           examples: ['https://example.com/images/productos/camiseta-deportiva.jpg']
+    ProductStatusResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          examples: ['Active']
   securitySchemes:
     BambiOAuth2:
       type: oauth2
       flows:
         authorizationCode:
-          authorizationUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/auth
-          tokenUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/token
+#          authorizationUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/auth
+#          tokenUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/token
+          authorizationUrl: http://keycloak.local/realms/bambi/protocol/openid-connect/auth
+          tokenUrl: http://keycloak.local/realms/bambi/protocol/openid-connect/token
           scopes:
             - admin: Acceso administrativo
             - supplier: Acceso proveedor

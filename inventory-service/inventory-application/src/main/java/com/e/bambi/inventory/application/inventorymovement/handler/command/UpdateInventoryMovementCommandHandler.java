@@ -30,7 +30,7 @@ public class UpdateInventoryMovementCommandHandler implements
                 .flatMap(inventoryMovement -> offerQueryRepository
                         .findOfferStock(
                                 inventoryMovement.getSupplierId(),
-                                inventoryMovement.getProductId()
+                                inventoryMovement.getProduct().getId()
                         )
                         .flatMap(productStock -> {
                             inventoryMovement.calculateStock(productStock, command.getQuantity());

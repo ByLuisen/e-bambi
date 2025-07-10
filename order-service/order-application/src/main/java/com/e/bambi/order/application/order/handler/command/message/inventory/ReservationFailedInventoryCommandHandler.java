@@ -23,7 +23,8 @@ public class ReservationFailedInventoryCommandHandler implements
     @Transactional
     public Mono<Void> handle(ReservationFailedInventoryCommand command) {
         return orderInventorySaga.rollback(command)
-                .doOnSuccess(__ -> log.info("Order is roll backed for order id: {} with failure messages: {}",
+                .doOnSuccess(__ -> log.info("Order Inventory Saga is roll backed for order id: {} with failure " +
+                                "messages: {}",
                         command.getOrderId().getValue(),
                         String.join(FAILURE_MESSAGE_DELIMITER, command.getFailureMessages())));
     }

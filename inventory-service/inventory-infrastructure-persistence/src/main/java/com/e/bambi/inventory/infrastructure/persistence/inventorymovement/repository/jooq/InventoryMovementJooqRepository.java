@@ -69,6 +69,7 @@ public class InventoryMovementJooqRepository {
         var mt = MOVEMENT_TYPES;
 
         return dslContext.select(
+                        im.ID.as("id"),
                         im.SUPPLIER_ID.as("supplier_id"), s.NAME.as("supplier_name"),
                         im.PRODUCT_ID.as("product_id"), im.PRODUCT_SKU.as("product_sku"),
                         im.PRODUCT_NAME.as("product_name"),

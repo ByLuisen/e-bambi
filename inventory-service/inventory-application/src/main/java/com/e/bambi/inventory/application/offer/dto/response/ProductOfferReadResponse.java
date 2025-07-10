@@ -9,8 +9,7 @@ import java.util.UUID;
 @Getter
 @RequiredArgsConstructor
 public class ProductOfferReadResponse {
-    private final UUID supplierId;
-    private final String supplier;
+    private final ProductOfferSupplierResponse supplier;
     private final Integer stock;
     private final BigDecimal price;
 }

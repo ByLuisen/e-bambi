@@ -1,12 +1,13 @@
 package com.e.bambi.order.application.order.dto.response.orderwithdetails;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.UUID;
 
+@Getter
 @RequiredArgsConstructor
 public class OrderWithDetailReadResponse {
     private final String orderStatus;
@@ -14,5 +15,5 @@ public class OrderWithDetailReadResponse {
     private final OrderWithDetailAddress address;
     private final List<OrderWithDetailItem> items;
     private final BigDecimal totalPrice;
-    private final Instant createdAt;
+    private final OffsetDateTime createdAt;
 }

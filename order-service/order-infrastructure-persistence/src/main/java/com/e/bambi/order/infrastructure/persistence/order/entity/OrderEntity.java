@@ -1,13 +1,15 @@
 package com.e.bambi.order.infrastructure.persistence.order.entity;
 
 import com.e.bambi.order.domain.order.valueobject.OrderStatus;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;

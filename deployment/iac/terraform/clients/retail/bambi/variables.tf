@@ -10,6 +10,12 @@ variable "admin_password" {
   default   = "admin!1Aadmin!1A"
 }
 
+variable "supplier_password" {
+  type      = string
+  sensitive = true
+  default   = "suppliera!1Aadmin!1A"
+}
+
 variable "user_password" {
   type      = string
   sensitive = true

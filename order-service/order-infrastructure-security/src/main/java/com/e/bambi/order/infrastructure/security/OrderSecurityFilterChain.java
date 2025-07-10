@@ -22,26 +22,25 @@ public class OrderSecurityFilterChain {
     SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http,
                                                Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthenticationConverter) {
         http.oauth2ResourceServer(oauth2 ->
-                oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter))
-        );
-
-        http.cors(Customizer.withDefaults());
-
-        http.csrf(ServerHttpSecurity.CsrfSpec::disable);
-
-        http.authorizeExchange(exchanges ->
-                exchanges
-                        .pathMatchers(HttpMethod.GET,
-                                "/v3/api-docs/**",
-                                "/openapi.yaml",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/debug",
-                                "/actuator/health/**"
-                        )
-                        .permitAll()
-                        .anyExchange().authenticated()
-        );
+                        oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
+                .cors(Customizer.withDefaults())
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .authorizeExchange(exchanges ->
+                        exchanges.pathMatchers(HttpMethod.GET,
+                                        "/v3/api-docs/**",
+                                        "/openapi.yaml",
+                                        "/swagger-ui.html",
+                                        "/swagger-ui/**",
+                                        "/debug",
+                                        "/actuator/health/**"
+                                )
+                                .permitAll()
+                                .pathMatchers("/v*/me/orders/**")
+                                .hasRole("USER")
+                                .pathMatchers("/v*/orders/**")
+                                .hasRole("ADMIN")
+                                .anyExchange().authenticated()
+                );
 
         return http.build();
     }

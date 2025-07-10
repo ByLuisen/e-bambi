@@ -19,7 +19,7 @@ public class ReservedInventoryCommandHandler implements CommandHandler<Mono<Void
     @Override
     public Mono<Void> handle(ReservedInventoryCommand command) {
         return orderInventorySaga.process(command)
-                .doOnSuccess(__ -> log.info("Order Inventory products are reserved for order id: {}",
+                .doOnSuccess(__ -> log.info("Reservation products has been confirmed for order id: {}",
                         command.getOrderId().getValue()));
     }
 }

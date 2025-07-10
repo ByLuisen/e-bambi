@@ -11,10 +11,12 @@ import com.e.bambi.inventory.domain.exception.OfferNotFoundException;
 import com.e.bambi.shared.kernel.application.bus.CommandHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
 import java.util.List;
 
@@ -70,6 +72,7 @@ public class ReserveInventoryCommandHandler implements CommandHandler<Mono<Void>
                                             offer.validateAndReserve(p.getPrice(), p.getQuantity());
                                             return offerRepository.update(offer);
                                         })
+                                        .retryWhen(Retry.max(Integer.MAX_VALUE).filter(this::isOptimisticLockFailure))
                                         .switchIfEmpty(Mono.error(new OfferNotFoundException(
                                                 "Product doesn't exists for the given supplier id and product id")))
                                 )
@@ -90,5 +93,9 @@ public class ReserveInventoryCommandHandler implements CommandHandler<Mono<Void>
                                     List.of(e.getMessage().split(FAILURE_MESSAGE_DELIMITER))));
                         }
                 );
+    }
+
+    private boolean isOptimisticLockFailure(Throwable throwable) {
+        return throwable instanceof OptimisticLockingFailureException;
     }
 }

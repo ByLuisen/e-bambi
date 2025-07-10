@@ -25,10 +25,11 @@ public class CreateProductCommandHandler implements CommandHandler<Mono<ProductR
         Product product = productApplicationMapper.createProductCommandToProduct(command);
 
         return inventoryApplicationService.ensureProductIsValid(product)
-                .flatMap(__ -> {
+                .then(Mono.defer(() -> {
                     product.initializeProduct();
                     return productRepository.insert(product);
-                }).onErrorMap(DuplicateKeyException.class, e ->
+                }))
+                .onErrorMap(DuplicateKeyException.class, e ->
                         new DuplicateKeyException("Please, ensure the product has unique properties")
                 )
                 .map(productApplicationMapper::toProductResponse);

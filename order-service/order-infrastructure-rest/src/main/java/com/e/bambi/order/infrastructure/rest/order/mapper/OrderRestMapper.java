@@ -10,7 +10,9 @@ import com.e.bambi.shared.kernel.domain.valueobject.*;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -89,6 +91,16 @@ public class OrderRestMapper {
                     if (UUID.class.equals(type)) {
                         @SuppressWarnings("unchecked")
                         T value = (T) UUID.fromString(item);
+                        return value;
+                    }
+                    if (BigDecimal.class.equals(type)) {
+                        @SuppressWarnings("unchecked")
+                        T value = (T) new BigDecimal(item);
+                        return value;
+                    }
+                    if (OffsetDateTime.class.equals(type)) {
+                        @SuppressWarnings("unchecked")
+                        T value = (T) LocalDate.parse(item).atStartOfDay().atOffset(ZoneOffset.UTC);
                         return value;
                     }
                     @SuppressWarnings("unchecked")

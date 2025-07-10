@@ -41,16 +41,17 @@ public class OrderPaymentValidateKafkaListener implements ReactiveKafkaConsumer<
     @Override
     public void receive() {
         subscription = template.receive()
-                .concatMap(receiverRecord -> {
+                .flatMap(receiverRecord -> {
                             String sagaId = receiverRecord.key();
                             OrderPaymentValidateEventPayload payload =
                                     kafkaConsumerHelper.getEventPayload(receiverRecord.value().toString(),
                                             OrderPaymentValidateEventPayload.class);
 
                             log.info("Incoming message in OrderPaymentValidateKafkaListener: {} with key: {}, " +
-                                            "partition: {} and offset: {}", receiverRecord.value(), sagaId,
-                                    receiverRecord.partition(),
-                                    receiverRecord.offset());
+                                            "topic: {}, partition: {}, offset: {} and timestamp: {}",
+                                    receiverRecord.value(), sagaId, receiverRecord.topic(), receiverRecord.partition(),
+                                    receiverRecord.offset(),
+                                    kafkaConsumerHelper.formatTimestamp(receiverRecord.timestamp()));
 
                             return commandBus
                                     .dispatch(paymentMethodMessagingMapper.toValidatePaymentCommand(sagaId, payload))
