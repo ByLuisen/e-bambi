@@ -1,8 +1,10 @@
 package com.e.bambi.inventory.infrastructure.persistence.offer.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Version;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -24,6 +26,4 @@ public class OfferEntity {
     private UUID productId;
     private BigDecimal price;
     private Integer stock;
-    @Version
-    private Integer version;
 }

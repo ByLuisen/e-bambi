@@ -18,7 +18,6 @@ public class Offer extends AggregateRoot<OfferId> {
     private final ProductId productId;
     private final Money price;
     private Stock stock;
-    private final Integer version;
 
     public void initializeOffer() {
         super.setId(new OfferId(UUID.randomUUID()));
@@ -48,7 +47,6 @@ public class Offer extends AggregateRoot<OfferId> {
         productId = builder.productId;
         price = builder.price;
         stock = builder.stock;
-        version = builder.version;
     }
 
     public static Builder builder() {
@@ -62,7 +60,6 @@ public class Offer extends AggregateRoot<OfferId> {
         private ProductId productId;
         private Money price;
         private Stock stock;
-        private Integer version;
 
         private Builder() {
         }
@@ -89,11 +86,6 @@ public class Offer extends AggregateRoot<OfferId> {
 
         public Builder stock(Stock val) {
             stock = val;
-            return this;
-        }
-
-        public Builder version(Integer val) {
-            version = val;
             return this;
         }
 

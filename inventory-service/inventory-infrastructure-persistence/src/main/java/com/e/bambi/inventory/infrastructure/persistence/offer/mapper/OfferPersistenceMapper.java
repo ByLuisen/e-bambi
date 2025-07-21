@@ -28,7 +28,6 @@ public class OfferPersistenceMapper {
                 .productId(offer.getProductId().getValue())
                 .price(offer.getPrice().getAmount())
                 .stock(offer.getStock().getQuantity())
-                .version(offer.getVersion())
                 .build();
     }
 
@@ -39,7 +38,6 @@ public class OfferPersistenceMapper {
                 .productId(new ProductId(offerEntity.getProductId()))
                 .price(new Money(offerEntity.getPrice()))
                 .stock(new Stock(offerEntity.getStock()))
-                .version(offerEntity.getVersion())
                 .build();
     }
 
@@ -74,8 +72,7 @@ public class OfferPersistenceMapper {
                                 offer.getSupplierId().getValue(),
                                 offer.getProductId().getValue(),
                                 offer.getPrice().getAmount(),
-                                offer.getStock().getQuantity(),
-                                offer.getVersion()
+                                offer.getStock().getQuantity()
                         )).toList();
     }
 }

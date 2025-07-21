@@ -72,7 +72,6 @@ public class ReserveInventoryCommandHandler implements CommandHandler<Mono<Void>
                                             offer.validateAndReserve(p.getPrice(), p.getQuantity());
                                             return offerRepository.update(offer);
                                         })
-                                        .retryWhen(Retry.max(Integer.MAX_VALUE).filter(this::isOptimisticLockFailure))
                                         .switchIfEmpty(Mono.error(new OfferNotFoundException(
                                                 "Product doesn't exists for the given supplier id and product id")))
                                 )

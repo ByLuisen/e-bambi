@@ -10,7 +10,7 @@
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
-        <intProp name="ThreadGroup.num_threads">7000</intProp>
+        <intProp name="ThreadGroup.num_threads">200</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
@@ -20,7 +20,7 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">8181</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -38,12 +38,12 @@
             </elementProp>
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Authorization</stringProp>
-              <stringProp name="Header.value">Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJWd19GcWczMHZrcXhoYXlXRGN4Q3pBalE4Ri1SODZQY3lpMHQ5YlRxVWNzIn0.eyJleHAiOjE3NTIxNDAzODAsImlhdCI6MTc1MjE0MDA4MCwiYXV0aF90aW1lIjoxNzUxMTI0MjM4LCJqdGkiOiJvbnJ0cnQ6MzdhMTE2OGUtNDYzYS00NzA0LWI4ZmMtNjA3YWY5MGNkMmJhIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgxL3JlYWxtcy9iYW1iaSIsInN1YiI6ImE1MTIzZGE4LTYxOWItNGRjYi1hYzQ3LWU3M2Y0YThlYmU1MSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUtYmFtYmkiLCJzaWQiOiI1NmFjOGI4NC1lNjY3LTQ5NzAtYjg4MC04YmNjNTE3MTQ0ZmYiLCJhY3IiOiIxIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIlVTRVIiXX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6IlVzZXIgQmFtYmkiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJlLWJhbWJpLXVzZXIiLCJnaXZlbl9uYW1lIjoiVXNlciIsImZhbWlseV9uYW1lIjoiQmFtYmkiLCJlbWFpbCI6ImUtYmFtYmktdXNlckB5b3VyLWRvbWFpbi5jb20ifQ.Euc5UtJqPya5CikkN7Wuc__vCw11cgY6II75MkLlDlyJZWhHxb1JfA8zqR3bqUQ2tUfOaGa9qQ7WoVKBkTMYxdpShBF2cegTqGzWTuDYzBnupWUvEidOKPcLTOFXkEuwB5btTzHnTEK_UXYKthdYaG1sFBeNg1nTa1h0QmhGtjrV2LWA4LkBRbN6E0ZG5mtJcxFST-xvYlugWhKb5K_m3tXt7ExdlpA1riqCtkR3NdKYgGfqEg99Zuqr-7yjPxluGIGlZhyRxIEtvsrnY20osFenUfd7i1zWgmiL0JC051srQtNhc_ehDn8iMQzvD9jBaD13OV8-l0yNKvcjPJvz-w </stringProp>
+              <stringProp name="Header.value">Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJJZk42S3RQWlhHTmp2MjFwa1FiTGZoczlkUWxKUHptdllRNzZuME55akY4In0.eyJleHAiOjE3NTMxMTYxMzYsImlhdCI6MTc1MzExNTgzNiwiYXV0aF90aW1lIjoxNzUzMTE1ODM2LCJqdGkiOiJvbnJ0YWM6YjJhMGMwNzktNWY5Zi00MGZiLTgwNDctNmQxYTBiMzNhM2MyIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgxL3JlYWxtcy9iYW1iaSIsInN1YiI6IjkwMzExZDJiLTgyNWEtNDlhNS04YTAwLTAzNDI2YmE2OTAxNSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUtYmFtYmkiLCJzaWQiOiJlYzZkZWVlMi03NWNkLTQyNTgtYWMzYS1lOWZmNGNlMTM3YjMiLCJhY3IiOiIxIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIlVTRVIiXX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6IlVzZXIgQmFtYmkiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJlLWJhbWJpLXVzZXIiLCJnaXZlbl9uYW1lIjoiVXNlciIsImZhbWlseV9uYW1lIjoiQmFtYmkiLCJlbWFpbCI6ImUtYmFtYmktdXNlckB5b3VyLWRvbWFpbi5jb20ifQ.uh5ylGXaxesmCDMAIVuxGFNutX8EzxuP1JMZL77B7PjVEuogyWGfMtI48JO13fnXvCbr3rKi-rbSGJmYO2zTAfsNilEfQmKwocLbXRDNGoAjS538D3QRWlqLXVzEV9Z_nK2G97KL_UPtUS4JJOOshl0YYnPCWFisbmoAWtBHLRVQ2pkVYTvdYUmJMYBHS6D9pnac45-HoLPVPGEy0lTWWM0blH_yHLoA5EjShBnCXwnvxtFQqVl0fzJ5SgzMw9XwDdsGRwBOt3cmAyX4862IIgzuWO9rjASfoizlSKNvUHitp6AIAJLrTkB80YkgkV22t9RAYM8nfKEs2uNmDV3EQw </stringProp>
             </elementProp>
           </collectionProp>
         </HeaderManager>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create order" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create order">
           <stringProp name="HTTPSampler.path">/api/v1/me/orders</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -159,7 +159,7 @@
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>

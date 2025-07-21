@@ -115,7 +115,7 @@ INSERT INTO offers (id, supplier_id, product_id, price, stock, version) VALUES
 ('779645fb-3f69-4108-8eed-eea9c392c5f3', '70bc3731-d02f-4e95-b44c-f5f1db9d0dac', 'b32da224-27e3-468e-ac30-c4456ab6c348', 99.99, 500, 0),
 ('fe300e9c-f871-40ee-be56-423cd0b04d18', 'e9d5bec4-8d4e-499d-9e65-d0fda7b56104', 'f2802d28-60a7-4ff0-a163-c2fb70835b91', 649.99, 9, 0),
 
-('fa6d4f38-7418-4e34-9ecf-c70c9e6b84f9', '0d95b4c4-a138-4e6a-9d86-4c27ea98a83c', '839546df-e9ab-45c4-b5e0-06f10ca5c3d7', 789.99, 150, 0),
+('fa6d4f38-7418-4e34-9ecf-c70c9e6b84f9', '0d95b4c4-a138-4e6a-9d86-4c27ea98a83c', '839546df-e9ab-45c4-b5e0-06f10ca5c3d7', 789.99, 10000, 0),
 ('380f22f3-7463-43e2-9ced-efb6517ea9e8', '0d95b4c4-a138-4e6a-9d86-4c27ea98a83c', '7435bce1-ff71-4f3e-b7d5-af16310637de', 139.99, 200, 0),
 ('db993b5d-2382-4a8b-8e28-1bb8a2c2ee2c', '0d95b4c4-a138-4e6a-9d86-4c27ea98a83c', '2e762dc5-40a0-477e-bf41-01aabfe1481e', 489.99, 100, 0),
 ('001c1ebe-ca1c-4ddc-b595-e97c6186fa24', '0d95b4c4-a138-4e6a-9d86-4c27ea98a83c', '1c6e3e3c-7994-4b16-8b6d-3da13e2fb1f2', 239.99, 120, 0),
