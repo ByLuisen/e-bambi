@@ -1,6 +1,6 @@
 # eval $(minikube docker-env)
 # eval $(minikube docker-env --unset)
-apiVersion: skaffold/v4beta11
+apiVersion: skaffold/v4beta13
 kind: Config
 
 # ---------------------------
@@ -8,27 +8,33 @@ kind: Config
 # ---------------------------
 #build:
 #  tagPolicy:
-#    sha256: {}
+#    sha256: { }
+#
 #  local:
 #    push: false # No se sube a repositorio remoto, solo local
-#    useBuildKit: true
 #    concurrency: 0  # Paralelismo para aumentar la velocidad de construcción
+#
 #  artifacts:
-# Definimos artefactos de construcción para cada servicio
+#    # Definimos artefactos de construcción para cada servicio
+#    - image: custom-keycloak
+#      context: ../keycloak
+#      docker:
+#        dockerfile: Dockerfile
+#
 #    - image: inventory-service
 #      context: ./apps/inventory-service
 #      docker:
 #        dockerfile: Dockerfile
-
-# - image: payment-service
-#   context: ./apps/payment-service
-#   docker:
-#     dockerfile: Dockerfile
-
-# - image: order-service
-#   context: ./apps/order-service
-#   docker:
-#     dockerfile: Dockerfile
+#
+#    - image: payment-service
+#      context: ./apps/payment-service
+#      docker:
+#        dockerfile: Dockerfile
+#
+#    - image: order-service
+#      context: ./apps/order-service
+#      docker:
+#        dockerfile: Dockerfile
 
 # ---------------------------
 # Despliegue con Helm

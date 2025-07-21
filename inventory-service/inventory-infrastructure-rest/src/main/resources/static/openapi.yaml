@@ -1867,10 +1867,10 @@ components:
       type: oauth2
       flows:
         authorizationCode:
-#          authorizationUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/auth
-#          tokenUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/token
-          authorizationUrl: http://keycloak.local/realms/bambi/protocol/openid-connect/auth
-          tokenUrl: http://keycloak.local/realms/bambi/protocol/openid-connect/token
+          authorizationUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/auth
+          tokenUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/token
+#          authorizationUrl: http://keycloak.local/realms/bambi/protocol/openid-connect/auth
+#          tokenUrl: http://keycloak.local/realms/bambi/protocol/openid-connect/token
           scopes:
             - admin: Acceso administrativo
             - supplier: Acceso proveedor

@@ -1,12 +1,11 @@
 package com.e.bambi.order.infrastructure.persistence.order.repository.jooq;
 
 import com.e.bambi.order.application.order.dto.query.OrderQuery;
+import com.e.bambi.order.application.order.dto.response.PaginatedResultResponse;
 import com.e.bambi.order.application.order.dto.response.ordersummary.OrderSummaryReadResponse;
 import com.e.bambi.order.application.order.dto.response.orderwithdetails.OrderWithDetailReadResponse;
-import com.e.bambi.order.application.order.dto.response.PaginatedResultResponse;
 import com.e.bambi.order.domain.exception.OrderNotFoundException;
 import com.e.bambi.order.domain.order.entity.Order;
-import com.e.bambi.order.infrastructure.persistence.order.entity.OrderEntity;
 import com.e.bambi.order.infrastructure.persistence.order.mapper.OrderPersistenceMapper;
 import lombok.RequiredArgsConstructor;
 import org.jooq.*;
@@ -16,7 +15,8 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.*;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -120,11 +120,13 @@ public class OrderJooqRepository {
         OffsetDateTime maxDate;
         switch (date) {
             case 30 -> {
-                minDate = OffsetDateTime.now().minusDays(30);
+                minDate = OffsetDateTime.now().minusDays(30)
+                        .withHour(0).withMinute(0).withSecond(0).withNano(0);
                 maxDate = OffsetDateTime.now();
             }
             case 3 -> {
-                minDate = OffsetDateTime.now().minusMonths(3);
+                minDate = OffsetDateTime.now().minusMonths(3)
+                        .withHour(0).withMinute(0).withSecond(0).withNano(0);
                 maxDate = OffsetDateTime.now();
             }
             default -> {
