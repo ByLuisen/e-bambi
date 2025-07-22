@@ -120,13 +120,11 @@ public class OrderJooqRepository {
         OffsetDateTime maxDate;
         switch (date) {
             case 30 -> {
-                minDate = OffsetDateTime.now().minusDays(30)
-                        .withHour(0).withMinute(0).withSecond(0).withNano(0);
+                minDate = OffsetDateTime.now().minusDays(30);
                 maxDate = OffsetDateTime.now();
             }
             case 3 -> {
-                minDate = OffsetDateTime.now().minusMonths(3)
-                        .withHour(0).withMinute(0).withSecond(0).withNano(0);
+                minDate = OffsetDateTime.now().minusMonths(3);
                 maxDate = OffsetDateTime.now();
             }
             default -> {
