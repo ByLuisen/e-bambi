@@ -171,7 +171,7 @@ configMap:
   # Dynamic definition where you can define your secret credentials
   data:
     # Example of secret credential definition
-    jwt_provider_uri: "http://keycloak.local/realms/bambi"
+    jwt_provider_uri: "http://keycloak.local:8081/realms/bambi"
     datasource_url: "payment-service-db:5432"
     kafka_bootstrap_servers: "redpanda-0:9092, redpanda-1:9092, redpanda-2:9092"
     kafka_schema_registry_url: "http://redpanda-0:8081"

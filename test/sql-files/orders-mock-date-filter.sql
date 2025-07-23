@@ -43,5 +43,3 @@ INSERT INTO orders VALUES
 (gen_random_uuid(), 'user_id', 'CREATED', '3fdc42b4-8341-43a4-aa78-c9fa792d4d9e', 'PayPal', 'Spain', 'Calle Mayor, 15', 'Madrid', 'Madrid', '28013', '+34 912 34 56 78', 789.99, '', now() - INTERVAL '2 years'),
 (gen_random_uuid(), 'user_id', 'CREATED', '3fdc42b4-8341-43a4-aa78-c9fa792d4d9e', 'PayPal', 'Spain', 'Calle Mayor, 15', 'Madrid', 'Madrid', '28013', '+34 912 34 56 78', 789.99, '', now() - INTERVAL '2 years'),
 (gen_random_uuid(), 'user_id', 'CREATED', '3fdc42b4-8341-43a4-aa78-c9fa792d4d9e', 'PayPal', 'Spain', 'Calle Mayor, 15', 'Madrid', 'Madrid', '28013', '+34 912 34 56 78', 789.99, '', now() - INTERVAL '2 years');
-
-
