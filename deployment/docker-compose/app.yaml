@@ -4,7 +4,7 @@ services:
     image: com.e.bambi/order.service:1.0-SNAPSHOT
     container_name: e-bambi-order-service
     environment:
-      JWT_PROVIDER_URI: http://bitnami-keycloak:8080/realms/bambi
+      JWT_PROVIDER_URI: http://keycloak.local:8081/realms/bambi
       DATASOURCE_URL: order-service-db:5432
       KAFKA_BOOTSTRAP_SERVERS: redpanda-0:9092,redpanda-1:9092,redpanda-2:9092
       KAFKA_SCHEMA_REGISTRY_URL: http://redpanda-0:8081
@@ -20,7 +20,7 @@ services:
     restart: unless-stopped
     image: com.e.bambi/inventory.service:1.0-SNAPSHOT
     environment:
-      JWT_PROVIDER_URI: http://bitnami-keycloak:8080/realms/bambi
+      JWT_PROVIDER_URI: http://keycloak.local:8081/realms/bambi
       REDIS_HOST: redis-stack
       DATASOURCE_URL: inventory-service-db:5432
       KAFKA_BOOTSTRAP_SERVERS: redpanda-0:9092,redpanda-1:9092,redpanda-2:9092
@@ -38,7 +38,7 @@ services:
     image: com.e.bambi/payment.service:1.0-SNAPSHOT
     container_name: e-bambi-payment-service
     environment:
-      JWT_PROVIDER_URI: http://bitnami-keycloak:8080/realms/bambi
+      JWT_PROVIDER_URI: http://keycloak.local:8081/realms/bambi
       DATASOURCE_URL: payment-service-db:5432
       KAFKA_BOOTSTRAP_SERVERS: redpanda-0:9092,redpanda-1:9092,redpanda-2:9092
       KAFKA_SCHEMA_REGISTRY_URL: http://redpanda-0:8081

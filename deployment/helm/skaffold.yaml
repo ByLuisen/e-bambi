@@ -46,12 +46,12 @@ deploy:
   helm:
     releases:
       # Definimos un release para cada servicio utilizando Helm Charts
-      - name: keycloak
-        remoteChart: oci://registry-1.docker.io/bitnamicharts/keycloak
-        createNamespace: true
-        namespace: auth
-        valuesFiles:
-          - ./values/dev/keycloak.yaml
+#      - name: keycloak
+#        remoteChart: oci://registry-1.docker.io/bitnamicharts/keycloak
+#        createNamespace: true
+#        namespace: auth
+#        valuesFiles:
+#          - ./values/dev/keycloak.yaml
 
       - name: inventory-service
         chartPath: ./helm-charts/app

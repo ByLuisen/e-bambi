@@ -182,7 +182,7 @@ configMap:
     # Example of secret credential definition
     # port: 5432
     # name: "my_database"
-    jwt_provider_uri: "http://keycloak.local/realms/bambi"
+    jwt_provider_uri: "http://keycloak.local:8081/realms/bambi"
     redis_host: "redis"
     datasource_url: "inventory-service-db:5432"
     kafka_bootstrap_servers: "redpanda-0:9092, redpanda-1:9092, redpanda-2:9092"

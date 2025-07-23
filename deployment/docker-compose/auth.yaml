@@ -3,7 +3,7 @@ volumes:
     name: e-bambi-keycloak-db
 
 services:
-  bitnami-keycloak:
+  keycloak.local:
     restart: unless-stopped
     image: bitnami/keycloak:26.2.5-debian-12-r3
     container_name: e-bambi-keycloak
@@ -15,7 +15,7 @@ services:
       KEYCLOAK_DATABASE_HOST: keycloak-db
       KEYCLOAK_DATABASE_PASSWORD: nil
     ports:
-      - "8081:8080"
+      - "8081:8081"
     networks:
       - e-bambi-network
     depends_on:

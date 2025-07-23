@@ -84,7 +84,7 @@ paths:
         default:
           description: Error inesperado
       security:
-        - BambiOAuth2: [admin]
+        - BambiOAuth2: [ admin ]
       x-roles-required:
         - ADMIN
     delete:
@@ -115,7 +115,7 @@ paths:
         default:
           description: Error inesperado
       security:
-        - BambiOAuth2: [admin]
+        - BambiOAuth2: [ admin ]
       x-roles-required:
         - ADMIN
   /v1/payment-methods:
@@ -167,7 +167,7 @@ paths:
         default:
           description: Error inesperado
       security:
-        - BambiOAuth2: [admin]
+        - BambiOAuth2: [ admin ]
       x-roles-required:
         - ADMIN
 components:
@@ -179,10 +179,12 @@ components:
           type: string
           maxLength: 50
           minLength: 0
+          examples: [ 'PayPal' ]
         description:
           type: string
           maxLength: 255
           minLength: 0
+          examples: [ 'Payment via PayPal account' ]
       required:
         - description
         - name
@@ -194,8 +196,10 @@ components:
           format: uuid
         name:
           type: string
+          examples: [ 'PayPal' ]
         description:
           type: string
+          examples: [ 'Payment via PayPal account' ]
     CreatePaymentMethodRequestDto:
       type: object
       properties:
@@ -203,10 +207,12 @@ components:
           type: string
           maxLength: 50
           minLength: 0
+          examples: [ 'PayPal' ]
         description:
           type: string
           maxLength: 255
           minLength: 0
+          examples: [ 'Payment via PayPal account' ]
       required:
         - description
         - name
@@ -215,9 +221,10 @@ components:
       properties:
         name:
           type: string
-          examples: ['PayPal']
+          examples: [ 'PayPal' ]
         description:
           type: string
+          examples: [ 'Payment via PayPal account' ]
   securitySchemes:
     BambiOAuth2:
       type: oauth2
@@ -225,7 +232,7 @@ components:
         authorizationCode:
           authorizationUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/auth
           tokenUrl: http://localhost:8081/realms/bambi/protocol/openid-connect/token
-#          authorizationUrl: http://keycloak.local/realms/bambi/protocol/openid-connect/auth
-#          tokenUrl: http://keycloak.local/realms/bambi/protocol/openid-connect/token
+          #          authorizationUrl: http://keycloak.local:8081/realms/bambi/protocol/openid-connect/auth
+          #          tokenUrl: http://keycloak.local:8081/realms/bambi/protocol/openid-connect/token
           scopes:
             - admin: Acceso administrativo
