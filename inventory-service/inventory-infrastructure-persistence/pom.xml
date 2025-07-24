@@ -70,4 +70,42 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.flywaydb</groupId>
+                        <artifactId>flyway-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>migrate-db</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>migrate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <url>jdbc:postgresql://localhost:5433/inventory-service</url>
+                            <user>user</user>
+                            <password>password</password>
+                            <schemas>
+                                <schema>public</schema>
+                            </schemas>
+                            <locations>
+                                <location>classpath:db/migration</location>
+                            </locations>
+                            <baselineOnMigrate>true</baselineOnMigrate>
+                            <outOfOrder>false</outOfOrder>
+                            <cleanDisabled>false</cleanDisabled>
+                            <validateOnMigrate>true</validateOnMigrate>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>
