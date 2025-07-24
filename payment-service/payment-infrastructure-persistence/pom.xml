@@ -55,7 +55,7 @@
                                 <schema>public</schema>
                             </schemas>
                             <locations>
-                                <location>classpath:db/migration</location>
+                                <location>filesystem:src/main/resources/db/migration</location>
                             </locations>
                             <baselineOnMigrate>true</baselineOnMigrate>
                             <outOfOrder>false</outOfOrder>
