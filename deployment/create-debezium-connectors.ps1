@@ -1,3 +1,5 @@
+#!/usr/bin/env pwsh
+
 $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
 $headers.Add("Content-Type", "application/json")
 
