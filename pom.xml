@@ -68,11 +68,6 @@
             </dependency>
             <dependency>
                 <groupId>com.e.bambi</groupId>
-                <artifactId>shared-infrastructure-cache-redis</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.e.bambi</groupId>
                 <artifactId>shared-infrastructure-persistence-flyway</artifactId>
                 <version>${project.version}</version>
             </dependency>

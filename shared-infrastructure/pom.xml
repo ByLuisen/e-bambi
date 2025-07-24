@@ -12,7 +12,6 @@
     <artifactId>shared-infrastructure</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>shared-infrastructure-cache-redis</module>
         <module>shared-infrastructure-messaging-kafka</module>
         <module>shared-infrastructure-persistence-flyway</module>
         <module>shared-infrastructure-persistence-jooq</module>
