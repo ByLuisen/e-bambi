@@ -1,0 +1,167 @@
+{
+  "paymentMethod": {
+    "id": "3fdc42b4-8341-43a4-aa78-c9fa792d4d9e",
+    "name": "PayPal"
+  },
+  "address": {
+    "country": "Spain",
+    "address": "Calle Gran Vía, 28",
+    "city": "Madrid",
+    "province": "Madrid",
+    "postalCode": "28013",
+    "phoneNumber": "+34 912 34 56 78"
+  },
+  "items": [
+    {
+      "imageUrl": "https://example.com/images/f1af2968-42a7-4022-a7ed-dd151db47a86.jpg",
+      "supplier": {
+        "id": "0d95b4c4-a138-4e6a-9d86-4c27ea98a83c",
+        "name": "Bambi"
+      },
+      "product": {
+        "id": "7435bce1-ff71-4f3e-b7d5-af16310637de",
+        "sku": "AD-002-SP",
+        "name": "Adidas Ultraboost"
+      },
+      "price": 139.99,
+      "quantity": 2,
+      "totalPrice": 279.98
+    },
+    {
+      "imageUrl": "https://example.com/images/1799bafa-23f2-4cb7-835d-be6ad85db1b1.jpg",
+      "supplier": {
+        "id": "0d95b4c4-a138-4e6a-9d86-4c27ea98a83c",
+        "name": "Bambi"
+      },
+      "product": {
+        "id": "2e762dc5-40a0-477e-bf41-01aabfe1481e",
+        "sku": "SONY-003-EL",
+        "name": "Sony PlayStation 5"
+      },
+      "price": 489.99,
+      "quantity": 1,
+      "totalPrice": 489.99
+    },
+    {
+      "imageUrl": "https://example.com/images/8b635ffd-df5f-48f9-b602-39134dfa918c.jpg",
+      "supplier": {
+        "id": "0d95b4c4-a138-4e6a-9d86-4c27ea98a83c",
+        "name": "Bambi"
+      },
+      "product": {
+        "id": "1c6e3e3c-7994-4b16-8b6d-3da13e2fb1f2",
+        "sku": "SAM-004-EL",
+        "name": "Samsung Galaxy Watch"
+      },
+      "price": 239.99,
+      "quantity": 2,
+      "totalPrice": 479.98
+    },
+    {
+      "imageUrl": "https://example.com/images/8b635ffd-df5f-48f9-b602-39134dfa918c.jpg",
+      "supplier": {
+        "id": "0d95b4c4-a138-4e6a-9d86-4c27ea98a83c",
+        "name": "Bambi"
+      },
+      "product": {
+        "id": "1808388a-039e-49b6-944d-639f561d592b",
+        "sku": "NIKE-005-SP",
+        "name": "Nike Air Max 270"
+      },
+      "price": 119.99,
+      "quantity": 4,
+      "totalPrice": 479.96
+    },
+    {
+      "imageUrl": "https://example.com/images/599cbc72-c70b-45c9-97c4-3d2cebdb1f13.jpg",
+      "supplier": {
+        "id": "0d95b4c4-a138-4e6a-9d86-4c27ea98a83c",
+        "name": "Bambi"
+      },
+      "product": {
+        "id": "4ccf4049-ebc3-4ef5-933c-1ab37abb4371",
+        "sku": "APPL-006-AC",
+        "name": "Apple Watch Series 8"
+      },
+      "price": 389.99,
+      "quantity": 1,
+      "totalPrice": 389.99
+    },
+    {
+      "imageUrl": "https://example.com/images/d8eeb0ad-35cc-44a3-8fbb-a4b67cc67a50.jpg",
+      "supplier": {
+        "id": "0d95b4c4-a138-4e6a-9d86-4c27ea98a83c",
+        "name": "Bambi"
+      },
+      "product": {
+        "id": "511eefe6-ee90-4143-83b5-4331b5ebd0d0",
+        "sku": "LG-007-EL",
+        "name": "LG OLED TV"
+      },
+      "price": 1789.99,
+      "quantity": 1,
+      "totalPrice": 1789.99
+    },
+    {
+      "imageUrl": "https://example.com/images/7b11fc7f-e6bc-463a-95f2-a44485d6fe88.jpg",
+      "supplier": {
+        "id": "0d95b4c4-a138-4e6a-9d86-4c27ea98a83c",
+        "name": "Bambi"
+      },
+      "product": {
+        "id": "910bb12c-e836-43c0-8734-b8d1e73e0543",
+        "sku": "DELL-008-EL",
+        "name": "Dell XPS 13"
+      },
+      "price": 989.99,
+      "quantity": 1,
+      "totalPrice": 989.99
+    },
+    {
+      "imageUrl": "https://example.com/images/75f96aae-8698-418c-8ffb-a13ea69c3997.jpg",
+      "supplier": {
+        "id": "0d95b4c4-a138-4e6a-9d86-4c27ea98a83c",
+        "name": "Bambi"
+      },
+      "product": {
+        "id": "5a5d48da-c540-4fbf-a4f1-f198e5a98af6",
+        "sku": "UA-009-CL",
+        "name": "Under Armour Compression Shirt"
+      },
+      "price": 39.99,
+      "quantity": 6,
+      "totalPrice": 239.94
+    },
+    {
+      "imageUrl": "https://example.com/images/dbd9b1b5-1feb-492d-9345-dfe402d99475.jpg",
+      "supplier": {
+        "id": "0d95b4c4-a138-4e6a-9d86-4c27ea98a83c",
+        "name": "Bambi"
+      },
+      "product": {
+        "id": "4aea5f1d-8269-4413-97ef-af95873353d6",
+        "sku": "SONY-010-AC",
+        "name": "Sony Noise Cancelling Headphones"
+      },
+      "price": 289.99,
+      "quantity": 1,
+      "totalPrice": 289.99
+    },
+    {
+      "imageUrl": "https://example.com/images/15c09396-0942-4405-8202-066463c69429.jpg",
+      "supplier": {
+        "id": "0d95b4c4-a138-4e6a-9d86-4c27ea98a83c",
+        "name": "Bambi"
+      },
+      "product": {
+        "id": "11c0668f-71f6-45b9-88c6-06471415631b",
+        "sku": "CANON-011-EL",
+        "name": "Canon EOS 80D"
+      },
+      "price": 1189.99,
+      "quantity": 1,
+      "totalPrice": 1189.99
+    }
+  ],
+  "totalPrice": 6619.80
+}

@@ -104,7 +104,7 @@ public class Order extends AggregateRoot<OrderId> {
 
         if (!totalPrice.equals(orderItemsTotal)) {
             throw new OrderDomainException("Total price: " + totalPrice.getAmount() +
-                    " is not equal to Order items total: " + orderItemsTotal);
+                    " is not equal to Order items total: " + orderItemsTotal.getAmount());
         }
     }
 

@@ -321,6 +321,7 @@ components:
         id:
           type: string
           format: uuid
+          examples: ['839546df-e9ab-45c4-b5e0-06f10ca5c3d7']
         sku:
           type: string
           examples: ['SAM-001-EL']
@@ -364,6 +365,7 @@ components:
         id:
           type: string
           format: uuid
+          examples: ['0d95b4c4-a138-4e6a-9d86-4c27ea98a83c']
         name:
           type: string
           examples: ['Bambi']
@@ -376,6 +378,7 @@ components:
         id:
           type: string
           format: uuid
+          examples: ['3fdc42b4-8341-43a4-aa78-c9fa792d4d9e']
         name:
           type: string
           pattern: ^[\p{L} ]+$
@@ -571,14 +574,14 @@ components:
           $ref: '#/components/schemas/OrderWithDetailItemProduct'
         price:
           type: number
-          examples: [799.99]
+          examples: [789.99]
         quantity:
           type: number
           format: int32
           examples: [1]
         totalPrice:
           type: number
-          examples: [799.99]
+          examples: [789.99]
     OrderWithDetailReadResponse:
       type: object
       properties:
@@ -595,7 +598,7 @@ components:
             $ref: '#/components/schemas/OrderWithDetailItem'
         totalPrice:
           type: number
-          examples: [799.99]
+          examples: [789.99]
         createdAt:
           type: string
           format: date-time
