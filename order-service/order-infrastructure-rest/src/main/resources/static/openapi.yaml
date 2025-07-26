@@ -321,6 +321,7 @@ components:
         id:
           type: string
           format: uuid
+          examples: ['839546df-e9ab-45c4-b5e0-06f10ca5c3d7']
         sku:
           type: string
           examples: ['SAM-001-EL']
@@ -344,7 +345,7 @@ components:
         price:
           type: number
           minimum: 0
-          examples: [799.99]
+          examples: [789.99]
         quantity:
           type: integer
           format: int32
@@ -352,7 +353,7 @@ components:
         totalPrice:
           type: number
           minimum: 0.01
-          examples: [799.99]
+          examples: [789.99]
       required:
         - imageUrl
         - price
@@ -364,6 +365,7 @@ components:
         id:
           type: string
           format: uuid
+          examples: ['0d95b4c4-a138-4e6a-9d86-4c27ea98a83c']
         name:
           type: string
           examples: ['Bambi']
@@ -376,6 +378,7 @@ components:
         id:
           type: string
           format: uuid
+          examples: ['3fdc42b4-8341-43a4-aa78-c9fa792d4d9e']
         name:
           type: string
           pattern: ^[\p{L} ]+$
@@ -397,7 +400,7 @@ components:
         totalPrice:
           type: number
           minimum: 0
-          examples: [799.99]
+          examples: [789.99]
       required:
         - address
         - items

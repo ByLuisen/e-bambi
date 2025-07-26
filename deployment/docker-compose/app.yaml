@@ -16,6 +16,7 @@ services:
   inventory-service:
     restart: unless-stopped
     image: com.e.bambi/inventory.service:1.0-SNAPSHOT
+    container_name: e-bambi-inventory-service
     environment:
       JWT_PROVIDER_URI: http://keycloak.local:8081/realms/bambi
       REDIS_HOST: redis-stack
