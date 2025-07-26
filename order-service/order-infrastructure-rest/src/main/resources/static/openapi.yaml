@@ -345,7 +345,7 @@ components:
         price:
           type: number
           minimum: 0
-          examples: [799.99]
+          examples: [789.99]
         quantity:
           type: integer
           format: int32
@@ -353,7 +353,7 @@ components:
         totalPrice:
           type: number
           minimum: 0.01
-          examples: [799.99]
+          examples: [789.99]
       required:
         - imageUrl
         - price
@@ -400,7 +400,7 @@ components:
         totalPrice:
           type: number
           minimum: 0
-          examples: [799.99]
+          examples: [789.99]
       required:
         - address
         - items
