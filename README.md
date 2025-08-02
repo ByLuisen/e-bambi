@@ -14,10 +14,16 @@
 
 ## 🕹️ Usage/Examples
 
+🚨 **Important:** If you want to follow this example, you need to have the project running.  
+📝 **Note:** All these steps can be done on the [Order Service OpenAPI definition](http://localhost/?urls.primaryName=order).
+
 1. Authenticate with Keycloak e-bambi client as e-bambi-user
 
     * **Client ID:** e-bambi
-    * **Client Secret:** You can get the client secret using the [Keycloak console.](http://localhost:8081/admin/master/console/#/bambi/clients/f068cb7d-2ea3-4490-bd0a-e2bd096aba16/credentials)
+    * **Client Secret:** You can get the client secret using the [Keycloak console](http://localhost:8081/admin/master/console/#/bambi/clients): **e-bambi > Credentials**
+      * Keycloak credentials:
+        * **Username:** admin
+        * **Password:** admin
 
 2. Create an order: 
 
