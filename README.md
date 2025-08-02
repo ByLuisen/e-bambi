@@ -200,9 +200,9 @@
 Clone the project
 
 ```bash
-  git clone https://github.com/ByLuisen/e-bambi.git
-  cd e-bambi/deployment/docker-compose
-  docker compose -f common.yaml -f auth.yaml -f db.yaml -f queue.yaml up -d
+git clone https://github.com/ByLuisen/e-bambi.git
+cd e-bambi/deployment/docker-compose
+docker compose -f common.yaml -f auth.yaml -f db.yaml -f queue.yaml up -d
 ```
 
 ```bash
