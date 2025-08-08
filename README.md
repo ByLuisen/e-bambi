@@ -4,13 +4,7 @@
 
 <br>
 
-E-Bambi es una API de e-commerce construida con microservicios y sistemas distribuidos no se que 
-Spring Webflux
-Microservicios y Sistemas distribuidos
-Arquitectura Hexagonal y DDD
-OpenAPI
-Kafka Outbox
-Control de excepciones
+Proyecto de microservicios para e-commerce (Inventory, Order, Payment) diseñado con Hexagonal Architecture y Domain-Driven Design. Cada microservicio expone su OpenAPI y se despliega con Docker/Helm sobre Kubernetes (Minikube), complementado con Terraform, Skaffold y CI/CD para despliegues reproducibles. Está construido en Java reactivo (Spring WebFlux) con persistencia R2DBC/JOOQ sobre PostgreSQL y seguridad centralizada con Spring Security + Keycloak. Para integración y consistencia eventual usa Kafka junto al patrón Outbox y Debezium; además aplica patrones avanzados (CQRS, Saga) y optimizaciones de rendimiento (control de concurrencia en stock, índices, batch inserts, prevención de N+1 y pruebas de carga con JMeter — 7.000 usuarios) para ser resiliente, escalable y fiable.
 
 ## 🔀 Create order flow
 
