@@ -157,7 +157,7 @@ Proyecto de microservicios para e-commerce (Inventory, Order, Payment) diseñado
  ┃  ┣ 📁 keycloak/                                  # Keycloak Dockerfile and theme
  ┃  ┣ 📄 create-debezium-connectors.ps1             # PowerShell script for create debezium connectors
  ┃  ┗ 📄 create-debezium-connectors.sh              # Shell script for create debezium connectors
- ┣ 📁 inventory-service/      
+ ┣ 📁 inventory-service/                            # Common microservices structure
  ┃  ┣ 📁 inventory-application/                     
  ┃  ┣ 📁 inventory-bootstrap/                       # Submodule that runs the application by calling the other submodules
  ┃  ┣ 📁 inventory-domain/
