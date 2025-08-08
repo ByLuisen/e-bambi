@@ -237,7 +237,7 @@ cd e-bambi/deployment/docker-compose
 docker compose -f common.yaml -f auth.yaml -f db.yaml -f queue.yaml up -d
 ```
 
-Compile the project by installing dependencies, applying Flyway migrations, generating JOOQ objects, and finally installing the artifacts.
+Compile the project by installing dependencies, applying Flyway migrations, generating JOOQ objects, installing the artifacts and finally building the Docker images for each microservice.
 
 ```bash
 ../../mvnw -f ../../pom.xml clean install -Pdev
