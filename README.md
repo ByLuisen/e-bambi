@@ -142,7 +142,7 @@ Proyecto de microservicios para e-commerce (Inventory, Order, Payment) diseñado
     }
     ```
 
-## 📐 Project structure (Monorepo)
+## 📐 Project structure (Monorepo, Hexagonal Architecture & DDD)
 
 ```
 📁 e-bambi/ 
