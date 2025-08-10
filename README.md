@@ -95,9 +95,9 @@ A microservices project for e-commerce (Inventory, Order, Payment) designed with
     * Output example:
    ```
    {
-      "id": "d9f1cfc9-9c30-46f7-8d2d-3fdecce5ee1e",
-      "orderStatus": "PENDING",
-      "message": "Order created successfully"
+     "id": "d9f1cfc9-9c30-46f7-8d2d-3fdecce5ee1e",
+     "orderStatus": "PENDING",
+     "message": "Order created successfully"
    }
    ```
 
