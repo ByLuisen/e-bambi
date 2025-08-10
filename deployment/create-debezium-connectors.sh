@@ -25,6 +25,8 @@ curl --location 'http://localhost:8083/connectors' \
   }
 }'
 
+sleep 2
+
 curl --location 'http://localhost:8083/connectors' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -49,6 +51,8 @@ curl --location 'http://localhost:8083/connectors' \
     "transforms.outbox.table.fields.additional.placement": "event_type:header"
   }
 }'
+
+sleep 2
 
 curl --location 'http://localhost:8083/connectors' \
   --header 'Content-Type: application/json' \

@@ -31,6 +31,8 @@ $body = @"
 $response = Invoke-RestMethod 'http://localhost:8083/connectors' -Method 'POST' -Headers $headers -Body $body
 $response | ConvertTo-Json
 
+Start-Sleep -Seconds 2
+
 $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
 $headers.Add("Content-Type", "application/json")
 
@@ -61,6 +63,8 @@ $body = @"
 
 $response = Invoke-RestMethod 'http://localhost:8083/connectors' -Method 'POST' -Headers $headers -Body $body
 $response | ConvertTo-Json
+
+Start-Sleep -Seconds 2
 
 $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
 $headers.Add("Content-Type", "application/json")
