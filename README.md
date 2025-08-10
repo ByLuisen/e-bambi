@@ -209,7 +209,7 @@ Proyecto de microservicios para e-commerce (Inventory, Order, Payment) diseñado
 
 ### Messaging & Data Streaming
 
-  * Apache Kafka • Kafka Connect • Debezium • Conduktor
+  * Apache Kafka • Kafka Connect • Debezium SMT • Conduktor
 
 ### Testing & API
 
