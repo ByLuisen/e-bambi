@@ -92,7 +92,16 @@ Proyecto de microservicios para e-commerce (Inventory, Order, Payment) diseñado
     }
     ```
 
-3. Track the order status:
+    * Output example:
+   ```
+   {
+      "id": "d9f1cfc9-9c30-46f7-8d2d-3fdecce5ee1e",
+      "orderStatus": "PENDING",
+      "message": "Order created successfully"
+   }
+   ```
+
+4. Track the order status:
 
     ```
     GET http://localhost:8181/api/v1/me/orders/{orderId}/tracking
@@ -106,7 +115,7 @@ Proyecto de microservicios para e-commerce (Inventory, Order, Payment) diseñado
     }
     ```
 
-4. Get the orders of the last 30 days:
+5. Get the orders of the last 30 days:
 
     ```
     GET http://localhost:8181/api/v1/me/orders?page=0&date=30
