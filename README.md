@@ -259,7 +259,7 @@ Create the Kafka topics with 3 partitions and 3 replicas if this is your first t
 docker compose -f common.yaml -f init_kafka.yaml up -d
 ```
 
-Start the three microservices (inventory, order, payment) along with a service (swaggerapi) that centralizes the OpenAPI documentation, accessible at [localhost](http://localhost).
+Start the three microservices (Inventory, Order, Payment) along with a service (swaggerapi) that centralizes the OpenAPI documentation, accessible at [localhost](http://localhost).
 
 ```bash
 docker compose -f common.yaml -f app.yaml -f swaggerapi.yaml up -d
