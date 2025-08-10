@@ -4,7 +4,7 @@
 
 <br>
 
-Proyecto de microservicios para e-commerce (Inventory, Order, Payment) diseñado con Hexagonal Architecture y Domain-Driven Design. Cada microservicio expone su OpenAPI y se despliega con Docker/Helm sobre Kubernetes (Minikube), complementado con Terraform, Skaffold y CI/CD para despliegues reproducibles. Está construido en Java reactivo (Spring WebFlux) con persistencia R2DBC/JOOQ sobre PostgreSQL y seguridad centralizada con Spring Security + Keycloak. Para integración y consistencia eventual usa Kafka junto al patrón Outbox y Debezium; además aplica patrones avanzados (CQRS, Saga) y optimizaciones de rendimiento (control de concurrencia en stock, índices, batch inserts, prevención de N+1 y pruebas de carga con JMeter — 7.000 usuarios) para ser resiliente, escalable y fiable.
+A microservices project for e-commerce (Inventory, Order, Payment) designed with Hexagonal Architecture and Domain-Driven Design. Each microservice exposes its OpenAPI and is deployed with Docker/Helm on Kubernetes (Minikube), complemented by Terraform, Skaffold and CI/CD for reproducible deployments. It is built with reactive Java using Spring WebFlux, with persistence via R2DBC/JOOQ on PostgreSQL and centralized security with Spring Security and Keycloak. For integration and eventual consistency it uses Kafka together with the Outbox pattern and Debezium; it also applies advanced patterns (CQRS, Saga) and performance optimizations (concurrency control for inventory, indexes, batch inserts, N+1 query prevention, and load testing with JMeter — 7,000 users) to be resilient, scalable and reliable.
 
 ## 🔀 Create order flow
 
