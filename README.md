@@ -39,7 +39,7 @@ Proyecto de microservicios para e-commerce (Inventory, Order, Payment) diseñado
 
 ## 🕹️ Usage/Examples
 
-🚨 **Important:** If you want to follow this example, you need to have the project running.  
+🚨 **Important:** If you want to follow this example, you need to have the [project running](#run-locally).  
 📝 **Note:** All these steps can be done on the [Order Service OpenAPI definition](http://localhost/?urls.primaryName=order).
 
 1. Authenticate with Keycloak e-bambi client as **e-bambi-user**
@@ -221,6 +221,7 @@ Proyecto de microservicios para e-commerce (Inventory, Order, Payment) diseñado
   * RESTful • CQRS • Outbox Pattern • Saga Pattern
   * Factory • Builder • Repository • Command/Query Bus
 
+<a name="run-locally"></a>
 ## 🚀 Run Locally (PowerShell, macOS & Linux)
 
   * Prerequists:
